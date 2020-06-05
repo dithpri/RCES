@@ -10,7 +10,10 @@
 // @grant        none
 // ==/UserScript==
 
-// SPDX-License-Identifier: 0BSD
+/* This file is part of RCES: https://github.com/dithpri/RCES and licensed under
+ * the MIT license. See LICENSE.md or
+ * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
+ */
 
 (function () {
     'use strict';

@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
-// @downloadURL  https://gist.github.com/dithpri/6a3fb524e59755510b18e676039b16d2/raw/main_auction_displayer.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/auction/Main%20Auction%20Displayer.user.js
 // @noframes
 // @match        https://www.nationstates.net/*/page=deck/*
 // @match        https://www.nationstates.net/page=deck/*
@@ -14,7 +14,10 @@
 // @connect      docs.google.com
 // ==/UserScript==
 
-// SPDX-License-Identifier: 0BSD
+/* This file is part of RCES: https://github.com/dithpri/RCES and licensed under
+ * the MIT license. See LICENSE.md or
+ * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
+ */
 
 /* Permissions:
  *

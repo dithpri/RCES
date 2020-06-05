@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Adds TNP's Card Guild logo beside members' card collecting nations during an auction
 // @author       dithpri
-// @downloadURL  https://gist.github.com/dithpri/7f06ce1bf64d2a4b5ec9225da2f1e3df/raw/Guildies%2520Auction%2520Highlighter%2520UwU.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/auction/Guildies%20Auction%20Highlighter%20UwU.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=deck*/*card=*
 // @match        https://www.nationstates.net/*card=*/*page=deck*
@@ -14,7 +14,10 @@
 // @connect      docs.google.com
 // ==/UserScript==
 
-// SPDX-License-Identifier: 0BSD
+/* This file is part of RCES: https://github.com/dithpri/RCES and licensed under
+ * the MIT license. See LICENSE.md or
+ * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
+ */
 
 /* Permissions:
  *
