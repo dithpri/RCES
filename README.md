@@ -4,7 +4,16 @@ This is a repository of various scripts that I've coded in 2019/2020 to help
 with [NationStates](https://www.nationstates.net) card farming.
 
 Most of them have been created in mid- to late-2019 and have since evolved
-significantly.
+significantly. Some of them were previously scattered through Discord and
+various gists, notably:
+
+  * [Default Prices](https://gist.github.com/dithpri/d443d2873a4b6212fc0b32894ce15707)
+  * [TNP Guild Highlighter](https://gist.github.com/dithpri/7f06ce1bf64d2a4b5ec9225da2f1e3df)
+  * [Main Auction Displayer](https://gist.github.com/dithpri/6a3fb524e59755510b18e676039b16d2)
+  * [Gardener Highlighter](https://gist.github.com/dithpri/93015dd7281c579ed267dafdf5e97b8d)
+  
+I'm in the process of consolidating them into this repository to make
+management easier and for them to be available to a wider public.
 
 ## Bugs
 
