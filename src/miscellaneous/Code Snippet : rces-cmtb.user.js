@@ -10,6 +10,13 @@
 // ==/UserScript==
 
 /*
+ * Copyright (c) 2020 dithpri (Racoda) <dithpri@gmail.com>
+ * This file is part of RCES: https://github.com/dithpri/RCES and licensed under
+ * the MIT license. See LICENSE.md or
+ * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
+ */
+
+/*
  * Keybinds:
  * [s]ell, [a]sk
  * [b]uy, [b]id
