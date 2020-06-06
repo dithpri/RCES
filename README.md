@@ -20,6 +20,11 @@ scripts included in the first repository commit are available, in that form,
 under the 0BSD license. Everything added or created in subsequent commits is
 available under the MIT license. For details, see [LICENSE.md](./LICENSE.md).
 
+Additionally, the image resources included in the
+`Guildies Auction Highlighter UwU` and `Garderner Highlighter` are **NOT**
+under the MIT license. You'll have to contact their respective owners/creators
+for terms of use.
+
 ### What does RCES stand for?
 
 I forgot. I like to invent acronyms and forget what they're all about.
