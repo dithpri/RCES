@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         Code Snippet / rces-cmtb
+// @name         Auction Keybindings
 // @version      0.1
 // @namespace    dithpri.RCES
 // @description  mousetrap keybinds for card page
 // @author       dithpri
-// @downloadURL  https://raw.githubusercontent.com/dithpri/RCES/master/src/miscellaneous/Code%20Snippet%20%3A%20rces-cmtb.user.js
+// @downloadURL  https://raw.githubusercontent.com/dithpri/RCES/master/src/miscellaneous/auction-keybindings.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=deck/card=*
 // @require      https://craig.global.ssl.fastly.net/js/mousetrap/mousetrap.min.js?a4098
