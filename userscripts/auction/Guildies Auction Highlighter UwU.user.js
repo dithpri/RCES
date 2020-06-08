@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Guildies Auction Highlighter UwU
-// @version      0.6
+// @version      0.8
 // @namespace    dithpri.RCES
 // @description  Adds TNP's Card Guild logo beside members' card collecting nations during an auction
 // @author       dithpri
@@ -38,6 +38,10 @@ function GM_addStyle(style) {
 	document.getElementsByTagName('head')[0].appendChild(node);
 };
 
+// A breaking spreadsheet change was introduced. Force updating if we last
+// updated the guild list before this time.
+const forceUpdateIfBefore = 1591582764000;
+
 (async function () {
 	'use strict';
 
@@ -55,7 +59,8 @@ function GM_addStyle(style) {
 
 	if (document.getElementById("auctiontablebox")) {
 		// If we haven't updated in the last 12h
-		if ((await GM.getValue("tnp-cards-guild-lastupdate", 0)) + 12 * 60 * 60 * 1000 < (new Date().getTime())) {
+		const lastUpdate = await GM.getValue("tnp-cards-guild-lastupdate", 0);
+		if (lastUpdate < forceUpdateIfBefore || lastUpdate + 12 * 60 * 60 * 1000 < (new Date().getTime())) {
 			GM.xmlHttpRequest({
 				method: "GET",
 				url: "https://docs.google.com/spreadsheets/d/1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ/export?format=tsv&id=1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ&gid=1147833059",
@@ -64,7 +69,7 @@ function GM_addStyle(style) {
 					await GM.setValue("tnp-cards-guild",
 						data.responseText
 							.split("\n")
-							.map((x) => x.split("\t")[3].toLowerCase().replace(/ /g, "_"))
+							.map((x) => x.split("\t")[4].toLowerCase().replace(/ /g, "_"))
 							.slice(1)
 							.concat("the_northern_light")
 							.join("\n"));
