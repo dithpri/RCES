@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/auction/Main%20Auction%20Displayer.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/auction/Main%20Auction%20Displayer.user.js
 // @noframes
 // @match        https://www.nationstates.net/*/page=deck/*
 // @match        https://www.nationstates.net/page=deck/*

@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Open issues in new tab with no decorations
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/issue_answering/NsIssueOpener.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsIssueOpener.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=dilemmas*
 // @grant        window.close

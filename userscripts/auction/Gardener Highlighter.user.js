@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/auction/Gardener%20Highlighter.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/auction/Gardener%20Highlighter.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=deck*/*card=*
 // @match        https://www.nationstates.net/*card=*/*page=deck*

@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  mousetrap keybinds for card page
 // @author       dithpri
-// @downloadURL  https://raw.githubusercontent.com/dithpri/RCES/master/src/miscellaneous/auction-keybindings.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/miscellaneous/auction-keybindings.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=deck/card=*
 // @require      https://craig.global.ssl.fastly.net/js/mousetrap/mousetrap.min.js?a4098

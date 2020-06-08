@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Auto-close resolved dilemma windows
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/src/issue_answering/NsDilemmaAutoClose.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsDilemmaAutoClose.user.js
 // @noframes
 // @match        https://www.nationstates.net/page=enact_dilemma/*
 // @grant        window.close
