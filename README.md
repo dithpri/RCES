@@ -16,6 +16,7 @@
       - [Auction Keybdindings](#auction-keybdindings)
       - [Puppet Creation Assistant](#puppet-creation-assistant)
     - [Puppet links sheet](#puppet-links-sheet)
+    - [goldretriever-web](#goldretriever-web)
 
 ---
 
@@ -141,3 +142,10 @@ By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
 [creation assistant](#puppet-creation-assistant). Configurable throught the
 `config.txt` file. Puppets (or future puppets) go in `puppets_list.txt`
 
+---
+
+### [goldretriever-web](https://dithpri.github.io/goldretriever-web/build/index.html)
+This is a web version of
+[Valentine Z's goldretriever](https://forum.nationstates.net/viewtopic.php?f=42&t=476326)
+
+Source is available [here](https://github.com/dithpri/goldretriever-web).
