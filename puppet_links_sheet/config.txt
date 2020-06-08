@@ -1,0 +1,22 @@
+[config]
+# The prefix to use for containers. Will work with the two most commonly used
+# ones out of the box.
+# Uncomment the following line to use only container=
+# containerPrefix: container=
+# Uncomment the following line to use only nation=
+# containerPrefix: nation=
+
+[links]
+# Links are relative to the NS site.
+# ie.
+#   Issues: page=dilemmas/template-overall=none
+# Will point to https://www.nationstates.net/page=dilemmas/template-overall=none
+# A container redirect will be automatically included.
+Issues: page=dilemmas/template-overall=none
+Deck: page=deck
+Value Deck: page=deck/value_deck=1
+Value Deck (No CSS): page=deck/value_deck=1s/template-overall=none
+Telegrams: page=telegrams
+Settings: page=settings
+TG Settings: page=tgsettings
+
