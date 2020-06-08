@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueOpener
-// @version      0.4
+// @version      0.5
 // @namespace    dithpri.RCES
 // @description  Open issues in new tab with no decorations
 // @author       dithpri
@@ -27,7 +27,7 @@
         .map(val => {
             val.classList.add("rces-dilemmalink");
             val.setAttribute("target", "_blank");
-            val.setAttribute("href", val.getAttribute("href") + "/template-overall=none");
+            val.setAttribute("href", val.getAttribute("href") + "/template-overall=none/x-rces=openissue");
             // Remove issues from the list after it has been opened
             val.addEventListener("click", event => {
                 val.parentElement.remove();

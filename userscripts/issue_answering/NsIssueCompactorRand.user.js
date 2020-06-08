@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.2
+// @version      0.3
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsIssueCompactorRand.user.js
 // @noframes
-// @match        https://www.nationstates.net/*page=show_dilemma*
+// @match        https://www.nationstates.net/*page=show_dilemma/*x-rces=openissue
 // @grant        window.close
 // @run-at       document-body
 // ==/UserScript==
@@ -54,7 +54,7 @@ right: 0;
 
 `);
     document.querySelectorAll("form[action^=\"/page=enact_dilemma/\"]").forEach(function (el) {
-        el.action += "/template-overall=none";
+        el.action += "/template-overall=none/x-rces=autoclose";
     });
     document.querySelectorAll("button.button.big.icon").forEach(function (el) {
         el.addEventListener("click", function () {

@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         NsDilemmaAutoClose
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
 // @description  Auto-close resolved dilemma windows
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsDilemmaAutoClose.user.js
 // @noframes
-// @match        https://www.nationstates.net/page=enact_dilemma/*
+// @match        https://www.nationstates.net/*page=enact_dilemma/*x-rces=autoclose*
 // @grant        window.close
 // @run-at       document-start
 // ==/UserScript==
