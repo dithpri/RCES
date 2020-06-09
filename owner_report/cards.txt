@@ -1,0 +1,11 @@
+1: Either a link to the card
+2: or id season (with anything separating them)
+3: in both cases season is optional
+4: Remember to delete everything here and input your own cards!
+https://www.nationstates.net/page=deck/card=1
+1 2
+2,2
+5;1
+https://www.nationstates.net/page=deck/card=5/season=2
+2	1
+7 blablabla 2
