@@ -86,9 +86,11 @@ just by pressing enter repeatedly:
   tab.
   * [NsIssueCompactorRand](userscripts/issue_answering/NsIssueCompactorRand.user.js)
   removes all the fluff and text around issue, focusing on a random option.
-  Press enter and voilà: issue answered.
+  Press enter and voilà: issue answered. *The issue has to be opened using the
+  previous script.*
   * [NsDilemmaAutoClose](userscripts/issue_answering/NsDilemmaAutoClose.user.js)
-  Closes the tab after an issue has been answered (successfully)
+  Closes the tab after an issue has been answered. *The issue has to be answered
+  using the previous script.*
 
 ---
 
