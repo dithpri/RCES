@@ -9,12 +9,18 @@
 
 import sys
 
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+    sys.stderr.flush()
+
+
 try:
     from sans.api import Api
     from sans.utils import pretty_string
     from sans.errors import NotFound
 except ImportError:
-    sys.exit(
+    eprint(
         """You need `sans` to run this script!
 install it by running
     python3 -m pip install -U sans
@@ -22,16 +28,13 @@ or
     py -m pip install -U sans
 or from https://pypi.org/project/sans/"""
     )
+    input("Press enter to continue...")
+    sys.exit(1)
 
 import asyncio
 import datetime
 import re
 from collections import defaultdict
-
-
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-    sys.stderr.flush()
 
 
 def canonical_nation_name(name):
