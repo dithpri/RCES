@@ -1,6 +1,6 @@
 1: Either a link to the card
 2: or id season (with anything separating them)
-3: in both cases season is optional
+3: In both cases, if no season is provided, it will check both seasons.
 4: Remember to delete everything here and input your own cards!
 https://www.nationstates.net/page=deck/card=1
 1 2

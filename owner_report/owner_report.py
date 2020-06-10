@@ -41,6 +41,9 @@ def canonical_nation_name(name):
     return name.lower().replace(" ", "_")
 
 
+current_season = 2
+
+
 async def main():
     mode = -1
     username = ""
@@ -67,15 +70,19 @@ async def main():
                     r"^https?://(www\.)?nationstates.net/page=deck/card=(?P<id>[0-9]+)(/season=(?P<season>[0-9]+))?",
                     line,
                 ):
-                    id, season = temp.group("id"), temp.group("season") or 1
+                    id, season = temp.group("id"), temp.group("season")
                 elif temp := re.match(
                     "(?P<id>[0-9]+)(([^0-9])+(?P<season>[0-9]+))?", line
                 ):
-                    id, season = temp.group("id"), temp.group("season") or 1
+                    id, season = temp.group("id"), temp.group("season")
                 else:
                     eprint(f"Unable to process line {linenum}: unknown format")
                     continue
-                cards.add((id, season))
+                if season:
+                    cards.add((id, season))
+                else:
+                    for s in range(current_season + 1):
+                        cards.add((id, s))
     if mode in [1, 3]:
         with open("puppets.txt", "r") as input_file:
             puppets = filter(None, input_file.read().splitlines())
