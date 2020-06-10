@@ -41,6 +41,13 @@ def canonical_nation_name(name):
     return name.lower().replace(" ", "_")
 
 
+async def ratelimit():
+    while xra := Api.xra:
+        xra = xra - datetime.datetime.now().timestamp()
+        eprint(f"Rate limit reached: sleep {xra}")
+        await asyncio.sleep(xra)
+
+
 current_season = 2
 
 
@@ -87,6 +94,7 @@ async def main():
         with open("puppets.txt", "r") as input_file:
             puppets = filter(None, input_file.read().splitlines())
         for puppet in puppets:
+            await ratelimit()
             result = await Api("cards deck", nationname=canonical_nation_name(puppet))
             try:
                 for card in result.DECK.CARD:
@@ -99,6 +107,7 @@ async def main():
         owners_dict = defaultdict(int)
         num_owners = 0
         num_copies = 0
+        await ratelimit()
         result = await Api("card owners", cardid=id, season=season)
         try:
             for owner in result.OWNERS.OWNER:
