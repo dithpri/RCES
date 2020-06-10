@@ -44,7 +44,7 @@ def canonical_nation_name(name):
 async def ratelimit():
     while xra := Api.xra:
         xra = xra - datetime.datetime.now().timestamp()
-        eprint(f"Rate limit reached: sleep {xra}")
+        eprint(f"Rate limit reached: sleeping {int(xra)} seconds...")
         await asyncio.sleep(xra)
 
 
@@ -100,6 +100,7 @@ async def main():
                 for card in result.DECK.CARD:
                     cards.add((card.CARDID.pyval, card.SEASON.pyval))
             except AttributeError:
+                eprint(f"{puppet} does not exist or has an empty deck.")
                 continue
     output_file.write("ID\tSEASON\tNUMBER OF OWNERS\tNUMBER OF COPIES\tOWNERS:COPIES\n")
     for card in cards:
@@ -114,7 +115,9 @@ async def main():
                 num_copies += 1
                 owners_dict[owner.text] += 1
         except AttributeError:
-            continue
+            if result.find("OWNERS") == None:
+                eprint(f"Card {id} season {season} does not exist.")
+                continue
         owners = owners_dict.keys()
         num_owners = len(owners)
         owners_copies = ",".join(
