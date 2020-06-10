@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.8
+// @version      0.10
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
