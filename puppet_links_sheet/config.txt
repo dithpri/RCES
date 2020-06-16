@@ -2,9 +2,11 @@
 # The prefix to use for containers. Will work with the two most commonly used
 # ones out of the box.
 # Uncomment the following line to use only container=
-# containerPrefix: container=
+# containerPrefix: container={}
 # Uncomment the following line to use only nation=
-# containerPrefix: nation=
+# containerPrefix: nation={}
+# In both cases, {} will be replaced with the name of the puppet
+
 
 [links]
 # Links are relative to the NS site.
