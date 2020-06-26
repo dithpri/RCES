@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.3
+// @version      0.4
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
@@ -39,7 +39,7 @@ list-style: none;
 padding-left: 0;
 }
 
-button:focus {
+button.rces-chosen {
 font-weight: 700;
 }
 
@@ -57,15 +57,7 @@ right: 0;
 		.forEach(function (el) {
 			el.action += "/template-overall=none/x-rces=autoclose";
 		});
-	document.querySelectorAll("button.button.big.icon").forEach(function (el) {
-		el.addEventListener("click", function () {
-			document
-				.querySelectorAll("button.button.big.icon")
-				.forEach(function (el) {
-					el.style.display = "none";
-				});
-		});
-	});
+
 	const issuebtns = document.querySelectorAll(
 		"button.button.big.icon.approve"
 	);
@@ -73,6 +65,19 @@ right: 0;
 		document.querySelector(
 			"p.dilemmadismissbox > button.big.icon.remove.danger"
 		).disabled = true;
-		issuebtns[Math.floor(Math.random() * issuebtns.length)].focus();
+		const chosenButtonNumber = Math.floor(Math.random() * issuebtns.length);
+		issuebtns[chosenButtonNumber].classList.add("rces-chosen");
+		document.addEventListener("keyup", function (ev) {
+			if (ev.key != "Enter" || ev.repeat) {
+				ev.preventDefault();
+				return;
+			}
+			document
+				.querySelectorAll("button.button.big.icon")
+				.forEach(function (el) {
+					el.style.display = "none";
+				});
+			issuebtns[chosenButtonNumber].click();
+		});
 	}
 })();

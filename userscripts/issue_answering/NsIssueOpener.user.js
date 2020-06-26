@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueOpener
-// @version      0.5
+// @version      0.6
 // @namespace    dithpri.RCES
 // @description  Open issues in new tab with no decorations
 // @author       dithpri
@@ -18,9 +18,17 @@
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
+function addStyle(style) {
+	"use strict";
+	var node = document.createElement("style");
+	node.innerHTML = style;
+	document.getElementsByTagName("head")[0].appendChild(node);
+}
+
 (function () {
 	"use strict";
 
+	addStyle(`.rces-chosen { border: .2em solid black; }`);
 	// Open on user click in new tab
 	Array.from(document.querySelectorAll(".dilemmalist > li >a"))
 		.filter((x) => {
@@ -37,22 +45,27 @@
 				val.getAttribute("href") +
 					"/template-overall=none/x-rces=openissue"
 			);
-			// Remove issues from the list after it has been opened
-			val.addEventListener("click", (event) => {
-				val.parentElement.remove();
-				// Close page if all issues have been opened
-				if (
-					document.querySelector(".dilemmalist").textContent.trim() ==
-					""
-				) {
-					setTimeout(window.close, 100);
-				} /* focus on next issue */ else {
-					document.querySelector(".rces-dilemmalink").focus();
-				}
-			});
 			return val;
 		})[0]
-		.focus();
+		.parentElement.classList.add("rces-chosen");
+
+	document.addEventListener("keypress", function (ev) {
+		if (ev.key != "Enter" || ev.repeat) {
+			ev.preventDefault();
+			return;
+		}
+		const element = document.querySelector(".rces-dilemmalink");
+		element.click();
+		// Remove issue from the list after it has been opened
+		element.parentElement.remove();
+		// Close page if all issues have been opened
+		if (document.querySelector(".dilemmalist").textContent.trim() == "") {
+			setTimeout(window.close, 100);
+		}
+		document
+			.querySelector(".dilemmalist > li >a")
+			.parentElement.classList.add("rces-chosen");
+	});
 
 	// Close page if no issues
 	const issuestxt = document.querySelector(".dilemmalist").textContent.trim();
