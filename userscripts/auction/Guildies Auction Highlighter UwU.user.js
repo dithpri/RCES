@@ -30,55 +30,79 @@
  *     to save and load Guild members' card collecting nations locally.
  */
 
-
 function GM_addStyle(style) {
-	'use strict';
-	var node = document.createElement('style');
+	"use strict";
+	var node = document.createElement("style");
 	node.innerHTML = style;
-	document.getElementsByTagName('head')[0].appendChild(node);
-};
+	document.getElementsByTagName("head")[0].appendChild(node);
+}
 
 // A breaking spreadsheet change was introduced. Force updating if we last
 // updated the guild list before this time.
 const forceUpdateIfBefore = 1591582764000;
 
 (async function () {
-	'use strict';
+	"use strict";
 
 	const update_auctiontable = async function () {
-		const guild_members_array = (await GM.getValue("tnp-cards-guild", "")).split("\n");
-		document.querySelectorAll("#cardauctiontable > tbody > tr > td > p > a.nlink").forEach(function (el, i) {
-			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "")
-			if (guild_members_array.includes(canonical_nname)) {
-				el.parentNode.parentNode.classList.add("rces-cl-tnp-cardguild");
-			} else {
-				el.parentNode.parentNode.classList.remove("rces-cl-tnp-cardguild");
-			}
-		});
+		const guild_members_array = (
+			await GM.getValue("tnp-cards-guild", "")
+		).split("\n");
+		document
+			.querySelectorAll(
+				"#cardauctiontable > tbody > tr > td > p > a.nlink"
+			)
+			.forEach(function (el, i) {
+				const canonical_nname = el
+					.getAttribute("href")
+					.replace(/^nation=/, "");
+				if (guild_members_array.includes(canonical_nname)) {
+					el.parentNode.parentNode.classList.add(
+						"rces-cl-tnp-cardguild"
+					);
+				} else {
+					el.parentNode.parentNode.classList.remove(
+						"rces-cl-tnp-cardguild"
+					);
+				}
+			});
 	};
 
 	if (document.getElementById("auctiontablebox")) {
 		// If we haven't updated in the last 12h
 		const lastUpdate = await GM.getValue("tnp-cards-guild-lastupdate", 0);
-		if (lastUpdate < forceUpdateIfBefore || lastUpdate + 12 * 60 * 60 * 1000 < (new Date().getTime())) {
+		if (
+			lastUpdate < forceUpdateIfBefore ||
+			lastUpdate + 12 * 60 * 60 * 1000 < new Date().getTime()
+		) {
 			GM.xmlHttpRequest({
 				method: "GET",
-				url: "https://docs.google.com/spreadsheets/d/1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ/export?format=tsv&id=1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ&gid=1147833059",
+				url:
+					"https://docs.google.com/spreadsheets/d/1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ/export?format=tsv&id=1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ&gid=1147833059",
 				onload: async function (data) {
 					console.info("updated");
-					await GM.setValue("tnp-cards-guild",
+					await GM.setValue(
+						"tnp-cards-guild",
 						data.responseText
 							.split("\n")
-							.map((x) => x.split("\t")[4].toLowerCase().replace(/ /g, "_"))
+							.map((x) =>
+								x
+									.split("\t")[4]
+									.toLowerCase()
+									.replace(/ /g, "_")
+							)
 							.slice(1)
 							.concat("the_northern_light")
-							.join("\n"));
-					GM.setValue("tnp-cards-guild-lastupdate", new Date().getTime());
+							.join("\n")
+					);
+					GM.setValue(
+						"tnp-cards-guild-lastupdate",
+						new Date().getTime()
+					);
 					update_auctiontable();
-				}
+				},
 			});
 		}
-
 
 		update_auctiontable();
 
@@ -87,10 +111,13 @@ const forceUpdateIfBefore = 1591582764000;
 		});
 
 		const observerOptions = {
-			childList: true
+			childList: true,
 		};
 
-		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
+		observer.observe(
+			document.getElementById("auctiontablebox"),
+			observerOptions
+		);
 
 		GM_addStyle(`
 .rces-cl-tnp-cardguild {

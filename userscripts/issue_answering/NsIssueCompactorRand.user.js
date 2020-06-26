@@ -18,16 +18,15 @@
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
-
 function addStyle(style) {
-    'use strict';
-    var node = document.createElement('style');
-    node.innerHTML = style;
-    document.getElementsByTagName('head')[0].appendChild(node);
-};
+	"use strict";
+	var node = document.createElement("style");
+	node.innerHTML = style;
+	document.getElementsByTagName("head")[0].appendChild(node);
+}
 
 (function () {
-    addStyle(`
+	addStyle(`
 body > *, body > #banner, .smalltext, .dilemmapaper, p, h5 {display : none;}
 body > #dilemma, body > #main, p.dilemmaaccept, p.dilemmadismissbox {display: initial;}
 
@@ -53,19 +52,27 @@ right: 0;
 * { visibility: hidden;}
 
 `);
-    document.querySelectorAll("form[action^=\"/page=enact_dilemma/\"]").forEach(function (el) {
-        el.action += "/template-overall=none/x-rces=autoclose";
-    });
-    document.querySelectorAll("button.button.big.icon").forEach(function (el) {
-        el.addEventListener("click", function () {
-            document.querySelectorAll("button.button.big.icon").forEach(function (el) {
-                el.style.display = "none";
-            });
-        });
-    });
-    const issuebtns = document.querySelectorAll("button.button.big.icon.approve");
-    if (issuebtns.length > 0) {
-        document.querySelector("p.dilemmadismissbox > button.big.icon.remove.danger").disabled = true;
-        issuebtns[Math.floor(Math.random() * issuebtns.length)].focus();
-    }
+	document
+		.querySelectorAll('form[action^="/page=enact_dilemma/"]')
+		.forEach(function (el) {
+			el.action += "/template-overall=none/x-rces=autoclose";
+		});
+	document.querySelectorAll("button.button.big.icon").forEach(function (el) {
+		el.addEventListener("click", function () {
+			document
+				.querySelectorAll("button.button.big.icon")
+				.forEach(function (el) {
+					el.style.display = "none";
+				});
+		});
+	});
+	const issuebtns = document.querySelectorAll(
+		"button.button.big.icon.approve"
+	);
+	if (issuebtns.length > 0) {
+		document.querySelector(
+			"p.dilemmadismissbox > button.big.icon.remove.danger"
+		).disabled = true;
+		issuebtns[Math.floor(Math.random() * issuebtns.length)].focus();
+	}
 })();

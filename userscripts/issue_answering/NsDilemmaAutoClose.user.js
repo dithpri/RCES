@@ -19,7 +19,6 @@
  */
 
 (function () {
-    'use strict';
-    window.close();
+	"use strict";
+	window.close();
 })();
-

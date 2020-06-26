@@ -26,7 +26,7 @@
  */
 
 (function () {
-	'use strict';
+	"use strict";
 	function noinput_mousetrap(event) {
 		if (event.target.classList.contains("mousetrap")) {
 			event.preventDefault();
@@ -34,44 +34,62 @@
 		}
 	}
 
-	const inputs = document.querySelectorAll("input.auctionbid[name=\"auction_ask\"], input.auctionbid[name=\"auction_bid\"]");
-	const ask_match = document.querySelector("#highest_matchable_ask_price > .cardprice_sell").textContent;
-	const bid_match = document.querySelector("#lowest_matchable_bid_price > .cardprice_buy").textContent;
+	const inputs = document.querySelectorAll(
+		'input.auctionbid[name="auction_ask"], input.auctionbid[name="auction_bid"]'
+	);
+	const ask_match = document.querySelector(
+		"#highest_matchable_ask_price > .cardprice_sell"
+	).textContent;
+	const bid_match = document.querySelector(
+		"#lowest_matchable_bid_price > .cardprice_buy"
+	).textContent;
 
 	// sell, ask
-	Mousetrap.bind(['s', 'a', 'S', 'A'], function (ev) {
+	Mousetrap.bind(["s", "a", "S", "A"], function (ev) {
 		noinput_mousetrap(ev);
-		document.querySelector("th[data-mode=\"sell\"").click();
-		const askbox = document.querySelector("input.auctionbid[name=\"auction_ask\"]");
-		askbox.focus(); askbox.select();
+		document.querySelector('th[data-mode="sell"').click();
+		const askbox = document.querySelector(
+			'input.auctionbid[name="auction_ask"]'
+		);
+		askbox.focus();
+		askbox.select();
 	});
 
 	// buy, bid
-	Mousetrap.bind(['b', 'B'], function (ev) {
+	Mousetrap.bind(["b", "B"], function (ev) {
 		noinput_mousetrap(ev);
-		document.querySelector("th[data-mode=\"buy\"").click();
-		const bidbox = document.querySelector("input.auctionbid[name=\"auction_bid\"]");
-		bidbox.focus(); bidbox.select();
+		document.querySelector('th[data-mode="buy"').click();
+		const bidbox = document.querySelector(
+			'input.auctionbid[name="auction_bid"]'
+		);
+		bidbox.focus();
+		bidbox.select();
 	});
 
 	// gift
-	Mousetrap.bind(['g', 'G'], function (ev) {
+	Mousetrap.bind(["g", "G"], function (ev) {
 		noinput_mousetrap(ev);
-		document.querySelectorAll("div.deckcard-info-cardbuttons > a.button").forEach(function (el) {
-			if (el.textContent == "Gift") {
-				el.click();
-			}
-		});
+		document
+			.querySelectorAll("div.deckcard-info-cardbuttons > a.button")
+			.forEach(function (el) {
+				if (el.textContent == "Gift") {
+					el.click();
+				}
+			});
 	});
 
 	// match
-	Mousetrap.bind(['m', 'M'], function (ev) {
+	Mousetrap.bind(["m", "M"], function (ev) {
 		noinput_mousetrap(ev);
 		if (ask_match && ask_match > 0) {
-			document.querySelector("input.auctionbid[name=\"auction_ask\"]").value = ask_match;
+			document.querySelector(
+				'input.auctionbid[name="auction_ask"]'
+			).value = ask_match;
 		}
 		if (bid_match && bid_match > 0) {
-			document.querySelector("input.auctionbid[name=\"auction_bid\"]").value = bid_match;
+			document.querySelector(
+				'input.auctionbid[name="auction_bid"]'
+			).value = bid_match;
 		}
 	});
 
@@ -79,10 +97,10 @@
 		// to be able to use keybinds while inputting numbers
 		el.classList.add("mousetrap");
 		// to submit on enter
-		el.addEventListener('keypress', function (e) {
+		el.addEventListener("keypress", function (e) {
 			if (e.which == 13) {
 				this.parentNode.nextElementSibling.firstChild.click();
 			}
-		})
+		});
 	});
 })();
