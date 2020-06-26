@@ -1,6 +1,8 @@
 # RCES
 
 - [RCES](#rces)
+  - [DISCLAIMER](#disclaimer)
+  - [About](#about) 
   - [Licensing](#licensing)
   - [Bugs](#bugs)
   - [What does RCES stand for?](#what-does-rces-stand-for)
@@ -19,6 +21,22 @@
     - [goldretriever-web](#goldretriever-web)
 
 ---
+
+## DISCLAIMER
+
+Though these scripts are, to the best of my knowledge, legal, you should
+read the NationStates [scripting rules](https://forum.nationstates.net/viewtopic.php?p=16394966#p16394966) 
+*BEFORE* using them. The most important takeaway is that YOU, the user,
+shouldn't try to automate **restricted actions**.
+
+When a script pauses and waits for your input, you should interact with
+it manually.
+That means no running another script to automate clicks or keypresses,
+no placing water bottles on the keyboard, no `yes | ./script`.
+
+---
+
+## About
 
 This is a repository of various scripts that I've coded in 2019/2020 to help
 with [NationStates](https://www.nationstates.net) card farming.
