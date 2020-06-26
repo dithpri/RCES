@@ -18,20 +18,25 @@
  */
 
 (function () {
-    'use strict';
-    // Change values here:
-    const default_prices = {
-        "common": { ask: 0.01, bid: 0.01 },
-        "uncommon": { ask: 0.05, bid: 0.05 },
-        "rare": { ask: 0.10, bid: 0.10 },
-        "ultra-rare": { ask: 0.20, bid: 0.20 },
-        "epic": { ask: 0.50, bid: 0.50 },
-        "legendary": { ask: 1.00, bid: 1.00 }
-    };
+	"use strict";
+	// Change values here:
+	const default_prices = {
+		common: {ask: 0.01, bid: 0.01},
+		uncommon: {ask: 0.05, bid: 0.05},
+		rare: {ask: 0.1, bid: 0.1},
+		"ultra-rare": {ask: 0.2, bid: 0.2},
+		epic: {ask: 0.5, bid: 0.5},
+		legendary: {ask: 1.0, bid: 1.0},
+	};
 
-    const rarity = document.querySelector(".deckcard-season-list-card-selected > .deckcard-token").textContent.toLowerCase();
+	const rarity = document
+		.querySelector(".deckcard-season-list-card-selected > .deckcard-token")
+		.textContent.toLowerCase();
 
-    document.querySelector("input[name=\"auction_ask\"").value = default_prices[rarity].ask.toFixed(2);
-    document.querySelector("input[name=\"auction_bid\"").value = default_prices[rarity].bid.toFixed(2);
-
+	document.querySelector('input[name="auction_ask"').value = default_prices[
+		rarity
+	].ask.toFixed(2);
+	document.querySelector('input[name="auction_bid"').value = default_prices[
+		rarity
+	].bid.toFixed(2);
 })();
