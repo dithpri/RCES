@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Garderner Highlighter
-// @version      0.2
+// @version      0.4
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
@@ -12,6 +12,7 @@
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @connect      docs.google.com
+// @connect      googleusercontent.com
 // ==/UserScript==
 
 /*
@@ -23,7 +24,7 @@
 
 /* Permissions:
  *
- * GM.xmlHttpRequest, `connect docs.google.com`:
+ * GM.xmlHttpRequest, `connect docs.google.com`, `connect googleusercontent.com`:
  *     to automatically fetch and update members' nations.
  *
  * GM.setValue, GM.getValue:
