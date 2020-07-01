@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Guildies Auction Highlighter UwU
-// @version      0.8
+// @version      0.9
 // @namespace    dithpri.RCES
 // @description  Adds TNP's Card Guild logo beside members' card collecting nations during an auction
 // @author       dithpri
@@ -12,6 +12,7 @@
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @connect      docs.google.com
+// @connect      googleusercontent.com
 // ==/UserScript==
 
 /*
@@ -23,7 +24,7 @@
 
 /* Permissions:
  *
- * GM.xmlHttpRequest, `connect docs.google.com`:
+ * GM.xmlHttpRequest, `connect docs.google.com`, `connect googleusercontent.com`:
  *     to automatically fetch and update Guild members' card collecting nations.
  *
  * GM.setValue, GM.getValue:

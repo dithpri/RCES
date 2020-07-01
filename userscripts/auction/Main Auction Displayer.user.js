@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.10
+// @version      0.11
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -12,6 +12,7 @@
 // @grant        GM.setValue
 // @grant        GM.getValue
 // @connect      docs.google.com
+// @connect      googleusercontent.com
 // ==/UserScript==
 
 /*
@@ -23,7 +24,7 @@
 
 /* Permissions:
  *
- * GM.xmlHttpRequest, `connect docs.google.com`:
+ * GM.xmlHttpRequest, `connect docs.google.com`, `connect googleusercontent.com`:
  *     to automatically fetch and update the puppet list.
  *
  * GM.setValue, GM.getValue:
