@@ -17,7 +17,7 @@
 Issues: page=dilemmas/template-overall=none
 Deck: page=deck
 Value Deck: page=deck/value_deck=1
-Value Deck (No CSS): page=deck/value_deck=1s/template-overall=none
+Value Deck (No CSS): page=deck/value_deck=1/template-overall=none
 Telegrams: page=telegrams
 Settings: page=settings
 TG Settings: page=tgsettings
