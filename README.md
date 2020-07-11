@@ -1,31 +1,33 @@
 # RCES
 
 - [RCES](#rces)
-  - [DISCLAIMER](#disclaimer)
-  - [About](#about) 
-  - [Licensing](#licensing)
-  - [Bugs](#bugs)
-  - [What does RCES stand for?](#what-does-rces-stand-for)
-  - [Contributing](#contributing)
-  - [Description of all utilities](#description-of-all-utilities)
-    - [Issue Answering Scripts](#issue-answering-scripts)
-    - [Auction Utilities](#auction-utilities)
-      - [Card Default Prices](#card-default-prices)
-      - [TNP Guild Highlighter](#tnp-guild-highlighter)
-      - [Gardener Highlighter](#gardener-highlighter)
-      - [Main Auction Displayer](#main-auction-displayer)
-    - [Miscellaneous](#miscellaneous)
-      - [Auction Keybdindings](#auction-keybdindings)
-      - [Puppet Creation Assistant](#puppet-creation-assistant)
-    - [Puppet links sheet](#puppet-links-sheet)
-    - [goldretriever-web](#goldretriever-web)
+	- [DISCLAIMER](#disclaimer)
+	- [About](#about)
+	- [Licensing](#licensing)
+	- [Bugs](#bugs)
+	- [What does RCES stand for?](#what-does-rces-stand-for)
+	- [Contributing](#contributing)
+	- [Description of all utilities](#description-of-all-utilities)
+		- [Issue Answering Scripts](#issue-answering-scripts)
+		- [Auction Utilities](#auction-utilities)
+			- [Card Default Prices](#card-default-prices)
+			- [TNP Guild Highlighter](#tnp-guild-highlighter)
+			- [Gardener Highlighter](#gardener-highlighter)
+			- [Main Auction Displayer](#main-auction-displayer)
+		- [Miscellaneous](#miscellaneous)
+			- [Auction Keybdindings](#auction-keybdindings)
+			- [Puppet Creation Assistant](#puppet-creation-assistant)
+			- [Cards Icon / Deck page link](#cards-icon--deck-page-link)
+		- [Puppet links sheet](#puppet-links-sheet)
+		- [Owner report](#owner-report)
+		- [goldretriever-web](#goldretriever-web)
 
 ---
 
 ## DISCLAIMER
 
 Though these scripts are, to the best of my knowledge, legal, you should
-read the NationStates [scripting rules](https://forum.nationstates.net/viewtopic.php?p=16394966#p16394966) 
+read the NationStates [scripting rules](https://forum.nationstates.net/viewtopic.php?p=16394966#p16394966)
 *BEFORE* using them. The most important takeaway is that YOU, the user,
 shouldn't try to automate **restricted actions**.
 
@@ -52,7 +54,7 @@ various gists, notably:
   * [TNP Guild Highlighter](https://gist.github.com/dithpri/7f06ce1bf64d2a4b5ec9225da2f1e3df)
   * [Main Auction Displayer](https://gist.github.com/dithpri/6a3fb524e59755510b18e676039b16d2)
   * [Gardener Highlighter](https://gist.github.com/dithpri/93015dd7281c579ed267dafdf5e97b8d)
-  
+
 I'm in the process of consolidating them into this repository to make
 management easier and for them to be available to a wider public.
 
@@ -98,7 +100,7 @@ Just open a pull request.
 ### [Issue Answering Scripts](userscripts/issue_answering)
 
 These consist of three scripts. When used together, issue answering can be done
-just by pressing enter repeatedly: 
+just by pressing enter repeatedly:
   * [NsIssueOpener](userscripts/issue_answering/NsIssueOpener.user.js) no more
   clicking! Just keep pressing enter to open links to unanswered issues in a new
   tab.
@@ -147,13 +149,17 @@ Assists with one-click creation of puppet nations. All fields (except password
 and name) are chosen randomly. Works with the `Create puppet` links in the
 [puppet links sheet](#puppet-links-sheet).
 
+#### [Cards Icon / Deck page link](userscripts/miscellaneous/cards-icon.user.js)
+Depending on NS theme, adds either a cards icon to the top banner or a link in
+the menu. Both the link and icon redirect to the deck page.
+
 ---
 
 ### [Puppet links sheet](puppet_links_sheet)
 A python script to generate a sheet of clickable links pointing to various
 puppets. Best used with the Containerise extension for maximum effiency. Also
 generates rules for Containerise so you don't have to.
-  
+
 [There's this guide for more information on the extension and how it's tied to
 farming.](https://www.nationstates.net/page=dispatch/id=1383002)
 
@@ -161,6 +167,14 @@ By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
 *settings*, *telegram settings*, the nation itself and the
 [creation assistant](#puppet-creation-assistant). Configurable throught the
 `config.txt` file. Puppets (or future puppets) go in `puppets_list.txt`
+
+---
+
+### [Owner report](owner_report)
+A python script that reads a list of cards and/or a list of puppets. It will
+spit out the number of owners, number of copies and who the owners are for each
+card. If provided with the list of puppets to check, it will do so for each card
+on the puppets. Cards go in the `cards.txt` file, puppets in `puppets.txt`.
 
 ---
 
