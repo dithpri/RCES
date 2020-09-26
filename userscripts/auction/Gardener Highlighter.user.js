@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Garderner Highlighter
-// @version      0.6
+// @version      0.7
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
@@ -66,16 +66,19 @@ const icon_base64 =
 					);
 				}
 			});
-		document.querySelectorAll("a.nlink").forEach(function (el, i) {
-			const canonical_nname = el
-				.getAttribute("href")
-				.replace(/^nation=/, "");
-			if (members_array.includes(canonical_nname)) {
-				el.classList.add("rces-cl-cardgardens-inline");
-			} else {
-				el.classList.remove("rces-cl-cardgardens-inline");
-			}
-		});
+		document
+			.querySelectorAll("a.nlink:not(.rces-cl-cardgardens-parsed)")
+			.forEach(function (el, i) {
+				const canonical_nname = el
+					.getAttribute("href")
+					.replace(/^nation=/, "");
+				if (members_array.includes(canonical_nname)) {
+					const new_el = document.createElement("span");
+					new_el.classList.add("rces-cl-cardgardens-inline");
+					el.parentNode.insertBefore(new_el, el);
+					el.classList.add("rces-cl-cardgardens-parsed");
+				}
+			});
 	};
 
 	if (document.getElementById("auctiontablebox")) {

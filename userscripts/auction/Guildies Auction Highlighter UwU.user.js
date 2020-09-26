@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Guildies Auction Highlighter UwU
-// @version      0.9
+// @version      0.10
 // @namespace    dithpri.RCES
 // @description  Adds TNP's Card Guild logo beside members' card collecting nations during an auction
 // @author       dithpri
@@ -70,6 +70,19 @@ const icon_base64 =
 					);
 				}
 			});
+		document
+			.querySelectorAll("a.nlink:not(.rces-cl-tnp-cardsguild-parsed)")
+			.forEach(function (el, i) {
+				const canonical_nname = el
+					.getAttribute("href")
+					.replace(/^nation=/, "");
+				if (members_array.includes(canonical_nname)) {
+					const new_el = document.createElement("span");
+					new_el.classList.add("rces-cl-tnp-cardsguild-inline");
+					el.parentNode.insertBefore(new_el, el);
+					el.classList.add("rces-cl-tnp-cardsguild-parsed");
+				}
+			});
 	};
 
 	if (document.getElementById("auctiontablebox")) {
@@ -115,6 +128,7 @@ const icon_base64 =
 		});
 
 		const observerOptions = {
+			subtree: true,
 			childList: true,
 		};
 
@@ -134,6 +148,12 @@ background-position: left;
 tr > td.rces-cl-tnp-cardsguild:nth-child(5) {
 background-image: linear-gradient(270deg, rgba(255,255,255,0), rgb(255,255,255) 50px, rgba(255, 255, 255, 0) 100px), url('${icon_base64}');
 background-position: right;
+}
+.rces-cl-tnp-cardsguild-inline {
+background-repeat: no-repeat;
+background-image: url('${icon_base64}');
+background-size: contain;
+padding-left: 1.5em;
 }
 `);
 	}
