@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Garderner Highlighter
-// @version      0.5
+// @version      0.6
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
@@ -118,6 +118,7 @@ const icon_base64 =
 		});
 
 		const observerOptions = {
+			subtree: true,
 			childList: true,
 		};
 
