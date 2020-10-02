@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.11
+// @version      0.12
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -110,9 +110,10 @@
 							.map((x) => x.split("\t").slice(0, 1 + 1))
 							.slice(1)
 							.reduce(function (map, obj) {
-								map[
-									canonicalize(obj[0].trim())
-								] = obj[1].trim();
+								map[canonicalize(obj[0].trim())] = ((x) =>
+									x.charAt(0).toUpperCase() + x.slice(1))(
+									obj[1].trim().replaceAll("_", " ")
+								);
 								return map;
 							}, {})
 					)
