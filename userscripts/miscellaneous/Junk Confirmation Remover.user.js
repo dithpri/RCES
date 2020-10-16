@@ -94,7 +94,7 @@ function addOpt(...args) {
 			junkButton.dataset.rarity = junkButton.dataset.rarity.toUpperCase();
 			junkButton.dataset.rarity += addOpt(marketValueText, bidText);
 		} else if (enableConfirmation === false) {
-			junkButton.dataset.rarity = "common";
+			junkButton.dataset.rarity = "uncommon";
 		}
 	});
 })();
