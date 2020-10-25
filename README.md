@@ -128,7 +128,7 @@ The same as the Guild Highlighter, except for members of the Card Gardening
 Society.
 
 #### [Main Auction Displayer](userscripts/auction/Main%20Auction%20Displayer.user.js)
-Contacts a secret Google Spreadsheet with known puppets and puppetmasters. Adds
+Contacts a Google Spreadsheet with known puppets and puppetmasters. Adds
 the puppetmaster's name next to the puppet. The spreadsheet is maintained by
 [9003](https://www.nationstates.net/nation=9003)
 
