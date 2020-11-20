@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.13
+// @version      0.13.1
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -31,48 +31,78 @@
  *     to save and load the puppet list locally.
  */
 
-(async function () {
-	"use strict";
-	const canonicalize = function (name) {
-		return name.trim().toLowerCase().replace(/ /g, "_");
-	};
+function GM_promiseXmlHttpRequest(opts) {
+	return new Promise((resolve, reject) => {
+		let details = opts;
+		details.onload = (response) => {
+			if (response.status >= 200 && response.status < 300) {
+				resolve(response);
+			} else {
+				reject(response);
+			}
+		};
+		details.onerror = (response) => {
+			reject(response);
+		};
+		GM.xmlHttpRequest(details);
+	});
+}
 
-	const update_puppets = async function (isAuctionPage) {
-		const puppets_map = JSON.parse(
-			await GM.getValue("rces-main-nations", "{}")
-		);
-		if (isAuctionPage) {
-			document
-				.querySelectorAll(
-					"#cardauctiontable > tbody > tr > td > p > a.nlink, .deckcard-title > a.nlink:not(.rces-was-parsed)"
-				)
-				.forEach(function (el, i) {
-					const canonical_nname = el
-						.getAttribute("href")
-						.replace(/^nation=/, "");
-					el.classList.add("rces-was-parsed");
-					if (
-						Object.prototype.hasOwnProperty.call(
-							puppets_map,
-							canonical_nname
-						)
-					) {
-						const puppetmaster = puppets_map[canonical_nname];
-						el.insertAdjacentHTML(
-							"beforebegin",
-							`<a href="nation=${canonicalize(
-								puppetmaster
-							)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a><br />`
-						);
-					}
-				});
-		}
+function canonicalize(name) {
+	return name.trim().toLowerCase().replace(/ /g, "_");
+}
+
+async function getFromSheet(
+	sheetUrl,
+	puppetColumn = 0,
+	mainColumn = 1,
+	headerRows = 1
+) /* -> object (map) */ {
+	const data = await GM_promiseXmlHttpRequest({
+		method: "GET",
+		url: sheetUrl,
+	});
+	return data.responseText
+		.split("\n")
+		.map((x) => {
+			let y = x.split("\t");
+			if (puppetColumn < mainColumn) {
+				y = y.slice(puppetColumn, mainColumn + 1);
+			} else {
+				// switch column order if the puppetmaster column is before the puppet
+				y.slice(mainColumn, puppetColumn + 1);
+				y = [y[1], y[0]];
+			}
+			return y;
+		})
+		.slice(headerRows)
+		.filter((x) => canonicalize(x[0]) != canonicalize(x[1]))
+		.reduce(function (map, obj) {
+			map[canonicalize(obj[0].trim())] = ((x) =>
+				// De-canonicalize owner names
+				// This could potentially be done when displaying, but we
+				// prefer doing this when downloading the sheet.
+				x.charAt(0).toUpperCase() + x.slice(1))(
+				obj[1].trim().replaceAll("_", " ")
+			);
+			return map;
+		}, {});
+}
+
+async function updatePuppets(isAuctionPage) {
+	const puppets_map = JSON.parse(
+		await GM.getValue("rces-main-nations", "{}")
+	);
+	if (isAuctionPage) {
 		document
-			.querySelectorAll("a.nlink:not(.rces-was-parsed)")
+			.querySelectorAll(
+				"#cardauctiontable > tbody > tr > td > p > a.nlink, .deckcard-title > a.nlink:not(.rces-was-parsed)"
+			)
 			.forEach(function (el, i) {
 				const canonical_nname = el
 					.getAttribute("href")
 					.replace(/^nation=/, "");
+				el.classList.add("rces-was-parsed");
 				if (
 					Object.prototype.hasOwnProperty.call(
 						puppets_map,
@@ -80,16 +110,52 @@
 					)
 				) {
 					const puppetmaster = puppets_map[canonical_nname];
-					el.classList.add("rces-was-parsed");
 					el.insertAdjacentHTML(
-						"afterend",
-						`&nbsp;<a href="nation=${canonicalize(
+						"beforebegin",
+						`<a href="nation=${canonicalize(
 							puppetmaster
-						)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a>`
+						)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a><br />`
 					);
 				}
 			});
-	};
+	}
+	document
+		.querySelectorAll("a.nlink:not(.rces-was-parsed)")
+		.forEach(function (el, i) {
+			const canonical_nname = el
+				.getAttribute("href")
+				.replace(/^nation=/, "");
+			if (
+				Object.prototype.hasOwnProperty.call(
+					puppets_map,
+					canonical_nname
+				)
+			) {
+				const puppetmaster = puppets_map[canonical_nname];
+				el.classList.add("rces-was-parsed");
+				el.insertAdjacentHTML(
+					"afterend",
+					`&nbsp;<a href="nation=${canonicalize(
+						puppetmaster
+					)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a>`
+				);
+			}
+		});
+}
+
+const sheets = [
+	{
+		// 9003's spreadsheet
+		url:
+			"https://docs.google.com/spreadsheets/d/1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4/export?format=tsv&id=1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4&gid=733627866",
+		puppetColumn: 0,
+		mainColumn: 1,
+		headerRows: 1,
+	},
+];
+
+(async function () {
+	"use strict";
 
 	// If we haven't updated in the last 24h
 	if (
@@ -97,43 +163,31 @@
 			24 * 60 * 60 * 1000 <
 		new Date().getTime()
 	) {
-		GM.xmlHttpRequest({
-			method: "GET",
-			url:
-				"https://docs.google.com/spreadsheets/d/1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4/export?format=tsv&id=1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4&gid=733627866",
-			onload: async function (data) {
-				await GM.setValue(
-					"rces-main-nations",
-					JSON.stringify(
-						data.responseText
-							.split("\n")
-							.map((x) => x.split("\t").slice(0, 1 + 1))
-							.slice(1)
-							.filter(
-								(x) => canonicalize(x[0]) != canonicalize(x[1])
+		await GM.setValue(
+			"rces-main-nations",
+			JSON.stringify(
+				Object.assign(
+					{},
+					...(await Promise.all(
+						sheets.map((sheet) =>
+							getFromSheet(
+								sheet.url,
+								sheet.puppetColumn,
+								sheet.mainColumn,
+								sheet.headerRows
 							)
-							.reduce(function (map, obj) {
-								map[canonicalize(obj[0].trim())] = ((x) =>
-									x.charAt(0).toUpperCase() + x.slice(1))(
-									obj[1].trim().replaceAll("_", " ")
-								);
-								return map;
-							}, {})
-					)
-				);
-
-				GM.setValue(
-					"rces-main-nations-lastupdate",
-					new Date().getTime()
-				);
-			},
-		});
+						)
+					))
+				)
+			)
+		);
+		GM.setValue("rces-main-nations-lastupdate", new Date().getTime());
 	}
 
 	if (document.getElementById("auctiontablebox")) {
-		update_puppets(true);
+		updatePuppets(true);
 		let observer = new MutationObserver(function (mutationList) {
-			update_puppets(true);
+			updatePuppets(true);
 		});
 
 		const observerOptions = {
@@ -145,6 +199,6 @@
 			observerOptions
 		);
 	} else {
-		update_puppets(false);
+		updatePuppets(false);
 	}
 })();
