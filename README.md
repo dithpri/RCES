@@ -101,38 +101,43 @@ Just open a pull request.
 
 These consist of three scripts. When used together, issue answering can be done
 just by pressing enter repeatedly:
-  * [NsIssueOpener](userscripts/issue_answering/NsIssueOpener.user.js) no more
+  * [NsIssueOpener](userscripts/issue_answering/NsIssueOpener.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsIssueOpener.user.js)  
+  no more
   clicking! Just keep pressing enter to open links to unanswered issues in a new
   tab.
-  * [NsIssueCompactorRand](userscripts/issue_answering/NsIssueCompactorRand.user.js)
+  * [NsIssueCompactorRand](userscripts/issue_answering/NsIssueCompactorRand.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsIssueCompactorRand.user.js)  
   removes all the fluff and text around issue, focusing on a random option.
   Press enter and voilà: issue answered. *The issue has to be opened using the
   previous script.*
   * Autoclose:
-    * [NsDilemmaAutoClose](userscripts/issue_answering/NsDilemmaAutoClose.user.js)
+    * [NsDilemmaAutoClose](userscripts/issue_answering/NsDilemmaAutoClose.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsDilemmaAutoClose.user.js)  
     Offers to open the card pack the issue generated. If no pack was
     generated, closes the tab. *The issue has to be answered using the previous
-    script.*
-    * [NsDilemmaAutoCloseAll](userscripts/issue_answering/NsDilemmaAutoCloseAll.user.js)
-    Closes the tab after an issue has been answered. *The issue has to be
-    answered using the previous script*
+    script.*  
+    * [NsDilemmaAutoCloseAll](userscripts/issue_answering/NsDilemmaAutoCloseAll.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsDilemmaAutoCloseAll.user.js)  
+    Closes the tab after an issue has been answered. Even if a pack was
+    generated. *The issue has to be answered using the previous script*
 
 ---
 
 ### [Auction Utilities](userscripts/auction)
 
 #### [Card Default Prices](userscripts/auction/Card%20Default%20Prices.user.js)
+[Install](../../raw/master/userscripts/auction/Card%20Default%20Prices.user.js)  
 Pretty straightforward: change the default starting price when placing an ask or
 bid. You'll have to edit the value in the script manually (for now).
 
 #### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
+[Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
 Adds an icon of TNP's Cards Guild next to guild members during an auction.
 
 #### [Gardener Highlighter](userscripts/auction/Gardener%20Highlighter.user.js)
+[Install](../../raw/master/userscripts/auction/Gardener%20Highlighter.user.js)  
 The same as the Guild Highlighter, except for members of the Card Gardening
 Society.
 
 #### [Main Auction Displayer](userscripts/auction/Main%20Auction%20Displayer.user.js)
+[Install](../../raw/master/userscripts/auction/Main%20Auction%20Displayer.user.js)  
 Contacts a Google Spreadsheet (that was totally never ever secret) with known
 puppets and puppetmasters. Adds the puppetmaster's name next to the puppet. The
 spreadsheet is maintained by [9003](https://www.nationstates.net/nation=9003)
@@ -142,6 +147,7 @@ spreadsheet is maintained by [9003](https://www.nationstates.net/nation=9003)
 ### [Miscellaneous](userscripts/miscellaneous)
 
 #### [Auction Keybdindings](userscripts/miscellaneous/auction-keybindings.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/auction-keybindings.user.js)  
 An early version of keybindings for the auction page. A more complete version is
 being worked on. These are the available bindings for now:
   * **A**sk / **S**ell
@@ -150,17 +156,20 @@ being worked on. These are the available bindings for now:
   * **G**ift
 
 #### [Puppet Creation Assistant](userscripts/miscellaneous/NsPuppetCreateAssist.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/NsPuppetCreateAssist.user.js)  
 Assists with one-click creation of puppet nations. All fields (except password
 and name) are chosen randomly. Works with the `Create puppet` links in the
 [puppet links sheet](#puppet-links-sheet).
 
 #### [Cards Icon / Deck page link](userscripts/miscellaneous/cards-icon.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/cards-icon.user.js)  
 Depending on NS theme, adds either a cards icon to the top banner or a link in
 the menu. Both the link and icon redirect to the deck page.
 
 ---
 
 ### [Puppet links sheet](puppet_links_sheet)
+[Download](../../releases/download/v0.1/puppet_links_sheet.zip)  
 A python script to generate a sheet of clickable links pointing to various
 puppets. Best used with the Containerise extension for maximum effiency. Also
 generates rules for Containerise so you don't have to.
@@ -176,6 +185,7 @@ By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
 ---
 
 ### [Owner report](owner_report)
+[Download](../../releases/download/v0.1/owner_report.zip)  
 A python script that reads a list of cards and/or a list of puppets. It will
 spit out the number of owners, number of copies and who the owners are for each
 card. If provided with the list of puppets to check, it will do so for each card
@@ -184,6 +194,7 @@ on the puppets. Cards go in the `cards.txt` file, puppets in `puppets.txt`.
 ---
 
 ### [goldretriever-web](https://dithpri.github.io/goldretriever-web/build/index.html)
+[Use](https://dithpri.github.io/goldretriever-web/build/index.html)  
 This is a web version of
 [Valentine Z's goldretriever](https://forum.nationstates.net/viewtopic.php?f=42&t=476326)
 
