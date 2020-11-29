@@ -108,9 +108,14 @@ just by pressing enter repeatedly:
   removes all the fluff and text around issue, focusing on a random option.
   Press enter and voilà: issue answered. *The issue has to be opened using the
   previous script.*
-  * [NsDilemmaAutoClose](userscripts/issue_answering/NsDilemmaAutoClose.user.js)
-  Closes the tab after an issue has been answered. *The issue has to be answered
-  using the previous script.*
+  * Autoclose:
+    * [NsDilemmaAutoClose](userscripts/issue_answering/NsDilemmaAutoClose.user.js)
+    Offers to open the card pack the issue generated. If no pack was
+    generated, closes the tab. *The issue has to be answered using the previous
+    script.*
+    * [NsDilemmaAutoCloseAll](userscripts/issue_answering/NsDilemmaAutoCloseAll.user.js)
+    Closes the tab after an issue has been answered. *The issue has to be
+    answered using the previous script*
 
 ---
 
