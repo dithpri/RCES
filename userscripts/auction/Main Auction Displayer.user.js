@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.13.1
+// @version      0.14
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -11,6 +11,7 @@
 // @grant        GM.xmlHttpRequest
 // @grant        GM.setValue
 // @grant        GM.getValue
+// @grant        GM.registerMenuCommand
 // @connect      docs.google.com
 // @connect      googleusercontent.com
 // ==/UserScript==
@@ -29,7 +30,21 @@
  *
  * GM.setValue, GM.getValue:
  *     to save and load the puppet list locally.
+ *
+ * GM.registerMenuCommand:
+ *     to offer a force update sheets button in the UserScripts menu.
  */
+
+const sheets = [
+	{
+		// 9003's spreadsheet
+		url:
+			"https://docs.google.com/spreadsheets/d/1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4/export?format=tsv&id=1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4&gid=733627866",
+		puppetColumn: 0,
+		mainColumn: 1,
+		headerRows: 1,
+	},
+];
 
 function GM_promiseXmlHttpRequest(opts) {
 	return new Promise((resolve, reject) => {
@@ -143,45 +158,48 @@ async function updatePuppets(isAuctionPage) {
 		});
 }
 
-const sheets = [
-	{
-		// 9003's spreadsheet
-		url:
-			"https://docs.google.com/spreadsheets/d/1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4/export?format=tsv&id=1MZ-4GLWAZDgB1TDvwtssEcVKHKunOKi3l90Jof1pBB4&gid=733627866",
-		puppetColumn: 0,
-		mainColumn: 1,
-		headerRows: 1,
-	},
-];
+async function refreshAllSheets() {
+	await GM.setValue(
+		"rces-main-nations",
+		JSON.stringify(
+			Object.assign(
+				{},
+				...(await Promise.all(
+					sheets.map((sheet) =>
+						getFromSheet(
+							sheet.url,
+							sheet.puppetColumn,
+							sheet.mainColumn,
+							sheet.headerRows
+						)
+					)
+				))
+			)
+		)
+	);
+	GM.setValue("rces-main-nations-lastupdate", new Date().getTime());
+}
 
 (async function () {
 	"use strict";
-
-	// If we haven't updated in the last 24h
-	if (
-		(await GM.getValue("rces-main-nations-lastupdate", 0)) +
-			24 * 60 * 60 * 1000 <
-		new Date().getTime()
-	) {
-		await GM.setValue(
-			"rces-main-nations",
-			JSON.stringify(
-				Object.assign(
-					{},
-					...(await Promise.all(
-						sheets.map((sheet) =>
-							getFromSheet(
-								sheet.url,
-								sheet.puppetColumn,
-								sheet.mainColumn,
-								sheet.headerRows
-							)
-						)
-					))
-				)
-			)
+	let lastUpdateMs = await GM.getValue("rces-main-nations-lastupdate", 0);
+	if (GM.registerMenuCommand != undefined) {
+		/*
+		 * GreaseMonkey requires a polyfill.
+		 * Not using it, because it clutters the user's page context menu instead of displaying the option in the extension's menu.
+		 */
+		await GM.registerMenuCommand(
+			`Force refresh sheets (last update: ${new Date(
+				lastUpdateMs
+			).toLocaleString()})`,
+			refreshAllSheets,
+			null
 		);
-		GM.setValue("rces-main-nations-lastupdate", new Date().getTime());
+	}
+	// Continue with the old script functionality.
+	// If we haven't updated in the last 24h
+	if (lastUpdateMs + 24 * 60 * 60 * 1000 < new Date().getTime()) {
+		refreshAllSheets();
 	}
 
 	if (document.getElementById("auctiontablebox")) {
