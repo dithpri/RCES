@@ -18,6 +18,9 @@
       - [Auction Keybdindings](#auction-keybdindings)
       - [Puppet Creation Assistant](#puppet-creation-assistant)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
+    - ["Decoration"](#decoration)
+      - [InvaderNS](#invaderns)
+      - [Steak Rarities](#steak-rarities)
     - [Puppet links sheet](#puppet-links-sheet)
     - [Owner report](#owner-report)
     - [goldretriever-web](#goldretriever-web)
@@ -165,6 +168,18 @@ and name) are chosen randomly. Works with the `Create puppet` links in the
 [Install](../../raw/master/userscripts/miscellaneous/cards-icon.user.js)  
 Depending on NS theme, adds either a cards icon to the top banner or a link in
 the menu. Both the link and icon redirect to the deck page.
+
+---
+
+### ["Decoration"](userscripts/decoration)
+
+#### [InvaderNS](userscripts/decoration/invader.user.js)
+[Install](../../raw/master/userscripts/decoration/invader.user.js)  
+The hidden NationStates Invader theme. For real GPers™.
+
+#### [Steak Rarities](userscripts/decoration/steak_rarities.user.js)
+[Install](../../raw/master/userscripts/decoration/steak_rarities.user.js)  
+Would you like to know what kind of steak your card is?
 
 ---
 
