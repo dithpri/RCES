@@ -108,14 +108,14 @@ for nation in puppets:
 	containerise_rules_container.write("@^.*\\.nationstates\\.net/(.*/)?container={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
 	containerise_rules_nation.write("@^.*\\.nationstates\\.net/(.*/)?nation={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
 	links.write("<tr>\n")
-	links.write(f'\t<td><p><a target="_blank" href="https://www.nationstates.net/{container_protolink}/nation={canonical}">{nation}</a></p></td>\n')
+	links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(container_protolink, canonical, nation))
 	try:
 		for key, value in config['links'].items():
-			links.write(f'\t<td><p><a target="_blank" href="https://www.nationstates.net/{container_protolink}/{value}">{key}</a></p></td>\n')
+			links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(container_protolink, value, key))
 	except KeyError:
 		pass
 	# links.write("""<td><p><a target="_blank" href="https://www.nationstates.net/container={}/nation={}/page=zombie_control">Zombie Control</a></p></td>""".format(canonical))
-	links.write(f'\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{container_protolink}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={nation.replace(" ", "_")}">Create {nation}</a></p></td>\n')
+	links.write('\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(container_protolink, nation.replace(" ", "_"), nation))
 	links.write("</tr>\n")
 
 links.write(html_end)
