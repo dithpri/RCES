@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         NsIssueCompactorRand
-// @version      0.4.1
+// @name         NsIssueCompactorRand-GM
+// @version      0.4.2
 // @namespace    dithpri.RCES
-// @description  Hide everything except issue buttons and focus on a random option
+// @description  Hide everything except issue buttons and focus on a random option (GM-compat version)
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsIssueCompactorRand.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/GM-Hacks/userscripts/issue_answering/NsIssueCompactorRand.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=show_dilemma/*x-rces=openissue
 // @grant        window.close
@@ -56,6 +56,7 @@ right: 0;
 		.querySelectorAll('form[action^="/page=enact_dilemma/"]')
 		.forEach(function (el) {
 			el.action += "/template-overall=none/x-rces=autoclose";
+			el.target = "_blank";
 		});
 
 	const issuebtns = document.querySelectorAll(
@@ -78,6 +79,7 @@ right: 0;
 					el.style.display = "none";
 				});
 			issuebtns[chosenButtonNumber].click();
+			window.close();
 		});
 	}
 })();
