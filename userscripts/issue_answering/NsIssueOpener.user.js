@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueOpener
-// @version      0.6
+// @version      0.6.1
 // @namespace    dithpri.RCES
 // @description  Open issues in new tab with no decorations
 // @author       dithpri
@@ -8,7 +8,7 @@
 // @noframes
 // @match        https://www.nationstates.net/*page=dilemmas*
 // @grant        window.close
-// @run-at       document-body
+// @run-at       document-end
 // ==/UserScript==
 
 /*
