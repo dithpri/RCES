@@ -109,6 +109,7 @@ just by pressing enter repeatedly:
   clicking! Just keep pressing enter to open links to unanswered issues in a new
   tab.
   * [NsIssueCompactorRand](userscripts/issue_answering/NsIssueCompactorRand.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsIssueCompactorRand.user.js)  
+  [NsIssueCompactorRand (GreaseMonkey)](../GM-Hacks/userscripts/issue_answering/NsIssueCompactorRand.user.js) | [GreaseMonkey Install](../../raw/GM-Hacks/userscripts/issue_answering/NsIssueCompactorRand.user.js)  
   removes all the fluff and text around issue, focusing on a random option.
   Press enter and voilà: issue answered. *The issue has to be opened using the
   previous script.*
