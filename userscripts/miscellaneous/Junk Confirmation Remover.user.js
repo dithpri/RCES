@@ -77,14 +77,9 @@ function addOpt(...args) {
 			Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || 0.0;
 		const bid = Number(bidText?.replaceAll(/[^0-9.]/g, "")) || 0.0;
 
-		console.log(shouldConfirm(rarity, junkValue, marketValue, bid), [
-			rarity,
-			junkValue,
-			marketValue,
-			bid,
-		]);
 		const enableConfirmation = shouldConfirm(
 			rarity,
+			season,
 			junkValue,
 			marketValue,
 			bid
