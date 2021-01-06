@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.14
+// @version      0.15
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -43,6 +43,14 @@ const sheets = [
 		puppetColumn: 0,
 		mainColumn: 1,
 		headerRows: 1,
+	},
+	{
+		// XKI card co-op
+		url:
+			"https://docs.google.com/spreadsheets/d/e/2PACX-1vSem15AVLXgdjxWBZOnWRFnF6NwkY0gVKPYI8aWuHJzlbyILBL3o1F5GK1hSK3iiBlXLIZBI5jdpkVr/pub?gid=916202163&single=true&output=tsv",
+		puppetColumn: 0,
+		mainColumn: 1,
+		headerRows: 0,
 	},
 ];
 

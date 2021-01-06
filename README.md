@@ -142,9 +142,12 @@ Society.
 
 #### [Main Auction Displayer](userscripts/auction/Main%20Auction%20Displayer.user.js)
 [Install](../../raw/master/userscripts/auction/Main%20Auction%20Displayer.user.js)  
-Contacts a Google Spreadsheet (that was totally never ever secret) with known
-puppets and puppetmasters. Adds the puppetmaster's name next to the puppet. The
-spreadsheet is maintained by [9003](https://www.nationstates.net/nation=9003)
+Contacts several Google Spreadsheets (that were totally never ever secret) with
+known puppets and puppetmasters. Adds the puppetmaster's name next to the
+puppet. The currently used spreadsheets are
+[9003](https://www.nationstates.net/nation=9003)'s puppet reporting spreadsheet
+and [XKI](https://www.nationstates.net/region=10000_islands)'s Card Co-op
+spreadsheet.
 
 ---
 
