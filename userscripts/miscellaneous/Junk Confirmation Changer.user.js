@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Junk Confirmation Remover
+// @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
 // @version      0.1
-// @description  Remove card junk confirmation alert
+// @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
 // @grant        none
@@ -17,39 +17,54 @@
 
 const shouldConfirm = (rarity, season, junkValue, marketValue, bid) => {
 	// EDIT HERE
-	// Note that marketValue and bid are *only* available when opening a pack,
-	// they can't be checked on the deck page
-	// Examples:
-	// Confirm junking epics and legendariess
-	if (rarity == "legendary" || rarity == "epic") {
+	// IMPORTANT: Note that marketValue and bid are *only* available when
+	// opening a pack, they can't be checked on the deck page.
+
+	// This is a sane default config, examples follow
+	// Will ask for confirmation when trying to junk a legendary,
+	// cards with >= 5 MV and cards with bids over JV
+	if (rarity == "legendary") {
 		return true;
 	}
-	// Confirm junking uncommons
-	if (rarity == "uncommon") {
+	if (marketValue >= 5) {
 		return true;
 	}
-	// Confirm junking cards with MV > 5
-	if (marketValue > 0.1) {
-		return true;
-	}
-	// Confirm junking cards with a bid higher than JV
 	if (bid > junkValue) {
 		return true;
 	}
+	return false; // don't require confirmation for anything else
+
+	// Examples:
+	// Confirm junking epics and legendariess
+	//if (rarity == "legendary" || rarity == "epic") {
+	//	return true;
+	//}
+	// Confirm junking uncommons
+	//if (rarity == "uncommon") {
+	//	return true;
+	//}
+	// Confirm junking cards with MV > 5
+	//if (marketValue > 0.1) {
+	//	return true;
+	//}
+	// Confirm junking cards with a bid higher than JV
+	//if (bid > junkValue) {
+	//	return true;
+	//}
 	// Confirm junking cards with a bid equal to at least 2×JV
-	if (bid >= 2 * junkValue) {
-		return true;
-	}
+	//if (bid >= 2 * junkValue) {
+	//	return true;
+	//}
 	// Don't require confirmation for junking rares
-	if (rarity == "rare") {
-		return false;
-	}
+	//if (rarity == "rare") {
+	//	return false;
+	//}
 	// Confirm junking S1 cards
-	if (season == 1) {
-		return true;
-	}
+	//if (season == 1) {
+	//	return true;
+	//}
 	// Require confirmation on junking anything
-	return true;
+	//return true;
 };
 
 /********************************/
