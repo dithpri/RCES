@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
-// @version      0.1
+// @version      0.2
 // @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
@@ -15,10 +15,21 @@
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
-const shouldConfirm = (rarity, season, junkValue, marketValue, bid) => {
+const shouldConfirm = ({
+	rarity,
+	season,
+	junkValue,
+	name,
+	id,
+	region,
+	badges,
+	marketValue,
+	bid,
+}) => {
 	// EDIT HERE
 	// IMPORTANT: Note that marketValue and bid are *only* available when
 	// opening a pack, they can't be checked on the deck page.
+	// If they're not displayed, they'll be set to NaN.
 
 	// This is a sane default config, examples follow
 	// Will ask for confirmation when trying to junk a legendary,
@@ -63,8 +74,19 @@ const shouldConfirm = (rarity, season, junkValue, marketValue, bid) => {
 	//if (season == 1) {
 	//	return true;
 	//}
+	// Confirm junking ex-nations (they have no region)
+	//if (region == undefined) {
+	//  return true;
+	//}
+	// Confirm junking cards from The South Pacific
+	//if (region == "the_south_pacific") {
+	//  return true;
+	//}
 	// Require confirmation on junking anything
 	//return true;
+	// There's also the badges parameter for more advanced users.
+	// It's an array of badge names - the name is the image file's name
+	// (or admin/delegate/wa/sec-gen/class for the non-image badges).
 };
 
 /********************************/
@@ -78,8 +100,34 @@ function addOpt(...args) {
 
 	document.querySelectorAll(".deckcard-junk-button").forEach((junkButton) => {
 		const rarity = junkButton.dataset.rarity;
+		const id = Number(junkButton.dataset.cardid);
 		const junkValue = Number(junkButton.dataset.junkprice);
 		const season = Number(junkButton.dataset.season);
+
+		const name = junkButton
+			.closest(".deckcard")
+			.querySelector(".deckcard-title .nnameblock .nname")
+			?.textContent.toLowerCase()
+			.replaceAll(" ", "_");
+		const region = junkButton
+			.closest(".deckcard")
+			.querySelector(".deckcard-region .rlink")
+			?.textContent.toLowerCase()
+			.replaceAll(" ", "_");
+
+		const badges = [
+			...junkButton.closest(".deckcard").querySelectorAll("img.trophy"),
+		]
+			.map((x) =>
+				x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1")
+			)
+			.concat(
+				[
+					...junkButton
+						.closest(".deckcard")
+						.querySelectorAll(".badge"),
+				].map((x) => x.textContent.toLowerCase().trim())
+			);
 
 		const marketValueText = junkButton
 			.closest(".deckcard-flag")
@@ -89,18 +137,24 @@ function addOpt(...args) {
 			.querySelector(".deckcard-card-buyers")?.textContent;
 
 		const marketValue =
-			Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || 0.0;
-		const bid = Number(bidText?.replaceAll(/[^0-9.]/g, "")) || 0.0;
+			Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || NaN;
+		const bid = Number(bidText?.replaceAll(/[^0-9.]/g, "")) || NaN;
 
-		const enableConfirmation = shouldConfirm(
+		const params = {
 			rarity,
 			season,
 			junkValue,
 			marketValue,
-			bid
-		);
+			bid,
+			name,
+			id,
+			region,
+			badges,
+		};
+
+		const enableConfirmation = shouldConfirm(params);
+		// console.info(params, enableConfirmation);
 		if (enableConfirmation === true) {
-			console.log(marketValue, bid);
 			junkButton.dataset.rarity = junkButton.dataset.rarity.toUpperCase();
 			junkButton.dataset.rarity += addOpt(marketValueText, bidText);
 		} else if (enableConfirmation === false) {
