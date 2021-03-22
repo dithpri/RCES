@@ -11,9 +11,11 @@
     - [Issue Answering Scripts](#issue-answering-scripts)
     - [Auction Utilities](#auction-utilities)
       - [Card Default Prices](#card-default-prices)
-      - [TNP Guild Highlighter](#tnp-guild-highlighter)
-      - [Gardener Highlighter](#gardener-highlighter)
       - [Main Auction Displayer](#main-auction-displayer)
+      - [Highlighters](#highlighters)
+        - [TNP Guild Highlighter](#tnp-guild-highlighter)
+        - [Gardener Highlighter](#gardener-highlighter)
+        - [NASPAQ Highlighter](#naspaq-highlighter)
     - [Miscellaneous](#miscellaneous)
       - [Auction Keybdindings](#auction-keybdindings)
       - [Puppet Creation Assistant](#puppet-creation-assistant)
@@ -131,15 +133,6 @@ just by pressing enter repeatedly:
 Pretty straightforward: change the default starting price when placing an ask or
 bid. You'll have to edit the value in the script manually (for now).
 
-#### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
-[Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
-Adds an icon of TNP's Cards Guild next to guild members during an auction.
-
-#### [Gardener Highlighter](userscripts/auction/Gardener%20Highlighter.user.js)
-[Install](../../raw/master/userscripts/auction/Gardener%20Highlighter.user.js)  
-The same as the Guild Highlighter, except for members of the Card Gardening
-Society.
-
 #### [Main Auction Displayer](userscripts/auction/Main%20Auction%20Displayer.user.js)
 [Install](../../raw/master/userscripts/auction/Main%20Auction%20Displayer.user.js)  
 Contacts several Google Spreadsheets (that were totally never ever secret) with
@@ -148,6 +141,20 @@ puppet. The currently used spreadsheets are
 [9003](https://www.nationstates.net/nation=9003)'s puppet reporting spreadsheet
 and [XKI](https://www.nationstates.net/region=10000_islands)'s Card Co-op
 spreadsheet.
+#### Highlighters
+
+##### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
+[Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
+Adds an icon of TNP's Cards Guild next to guild members during an auction.
+
+##### [Gardener Highlighter](userscripts/auction/Gardener%20Highlighter.user.js)
+[Install](../../raw/master/userscripts/auction/Gardener%20Highlighter.user.js)  
+The same as the Guild Highlighter, except for members of the Card Gardening
+Society.
+
+##### [NASPAQ Highlighter](userscripts/auction/NASPAQ%20Highlighter.user.js)
+[Install](../../raw/master/userscripts/auction/NASPAQ%20Highlighter.user.js)  
+Highlighter for NASPAQ members.
 
 ---
 
