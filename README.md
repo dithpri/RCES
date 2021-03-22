@@ -83,8 +83,9 @@ for terms of use.
 ## Bugs
 
 Please report any bugs you encounter by filing an issue. The UserScripts were
-tested with TamperMonkey but *should* also work with GreaseMonkey and other
-compatible engines.
+tested with TamperMonkey but *should* also work with compatible engines (ex.
+ViolentMonkey).  
+*May* work with GreaseMonkey.
 
 ---
 
