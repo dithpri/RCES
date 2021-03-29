@@ -17,6 +17,7 @@
         - [Gardener Highlighter](#gardener-highlighter)
         - [NASPAQ Highlighter](#naspaq-highlighter)
     - [Miscellaneous](#miscellaneous)
+      - [Better Card Page Titles](#better-card-page-titles)
       - [Auction Keybdindings](#auction-keybdindings)
       - [Puppet Creation Assistant](#puppet-creation-assistant)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
@@ -160,6 +161,21 @@ Highlighter for NASPAQ members.
 ---
 
 ### [Miscellaneous](userscripts/miscellaneous)
+
+#### [Better Card Page Titles](userscripts/miscellaneous/Better%20Card%20Page%20Titles.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/Better%20Card%20Page%20Titles.user.js)  
+Tweaks the titles on card pages to be more descriptive instead of the default
+"NationStates | Trading Cards".
+
+<details>
+<summary>Examples</summary>
+
+* `NationStates | Trading Cards | Live Auctions`
+* `NationStates | Trading Cards | {nation}'s deck`
+* `NationStates | Trading Cards | {nation}'s Trades | Sales`
+* `NationStates | Trading Cards | {nation} (S{season})`
+* etc.
+</details>
 
 #### [Auction Keybdindings](userscripts/miscellaneous/auction-keybindings.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/auction-keybindings.user.js)  
