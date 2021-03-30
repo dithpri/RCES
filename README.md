@@ -212,7 +212,7 @@ Would you like to know what kind of steak your card is?
 ---
 
 ### [Puppet links sheet](puppet_links_sheet)
-[Download](../../releases/download/v-p.0.1.2/puppet_links_sheet.zip)  
+[Downloads](../../releases)  
 A python script to generate a sheet of clickable links pointing to various
 puppets. Best used with the Containerise extension for maximum effiency. Also
 generates rules for Containerise so you don't have to.
@@ -228,7 +228,7 @@ By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
 ---
 
 ### [Owner report](owner_report)
-[Download](../../releases/download/v0.1/owner_report.zip)  
+[Downloads](../../releases)  
 A python script that reads a list of cards and/or a list of puppets. It will
 spit out the number of owners, number of copies and who the owners are for each
 card. If provided with the list of puppets to check, it will do so for each card
