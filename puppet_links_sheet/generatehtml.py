@@ -6,6 +6,9 @@
  * the MIT license. See LICENSE.md or
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
 """
+
+import sys
+import traceback
 import re
 import configparser
 
@@ -79,43 +82,58 @@ document.querySelectorAll("td").forEach(function(el) {
 </html>
 """
 
-config = configparser.ConfigParser()
-config.read("config.txt")
 
-try:
-	container_prefix = config['config']['containerPrefix']
-except KeyError:
-	container_prefix = "container={}/nation={}"
-	containerise_rules = {
-		
-	}
+def eprint(*args, **kwargs):
+	print(*args, file=sys.stderr, **kwargs)
+	sys.stderr.flush()
 
-with open('puppets_list.txt') as f:
-	puppets = f.read().split('\n')
+def main():
+	config = configparser.ConfigParser()
+	config.read("config.txt")
 
-puppets = list(filter(None, puppets))
-
-containerise_rules_container = open('containerise (container).txt', 'w')
-containerise_rules_nation = open('containerise (nation).txt', 'w')
-links = open('puppet_links.html', 'w')
-
-links.write(html_start)
-
-for nation in puppets:
-	canonical = nation.lower().replace(" ", "_")
-	escaped_canonical = re.escape(canonical)
-	container_protolink = container_prefix.format(*([canonical for _ in range(container_prefix.count("{}"))]))
-	containerise_rules_container.write("@^.*\\.nationstates\\.net/(.*/)?container={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
-	containerise_rules_nation.write("@^.*\\.nationstates\\.net/(.*/)?nation={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
-	links.write("<tr>\n")
-	links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(container_protolink, canonical, nation))
 	try:
-		for key, value in config['links'].items():
-			links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(container_protolink, value, key))
+		container_prefix = config['config']['containerPrefix']
 	except KeyError:
-		pass
-	# links.write("""<td><p><a target="_blank" href="https://www.nationstates.net/container={}/nation={}/page=zombie_control">Zombie Control</a></p></td>""".format(canonical))
-	links.write('\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(container_protolink, nation.replace(" ", "_"), nation))
-	links.write("</tr>\n")
+		container_prefix = "container={}/nation={}"
+		containerise_rules = {
 
-links.write(html_end)
+		}
+
+	with open('puppets_list.txt') as f:
+		puppets = f.read().split('\n')
+
+	puppets = list(filter(None, puppets))
+
+	containerise_rules_container = open('containerise (container).txt', 'w')
+	containerise_rules_nation = open('containerise (nation).txt', 'w')
+	links = open('puppet_links.html', 'w')
+
+	links.write(html_start)
+
+	for nation in puppets:
+		canonical = nation.lower().replace(" ", "_")
+		escaped_canonical = re.escape(canonical)
+		container_protolink = container_prefix.format(*([canonical for _ in range(container_prefix.count("{}"))]))
+		containerise_rules_container.write("@^.*\\.nationstates\\.net/(.*/)?container={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
+		containerise_rules_nation.write("@^.*\\.nationstates\\.net/(.*/)?nation={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
+		links.write("<tr>\n")
+		links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(container_protolink, canonical, nation))
+		try:
+			for key, value in config['links'].items():
+				links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(container_protolink, value, key))
+		except KeyError:
+			pass
+		# links.write("""<td><p><a target="_blank" href="https://www.nationstates.net/container={}/nation={}/page=zombie_control">Zombie Control</a></p></td>""".format(canonical))
+		links.write('\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(container_protolink, nation.replace(" ", "_"), nation))
+		links.write("</tr>\n")
+
+	links.write(html_end)
+
+if __name__ == "__main__":
+	try:
+		main()
+	except Exception:
+		traceback.print_exc()
+		eprint("Something went wrong!")
+		input("Press enter to continue...")
+		sys.exit(-1)
