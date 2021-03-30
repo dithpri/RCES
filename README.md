@@ -212,7 +212,7 @@ Would you like to know what kind of steak your card is?
 ---
 
 ### [Puppet links sheet](puppet_links_sheet)
-[Download](../../releases/download/v0.1/puppet_links_sheet.zip)  
+[Download](../../releases/download/v-p.0.1.2/puppet_links_sheet.zip)  
 A python script to generate a sheet of clickable links pointing to various
 puppets. Best used with the Containerise extension for maximum effiency. Also
 generates rules for Containerise so you don't have to.
