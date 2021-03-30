@@ -82,10 +82,14 @@ document.querySelectorAll("td").forEach(function(el) {
 </html>
 """
 
+invalid_nation_chars = re.compile("[^A-Za-z0-9_ -]")
 
 def eprint(*args, **kwargs):
 	print(*args, file=sys.stderr, **kwargs)
 	sys.stderr.flush()
+
+def canonicalize(name):
+	return name.lower().replace(" ", "_")
 
 def main():
 	config = configparser.ConfigParser()
@@ -111,7 +115,10 @@ def main():
 	links.write(html_start)
 
 	for nation in puppets:
-		canonical = nation.lower().replace(" ", "_")
+		nation, *cont = re.split(invalid_nation_chars, nation)
+		if cont:
+			eprint("Invalid puppet name encountered! Assuming '{}' is the puppet name.".format(nation))
+		canonical = canonicalize(nation)
 		escaped_canonical = re.escape(canonical)
 		container_protolink = container_prefix.format(*([canonical for _ in range(container_prefix.count("{}"))]))
 		containerise_rules_container.write("@^.*\\.nationstates\\.net/(.*/)?container={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
@@ -123,7 +130,6 @@ def main():
 				links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(container_protolink, value, key))
 		except KeyError:
 			pass
-		# links.write("""<td><p><a target="_blank" href="https://www.nationstates.net/container={}/nation={}/page=zombie_control">Zombie Control</a></p></td>""".format(canonical))
 		links.write('\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(container_protolink, nation.replace(" ", "_"), nation))
 		links.write("</tr>\n")
 
@@ -135,5 +141,4 @@ if __name__ == "__main__":
 	except Exception:
 		traceback.print_exc()
 		eprint("Something went wrong!")
-		input("Press enter to continue...")
-		sys.exit(-1)
+	input("Press enter to continue...")
