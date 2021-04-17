@@ -148,11 +148,11 @@ spreadsheet.
 
 ##### [Universal Member Highlighter](userscripts/auction/Universal%20Member%20Highlighter.user.js)
 [Install](../../raw/master/userscripts/auction/Universal%20Member%20Highlighter.user.js)  
-**Tampermonkey only.**  
+**ViolentMonkey/Tampermonkey only.**  
 A universal highlighter. You can load various card organizations' configs
 instead of having multiple highlighter scripts running. This also makes it much
 easier for card organizations to have a highlighter, without having to duplicate
-existing code.
+existing code. A curated list of configs is available [here](resources/umh-configs.md).
 
 ##### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
 [Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
