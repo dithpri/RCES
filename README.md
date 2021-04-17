@@ -13,6 +13,7 @@
       - [Card Default Prices](#card-default-prices)
       - [Main Auction Displayer](#main-auction-displayer)
       - [Highlighters](#highlighters)
+        - [Universal Member Highlighter](#universal-member-highlighter)
         - [TNP Guild Highlighter](#tnp-guild-highlighter)
         - [Gardener Highlighter](#gardener-highlighter)
         - [NASPAQ Highlighter](#naspaq-highlighter)
@@ -144,6 +145,14 @@ puppet. The currently used spreadsheets are
 and [XKI](https://www.nationstates.net/region=10000_islands)'s Card Co-op
 spreadsheet.
 #### Highlighters
+
+##### [Universal Member Highlighter](userscripts/auction/Universal%20Member%20Highlighter.user.js)
+[Install](../../raw/master/userscripts/auction/Universal%20Member%20Highlighter.user.js)  
+**Tampermonkey only.**  
+A universal highlighter. You can load various card organizations' configs
+instead of having multiple highlighter scripts running. This also makes it much
+easier for card organizations to have a highlighter, without having to duplicate
+existing code.
 
 ##### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
 [Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
