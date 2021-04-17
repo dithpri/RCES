@@ -148,7 +148,7 @@ spreadsheet.
 
 ##### [Universal Member Highlighter](userscripts/auction/Universal%20Member%20Highlighter.user.js)
 [Install](../../raw/master/userscripts/auction/Universal%20Member%20Highlighter.user.js)  
-<s>~~ViolentMonkey/Tampermonkey only.~~</s>Should work on all userscript extensions.  
+<s>**ViolentMonkey/Tampermonkey only.**</s> Should work on all userscript extensions.  
 A universal highlighter. You can load various card organizations' configs
 instead of having multiple highlighter scripts running. This also makes it much
 easier for card organizations to have a highlighter, without having to duplicate
