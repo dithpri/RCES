@@ -191,10 +191,18 @@ Tweaks the titles on card pages to be more descriptive instead of the default
 [Install](../../raw/master/userscripts/miscellaneous/auction-keybindings.user.js)  
 An early version of keybindings for the auction page. A more complete version is
 being worked on. These are the available bindings for now:
+<details>
+
   * **A**sk / **S**ell
   * **B**id / **B**uy
   * **M**atch
   * **G**ift
+  * **M**atch
+  * Market **V**alue match
+  * **R**emove ask/bid
+  * **C**hange ask/bid
+  
+</details>
 
 #### [Puppet Creation Assistant](userscripts/miscellaneous/NsPuppetCreateAssist.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/NsPuppetCreateAssist.user.js)  
