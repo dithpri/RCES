@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.3
+// @version      0.3.1
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -143,6 +143,7 @@ function addOrgStyle(org) {
 	background-image: url('${org.image}');
 	background-size: contain;
 	padding-left: 1.5em;
+	filter: drop-shadow(0px 0px 1px);
 	}
 	.rces-umh-${org.hash}-inline:hover::before {
 	content: "${CSS.escape(org.name)}";
