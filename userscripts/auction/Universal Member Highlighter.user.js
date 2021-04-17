@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.3.1
+// @version      0.3.2
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -8,6 +8,7 @@
 // @noframes
 // @match        https://www.nationstates.net/*page=deck*/*card=*
 // @match        https://www.nationstates.net/*card=*/*page=deck*
+// @match        https://www.nationstates.net/page=settings
 // @grant        GM.xmlHttpRequest
 // @grant        GM.setValue
 // @grant        GM.getValue
@@ -486,6 +487,22 @@ async function update_auctiontable() {
 	}
 
 	updateSheets();
+
+	if (window.location.pathname === "/page=settings") {
+		let insertInElement =
+			document.getElementById("content") ||
+			document.getElementById("main");
+		insertInElement.insertAdjacentHTML(
+			"afterbegin",
+			`<a href="#" id="umh-conf-settings-open" class="button icon-cog-alt">Universal Member Highlighter settings</a>`
+		);
+		document
+			.getElementById("umh-conf-settings-open")
+			.addEventListener("click", function (ev) {
+				ev.preventDefault();
+				showConfigMenu();
+			});
+	}
 
 	if (document.getElementById("auctiontablebox")) {
 		update_auctiontable();
