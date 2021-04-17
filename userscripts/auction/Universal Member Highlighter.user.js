@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.2
+// @version      0.3
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -78,17 +78,23 @@ async function getSheetData(org) {
 		method: "GET",
 		url: org.sheetUrl,
 	});
-	return data.responseText
+	let ret = data.responseText
 		.split("\n")
+		.slice(org.headerRows)
 		.map((x) =>
 			x
 				.split("\t")
 				[org.nationColumn].trim()
 				.toLowerCase()
 				.replace(/ /g, "_")
-		)
-		.slice(org.headerRows)
-		.join("\n");
+		);
+	if (org.regexPattern && org.regexPattern != "") {
+		const regexPattern = RegExp(org.regexPattern);
+		ret = ret.map((x) =>
+			x.match(regexPattern)[0].replace(regexPattern, "$1")
+		);
+	}
+	return ret.join("\n");
 }
 
 function extractCssColorString(str) {
@@ -155,17 +161,13 @@ async function addOrgSheetConfig(str) {
 	try {
 		let newOrg = JSON.parse(str);
 		confTable_addOrgRow(newOrg);
-		await GM.setValue(
-			`data-${newOrg.sheetUrl}`,
-			await getSheetData(newOrg)
-		);
 	} catch (error) {
 		console.log(error);
 		alert("Ooops! Something went wrong!\nCheck the console for errors.");
 	}
 }
 
-function confTable_addOrgRow(conf) {
+async function confTable_addOrgRow(org) {
 	let row = document
 		.getElementById("rces-umh-config-table")
 		.tBodies[0].insertRow();
@@ -173,23 +175,39 @@ function confTable_addOrgRow(conf) {
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-image");
-	newCell.innerHTML = `<img src="${conf.image}" />`;
+	newCell.innerHTML = `<img src="${org.image}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-name");
-	newCell.innerHTML = `<input type="text" value="${conf.name}" />`;
+	newCell.innerHTML = `<input type="text" value="${org.name}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-sheetUrl");
-	newCell.innerHTML = `<input type="text" value="${conf.sheetUrl}" />`;
+	newCell.innerHTML = `<input type="text" value="${org.sheetUrl}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-headerRows");
-	newCell.innerHTML = `<input type="number" value="${conf.headerRows}" />`;
+	newCell.innerHTML = `<input type="number" value="${
+		org.headerRows || 0
+	}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-nationColumn");
-	newCell.innerHTML = `<input type="number" value="${conf.nationColumn}" />`;
+	newCell.innerHTML = `<input type="number" value="${
+		org.nationColumn || 0
+	}" />`;
+
+	newCell = row.insertCell();
+	newCell.classList.add("rces-umh-config-org-regexPattern");
+	newCell.innerHTML = `<input type="text" value="${
+		org.regexPattern || ""
+	}" placeholder="(none)"/>`;
+
+	newCell = row.insertCell();
+	newCell.classList.add("rces-umh-config-org-lastupdate");
+	newCell.innerText = `${new Date(
+		await GM.getValue(`lastupdate-${org.sheetUrl}`, 0)
+	).toLocaleString()}`;
 
 	newCell = row.insertCell();
 	newCell.innerHTML = `<a href ="#" class="rces-umh-config-removerow button danger">Remove</a>`;
@@ -247,6 +265,9 @@ function confModal_save() {
 				val.querySelector(".rces-umh-config-org-nationColumn input")
 					.value
 			),
+			regexPattern: val.querySelector(
+				".rces-umh-config-org-regexPattern input"
+			).value,
 		};
 		orgConf.hash = stringHash(orgConf.sheetUrl);
 		acc.push(orgConf);
@@ -268,10 +289,6 @@ async function createConfigMenu() {
 	<div id="rces-umh-config-modal-content">
 		<a class="button danger" id="rces-umh-config-modal-close">×</a>
 		<h2>UMH Config</h2>
-		<div class="info" style="margin: 0;">Last sheet update: ${new Date(
-			await GM.getValue("lastupdate")
-		).toLocaleString()}</div>
-    <br />
 		<table id="rces-umh-config-table">
 			<thead>
 				<tr>
@@ -280,12 +297,15 @@ async function createConfigMenu() {
 					<td>URL</td>
 					<td>Header rows</td>
 					<td>Nation column</td>
+					<td>Regex extract pattern</td>
+					<td>Last update</td>
 					<td></td>
 				</tr>
 			</thead>
 			<tbody>
 			</tbody>
 		</table>
+		<br />
 		<button id="rces-umh-config-reload">Reload</button>
 		<button id="rces-umh-config-add">Add</button>
 		<button id="rces-umh-config-save">Save</button>
@@ -319,24 +339,53 @@ async function createConfigMenu() {
 	overflow: auto;
 	margin: auto;
 	padding-top: 5em;
-  text-align: center;
+	text-align: center;
 }
-#rces-umh-config-modal-content{
+#rces-umh-config-modal-content {
 	background: ${bg};
 	color: ${col};
 	text-align: center;
 	padding: 20px;
 	border-radius: 5px;
 	margin: auto;
-	width: 80%;
+	width: 95%;
 }
-#rces-umh-config-modal-close{
-  float: right;
-  padding: 0;
-  height: 1em;
-  width: 1em;
-  font-size: 200%;
-}`);
+#rces-umh-config-modal-close {
+	float: right;
+	padding: 0;
+	height: 1em;
+	width: 1em;
+	font-size: 200%;
+}
+
+#rces-umh-config-table {
+	border: 1px solid ${col};
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#rces-umh-config-table td {
+	border-bottom: 1px solid ${col};
+}
+
+#rces-umh-config-table input {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#rces-umh-config-table input[type="number"]{
+	width: 4em;
+	box-sizing: content-box;
+}
+
+.rces-umh-config-org-sheetUrl {
+	width: 30%;
+}
+
+.rces-umh-config-org-name {
+	width: 12em;
+}
+`);
 }
 
 async function showConfigMenu() {
@@ -348,19 +397,20 @@ async function showConfigMenu() {
 	}
 }
 
+async function updateSingleSheet(org) {
+	await GM.setValue(`data-${org.sheetUrl}`, await getSheetData(org));
+	await GM.setValue(`lastupdate-${org.sheetUrl}`, new Date().getTime());
+}
+
 async function updateSheets(force = false) {
-	// If we haven't updated in the last 12h
-	if (
-		force ||
-		(await GM.getValue("lastupdate", 0)) + 12 * 60 * 60 * 1000 <
-			new Date().getTime()
-	) {
-		GM.setValue("lastupdate", 0);
-		const orgs = await getConfig();
-		for (const org of orgs) {
-			GM.setValue(`data-${org.sheetUrl}`, await getSheetData(org));
+	const orgs = await getConfig();
+	for (const org of orgs) {
+		const lastupdate = await GM.getValue(`lastupdate-${org.sheetUrl}`, 0);
+		// If we haven't updated in the last 12h
+		if (force || lastupdate + 12 * 60 * 60 * 1000 < new Date().getTime()) {
+			await GM.setValue(`lastupdate-${org.sheetUrl}`, 0);
+			updateSingleSheet(org);
 		}
-		GM.setValue("lastupdate", new Date().getTime());
 	}
 }
 
@@ -433,6 +483,8 @@ async function update_auctiontable() {
 			updateSheets(true);
 		});
 	}
+
+	updateSheets();
 
 	if (document.getElementById("auctiontablebox")) {
 		update_auctiontable();
