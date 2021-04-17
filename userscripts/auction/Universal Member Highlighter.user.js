@@ -4,7 +4,7 @@
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
-// @downloadURL  https://github.com/dithpri/RCES/raw/universal-highlighter/userscripts/auction/Universal%20Member%20Highlighter.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/auction/Universal%20Member%20Highlighter.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=deck*/*card=*
 // @match        https://www.nationstates.net/*card=*/*page=deck*
