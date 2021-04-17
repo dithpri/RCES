@@ -39,15 +39,15 @@
 	);
 	const ask_match = document.querySelector(
 		"#highest_matchable_ask_price > .cardprice_sell"
-	).textContent;
+	)?.textContent;
 	const bid_match = document.querySelector(
 		"#lowest_matchable_bid_price > .cardprice_buy"
-	).textContent;
+	)?.textContent;
 
 	// sell, ask
 	Mousetrap.bind(["s", "a", "S", "A"], function (ev) {
 		noinput_mousetrap(ev);
-		document.querySelector('th[data-mode="sell"').click();
+		document.querySelector('th[data-mode="sell"]').click();
 		const askbox = document.querySelector(
 			'input.auctionbid[name="auction_ask"]'
 		);
@@ -58,7 +58,7 @@
 	// buy, bid
 	Mousetrap.bind(["b", "B"], function (ev) {
 		noinput_mousetrap(ev);
-		document.querySelector('th[data-mode="buy"').click();
+		document.querySelector('th[data-mode="buy"]').click();
 		const bidbox = document.querySelector(
 			'input.auctionbid[name="auction_bid"]'
 		);
