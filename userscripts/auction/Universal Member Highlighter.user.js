@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.3.2
+// @version      0.3.3
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -343,6 +343,7 @@ async function createConfigMenu() {
 	padding-top: 5em;
 	text-align: center;
 }
+
 #rces-umh-config-modal-content {
 	background: ${bg};
 	color: ${col};
@@ -352,6 +353,7 @@ async function createConfigMenu() {
 	margin: auto;
 	width: 95%;
 }
+
 #rces-umh-config-modal-close {
 	float: right;
 	padding: 0;
@@ -378,6 +380,10 @@ async function createConfigMenu() {
 #rces-umh-config-table input[type="number"]{
 	width: 4em;
 	box-sizing: content-box;
+}
+
+.rces-umh-config-org-image img {
+	filter: drop-shadow(0px 0px 1px);
 }
 
 .rces-umh-config-org-sheetUrl {
