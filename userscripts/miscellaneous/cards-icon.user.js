@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Cards Icon
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
-// @description  Adds link to the deck page as either an icon or menu entry (depending on NS theme)
+// @description  Adds links to the deck page and market page as either an icon or menu entry (depending on NS theme)
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/miscellaneous/cards-icon.user.js
 // @noframes
@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 /*
- * Copyright (c) 2020 dithpri (Racoda) <dithpri@gmail.com>
+ * Copyright (c) 2020-2021 dithpri (Racoda) <dithpri@gmail.com>
  * This file is part of RCES: https://github.com/dithpri/RCES and licensed under
  * the MIT license. See LICENSE.md or
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
@@ -20,27 +20,45 @@
 (function () {
 	"use strict";
 
-	if (document.querySelector("#panel > ul.menu")) {
-		// Antiquity & Century
-		const cardsLink = document.createElement("li");
-		cardsLink.innerHTML = `<a href="page=deck">DECK</a>`;
+	const buttonsConf = [
+		{
+			title: "DECK",
+			destination: "page=deck",
+			icon_class: "icon-cards",
+		},
+		{
+			title: "MARKET",
+			destination: "page=deck/show_market=auctions",
+			icon_class: "icon-chart-line",
+		},
+	];
 
-		if (document.getElementById("sidebar")) {
+	for (const conf of buttonsConf) {
+		// Antiquity & Century
+		if (document.querySelector("#panel > ul.menu")) {
+			const cardsLink = document.createElement("li");
+			// <i> is too large on century due to NS css, use <span>
+			cardsLink.innerHTML = `<a href="${conf.destination}"><span class="${conf.icon_class}"> </span>${conf.title}</a>`;
+
 			// Antiquity
-			document
-				.querySelector("#panel > ul.menu > li > ul.submenu")
-				.lastElementChild.before(cardsLink);
+			if (document.getElementById("sidebar")) {
+				document
+					.querySelector("#panel > ul.menu > li > ul.submenu")
+					.lastElementChild.before(cardsLink);
+				// Century
+			} else {
+				document
+					.querySelector("#panel > ul.menu > li > ul.submenu")
+					.lastElementChild.after(cardsLink);
+			}
+			// Other themes
 		} else {
-			// Century
+			const cardsButton = document.createElement("div");
+			cardsButton.classList.add("bel");
+			cardsButton.innerHTML = `<div class="belcontent"><a href="${conf.destination}" class="bellink"><i class="${conf.icon_class}"></i>${conf.title}</a></div>`;
 			document
-				.querySelector("#panel > ul.menu > li > ul.submenu")
-				.lastElementChild.after(cardsLink);
+				.getElementById("banner")
+				.lastElementChild.before(cardsButton);
 		}
-	} else {
-		// Other themes
-		const cardsButton = document.createElement("div");
-		cardsButton.classList.add("bel");
-		cardsButton.innerHTML = `<div class="belcontent"><a href="page=deck" class="bellink"><i class="icon-cards"></i>DECK</a></div>`;
-		document.getElementById("banner").lastElementChild.before(cardsButton);
 	}
 })();
