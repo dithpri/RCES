@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NASPAQ Highlighter
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
 // @description  Adds NASPAQ's icon besides members during auctions
 // @author       dithpri
@@ -140,6 +140,7 @@ background-position: right;
 .rces-cl-naspaq-inline {
 background-repeat: no-repeat;
 background-image: url('${icon_base64}');
+filter: drop-shadow(0px 0px 1px);
 background-size: contain;
 padding-left: 1.5em;
 }
