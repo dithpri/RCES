@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.3.3
+// @version      0.4
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -139,21 +139,11 @@ function addOrgStyle(org) {
 				url('${org.image}');
 	background-position: right;
 	}
-	.rces-umh-${org.hash}-inline {
-	background-repeat: no-repeat;
-	background-image: url('${org.image}');
-	background-size: contain;
-	padding-left: 1.5em;
-	filter: drop-shadow(0px 0px 1px);
+	.rces-umh-${org.hash}-inline::after {
+		background-image: url('${org.image}');
 	}
 	.rces-umh-${org.hash}-inline:hover::before {
-	content: "${CSS.escape(org.name)}";
-	position: absolute;
-	/*background: #e0e0e0;
-	color: #219550;*/
-	transform: translate(-50%, -110%);
-	padding: 0.2em;
-	border-radius: 0.2em;
+		content: "${CSS.escape(org.name)}";
 	}
 	`);
 }
@@ -276,6 +266,10 @@ function confModal_save() {
 		return acc;
 	}, []);
 	saveConfig(newConf);
+	GM.setValue(
+		`preferences-iconSize`,
+		document.getElementById("rces-umh-config-iconSize").value
+	);
 }
 
 async function createConfigMenu() {
@@ -284,6 +278,8 @@ async function createConfigMenu() {
 		"#FFF";
 	const col =
 		document.defaultView.getComputedStyle(document.body).color || "#000";
+
+	const iconSize = await GM.getValue(`preferences-iconSize`, 120);
 
 	document.body.insertAdjacentHTML(
 		"beforeend",
@@ -307,6 +303,12 @@ async function createConfigMenu() {
 			<tbody>
 			</tbody>
 		</table>
+		<br />
+		<label for="rces-umh-config-iconSize">Inline icon size</label>
+		<br />
+		Tiny
+		<input type="range" min="50" max="200" value="${iconSize}" id="rces-umh-config-iconSize"/>
+		Big
 		<br />
 		<button id="rces-umh-config-reload">Reload</button>
 		<button id="rces-umh-config-add">Add</button>
@@ -352,6 +354,10 @@ async function createConfigMenu() {
 	border-radius: 5px;
 	margin: auto;
 	width: 95%;
+}
+
+#rces-umh-config-iconSize {
+	vertical-align: middle;
 }
 
 #rces-umh-config-modal-close {
@@ -454,12 +460,19 @@ async function update_auctiontable() {
 					.replace(/^nation=/, "");
 				if (members_array.includes(canonical_nname)) {
 					const new_el = document.createElement("span");
-					new_el.classList.add(`rces-umh-${org.hash}-inline`);
+					new_el.classList.add(
+						`rces-umh-${org.hash}-inline`,
+						"rces-umh-inline-common"
+					);
 					el.parentNode.insertBefore(new_el, el.nextSibling);
 					el.classList.add(`rces-umh-${org.hash}-parsed`);
 				}
 			});
 	}
+}
+
+function clampValue(val, min, max) {
+	return Math.min(Math.max(val, min), max) || min;
 }
 
 (async function () {
@@ -531,5 +544,37 @@ async function update_auctiontable() {
 		for (const org of orgs) {
 			addOrgStyle(org);
 		}
+		const iconSize =
+			clampValue(
+				await GM.getValue(`preferences-iconSize`, 120),
+				50,
+				200
+			) / 100;
+		GM_addStyle(`.rces-umh-inline-common {
+			display: inline-block;
+			margin-left: 4px;
+}
+
+.rces-umh-inline-common::after {
+	content: '';
+	background-size: contain;
+	filter: drop-shadow(0px 0px 1px);
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	height: ${iconSize}rem;
+	width: ${iconSize}rem;
+	display: inline-block;
+}
+
+.rces-umh-inline-common::before {
+	position: absolute;
+	background: rgba(0,0,0, 50%);
+	font-weight: 600;
+	color: white;
+	transform: translate(-50%, -110%);
+	padding: 0.2em;
+	border-radius: 0.2em;
+}
+`);
 	}
 })();
