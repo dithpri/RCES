@@ -28,10 +28,16 @@
 /* Permissions:
  *
  * GM.xmlHttpRequest, `connect docs.google.com`, `connect googleusercontent.com`:
- *     to automatically fetch and update members' nations.
+ *     to automatically fetch and update members' nations from google sheets.
  *
  * GM.setValue, GM.getValue:
- *     to save and load members' nations locally.
+ *     to save and load members' nations locally and storing preferences.
+ *
+ * GM.registerMenuCommand:
+ *     to add items to the extension menu
+ *
+ * GM.setClipboard:
+ *     to export a whole config.
  */
 
 function GM_addStyle(style) {
