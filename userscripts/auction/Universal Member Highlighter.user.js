@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Universal Member Highlighter
-// @version      0.4
+// @version      0.4.1
 // @namespace    dithpri.RCES
 // @description  Adds a card organization's icon besides members during auctions, with customizable configs
 // @author       dithpri
@@ -240,6 +240,8 @@ async function confModal_reload() {
 	for (const orgConf of await getConfig()) {
 		confTable_addOrgRow(orgConf);
 	}
+	const iconSize = await GM.getValue(`preferences-iconSize`, 120);
+	document.getElementById("rces-umh-config-iconSize").value = iconSize;
 }
 
 function confModal_add() {
@@ -285,8 +287,6 @@ async function createConfigMenu() {
 	const col =
 		document.defaultView.getComputedStyle(document.body).color || "#000";
 
-	const iconSize = await GM.getValue(`preferences-iconSize`, 120);
-
 	document.body.insertAdjacentHTML(
 		"beforeend",
 		`<div id="rces-umh-config-modal">
@@ -313,7 +313,7 @@ async function createConfigMenu() {
 		<label for="rces-umh-config-iconSize">Inline icon size</label>
 		<br />
 		Tiny
-		<input type="range" min="50" max="200" value="${iconSize}" id="rces-umh-config-iconSize"/>
+		<input type="range" min="50" max="200" id="rces-umh-config-iconSize"/>
 		Big
 		<br />
 		<button id="rces-umh-config-reload">Reload</button>
