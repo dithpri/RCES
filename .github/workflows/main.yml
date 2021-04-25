@@ -18,7 +18,7 @@ jobs:
       - name: "Zip files"
         run: |
           mkdir -p build
-          zip -9 -r build/puppets_links_sheet.zip puppets_links_sheet/ LICENSE.md
+          zip -9 -r build/puppet_links_sheet.zip puppet_links_sheet/ LICENSE.md
           zip -9 -r build/owner_report.zip owner_report/ LICENSE.md
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
