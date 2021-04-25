@@ -141,11 +141,11 @@ def main():
 
 	links.write(html_start)
 
-	row_number = 1
+	puppet_number = 1
 	for nation in puppets:
 		nation, *cont = re.split(invalid_nation_chars, nation)
 		if cont:
-			eprint("Invalid puppet name encountered! Assuming '{}' is the puppet name.".format(nation))
+			eprint("Line {}: Invalid puppet name encountered! Assuming '{}' is the puppet name.".format(puppet_number, nation))
 		canonical = canonicalize(nation)
 		escaped_canonical = re.escape(canonical)
 		container_protolink = container_prefix.format(*([canonical for _ in range(container_prefix.count("{}"))]))
@@ -153,7 +153,7 @@ def main():
 		containerise_rules_nation.write("@^.*\\.nationstates\\.net/(.*/)?nation={}(/.*)?$ , {}\n".format(escaped_canonical, nation))
 		links.write("<tr>\n")
 		if config['config']['number rows'] in ["yes", "true", "1"]:
-				links.write("\t<td>{}</td>".format(row_number))
+				links.write("\t<td>{}</td>".format(puppet_number))
 		links.write('\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(container_protolink, canonical, nation))
 		try:
 			for key, value in config['links'].items():
@@ -163,7 +163,7 @@ def main():
 		if config['config']['include create column'] in ["yes", "true", "1"]:
 			links.write('\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(container_protolink, nation.replace(" ", "_"), nation))
 		links.write("</tr>\n")
-		row_number += 1
+		puppet_number += 1
 
 	links.write(html_end)
 
