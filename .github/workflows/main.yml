@@ -1,11 +1,8 @@
 ---
-name: "Automatic release"
+name: "Manual release"
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "master"
 
 jobs:
   pre-release:
