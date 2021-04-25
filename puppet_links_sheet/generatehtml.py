@@ -19,13 +19,38 @@ html_start = """
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 	<style>
+	/* Light mode */
+	@media (prefers-color-scheme: light) {
+		body {
+			background-color: white;
+			color: black;
+		}
+		a {
+			color: black;
+		}
+		tr:hover {
+			background-color: lightgrey;
+		}
+	}
+	/* Dark mode */
+	@media (prefers-color-scheme: dark) {
+		body {
+			background-color: #111;
+			color: #EEE;
+		}
+		a {
+			color: #EEE;
+		}
+		tr:hover {
+			background-color: #444;
+		}
+	}
 	td.createcol p {
 		padding-left: 10em;
 	}
 
 	a {
 		text-decoration: none;
-		color: black;
 	}
 
 	a:visited {
@@ -45,10 +70,6 @@ html_start = """
 
 	td p {
 		padding: 0.5em;
-	}
-
-	tr:hover {
-		background-color: lightgrey;
 	}
 
 	</style>
