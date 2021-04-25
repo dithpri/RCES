@@ -7,6 +7,9 @@
 # containerPrefix: nation={}
 # In both cases, {} will be replaced with the name of the puppet
 
+Include create column: yes
+Number rows: yes
+
 
 [links]
 # Links are relative to the NS site.
@@ -21,4 +24,3 @@ Value Deck (No CSS): page=deck/value_deck=1/template-overall=none
 Telegrams: page=telegrams
 Settings: page=settings
 TG Settings: page=tgsettings
-
