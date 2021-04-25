@@ -86,12 +86,12 @@ html_end = """
 </table>
 <script>
 
-document.querySelectorAll("td").forEach(function(el) {
+document.querySelectorAll("a").forEach(function(el) {
 	el.addEventListener("click", function(ev) {
 		if (!ev.repeat) {
 			let myidx = 0;
-			const row = el.parentNode;
-			let child = el;
+			const row = el.closest("tr");
+			let child = el.closest("td");
 			while((child = child.previousElementSibling) != null) {
 				myidx++;
 			}
