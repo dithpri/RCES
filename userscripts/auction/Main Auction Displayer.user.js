@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.15
+// @version      0.16
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -15,6 +15,13 @@
 // @connect      docs.google.com
 // @connect      googleusercontent.com
 // ==/UserScript==
+
+/*
+ * To have the script run on any NS page, you can add this match line:
+
+// @match        https://www.nationstates.net/*
+
+ */
 
 /*
  * Copyright (c) 2020 dithpri (Racoda) <dithpri@gmail.com>
@@ -188,6 +195,23 @@ async function refreshAllSheets() {
 	GM.setValue("rces-main-nations-lastupdate", new Date().getTime());
 }
 
+function setupUpdates() {
+	const isAuctionPage = document.getElementById("auctiontablebox") != null;
+	let observer = new MutationObserver(function (mutationList) {
+		updatePuppets(isAuctionPage);
+	});
+	let observerOptions = {
+		childList: true,
+		// for dynamically updating pages such as the world feed
+		subtree: !isAuctionPage,
+	};
+	updatePuppets(isAuctionPage);
+	observer.observe(
+		document.getElementById("auctiontablebox") || document,
+		observerOptions
+	);
+}
+
 (async function () {
 	"use strict";
 	let lastUpdateMs = await GM.getValue("rces-main-nations-lastupdate", 0);
@@ -209,22 +233,5 @@ async function refreshAllSheets() {
 	if (lastUpdateMs + 24 * 60 * 60 * 1000 < new Date().getTime()) {
 		refreshAllSheets();
 	}
-
-	if (document.getElementById("auctiontablebox")) {
-		updatePuppets(true);
-		let observer = new MutationObserver(function (mutationList) {
-			updatePuppets(true);
-		});
-
-		const observerOptions = {
-			childList: true,
-		};
-
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
-	} else {
-		updatePuppets(false);
-	}
+	setupUpdates();
 })();
