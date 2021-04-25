@@ -10,104 +10,9 @@
 import sys
 import traceback
 import re
-import configparser
+from configparser import ConfigParser, ExtendedInterpolation
 
 guard, *guard_ = 0, 0, 0 # This script requires Python 3, you're using Python 2. If running from the command line, try 'python3 generatehtml.py' instead.
-
-html_start = """
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<style>
-	/* Light mode */
-	@media (prefers-color-scheme: light) {
-		body {
-			background-color: white;
-			color: black;
-		}
-		a {
-			color: black;
-		}
-		tr:hover {
-			background-color: lightgrey;
-		}
-	}
-	/* Dark mode */
-	@media (prefers-color-scheme: dark) {
-		body {
-			background-color: #111;
-			color: #EEE;
-		}
-		a {
-			color: #EEE;
-		}
-		tr:hover {
-			background-color: #444;
-		}
-	}
-	td.createcol p {
-		padding-left: 10em;
-	}
-
-	a {
-		text-decoration: none;
-	}
-
-	a:visited {
-		color: grey;
-	}
-
-	table {
-		border-collapse: collapse;
-		display: table-cell;
-		max-width: 100%;
-		border: 1px solid darkorange;
-	}
-
-	tr, td {
-		border-bottom: 1px solid darkorange;
-	}
-
-	td:first-child {
-		border: 1px solid darkorange;
-	}
-
-	td p, td:first-child {
-		padding: 0.5em;
-	}
-
-	</style>
-</head>
-<body>
-<table>
-"""
-
-html_end = """
-</table>
-<script>
-
-document.querySelectorAll("a").forEach(function(el) {
-	el.addEventListener("click", function(ev) {
-		if (!ev.repeat) {
-			let myidx = 0;
-			const row = el.closest("tr");
-			let child = el.closest("td");
-			while((child = child.previousElementSibling) != null) {
-				myidx++;
-			}
-			try {
-				row.nextElementSibling.children[myidx].querySelector("p > a").focus();
-			} finally {
-				row.parentNode.removeChild(row);
-			}
-		}
-	});
-});
-
-</script>
-</body>
-</html>
-"""
 
 invalid_nation_chars = re.compile("[^A-Za-z0-9_ -]")
 
@@ -119,7 +24,7 @@ def canonicalize(name):
 	return name.lower().replace(" ", "_")
 
 def main():
-	config = configparser.ConfigParser()
+	config = ConfigParser(interpolation=ExtendedInterpolation())
 	config.read("config.txt")
 
 	try:
@@ -130,6 +35,8 @@ def main():
 
 		}
 
+	html_start = config['html_template']['html_start']
+	html_end = config['html_template']['html_end']
 	with open('puppets_list.txt') as f:
 		puppets = f.read().split('\n')
 
