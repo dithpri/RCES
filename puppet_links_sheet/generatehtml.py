@@ -12,6 +12,8 @@ import traceback
 import re
 import configparser
 
+guard, *guard_ = 0, 0, 0 # This script requires Python 3, you're using Python 2. If running from the command line, try 'python3 generatehtml.py' instead.
+
 html_start = """
 <html>
 <head>
