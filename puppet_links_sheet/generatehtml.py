@@ -8,6 +8,8 @@
 """
 
 import sys
+import os
+import inspect
 import traceback
 import re
 from configparser import ConfigParser, ExtendedInterpolation
@@ -23,9 +25,43 @@ def eprint(*args, **kwargs):
 def canonicalize(name):
 	return name.lower().replace(" ", "_")
 
+def get_script_dir():
+	return os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+def get_cwd():
+	return os.getcwd()
+
+def get_file_paths():
+	reqs = {
+		"config": "config.txt",
+		"puppets_list": "puppets_list.txt"
+	}
+	ret = {}
+	possible_roots = set([get_cwd(), get_script_dir()])
+	for k, v in reqs.items():
+		for root in possible_roots:
+			tryfile = os.path.join(root, v)
+			if os.path.isfile(tryfile):
+				ret[k] = tryfile
+				break
+		if k not in ret:
+			eprint("Could not find `{}` in any of these directories: ".format(v))
+			for root in possible_roots:
+				eprint("  {}".format(root))
+	if ret.keys() != reqs.keys():
+		raise FileNotFoundError("A required file wasn't found.")
+	return ret
+
 def main():
+	if get_cwd() != get_script_dir():
+		eprint("Hint: The working directory is different from the script directory.")
+		eprint("Hint: files will be generated in {}".format(get_cwd()))
+
+	files = get_file_paths()
 	config = ConfigParser(interpolation=ExtendedInterpolation())
-	config.read("config.txt")
+
+	with open(files["config"]) as config_file:
+		config.read_file(config_file)
 
 	try:
 		container_prefix = config['config']['containerPrefix']
@@ -37,7 +73,7 @@ def main():
 
 	html_start = config['html_template']['html_start']
 	html_end = config['html_template']['html_end']
-	with open('puppets_list.txt') as f:
+	with open(files["puppets_list"]) as f:
 		puppets = f.read().split('\n')
 
 	puppets = list(filter(None, puppets))
