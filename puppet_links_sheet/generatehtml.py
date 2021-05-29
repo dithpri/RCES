@@ -31,56 +31,59 @@ def get_script_dir():
 def get_cwd():
 	return os.getcwd()
 
-def get_file_paths():
-	reqs = {
-		"config": "config.txt",
-		"puppets_list": "puppets_list.txt"
-	}
-	ret = {}
-	possible_roots = set([get_cwd(), get_script_dir()])
-	for k, v in reqs.items():
-		for root in possible_roots:
-			tryfile = os.path.join(root, v)
-			if os.path.isfile(tryfile):
-				ret[k] = tryfile
-				break
-		if k not in ret:
-			eprint("Could not find `{}` in any of these directories: ".format(v))
-			for root in possible_roots:
-				eprint("  {}".format(root))
-	if ret.keys() != reqs.keys():
-		raise FileNotFoundError("A required file wasn't found.")
-	return ret
+possible_dirs = [get_script_dir(), get_cwd(), str(os.path.expanduser("~/RCES/puppet_links_sheet/"))]
+
+def get_config_files(*params):
+	config_files = set(params)
+	for try_dir in possible_dirs:
+		for filename in config_files:
+			try:
+				ret = {
+					k: v for k, v in map(lambda filename: (filename, open(os.path.join(try_dir, filename), "r")), config_files)
+				}
+				eprint("Using config from {}".format(try_dir))
+				return ret
+			except OSError:
+				eprint("Something went wrong when trying to read config from {}".format(try_dir))
+	raise FileNotFoundError("A required file wasn't found.")
+
+def create_output_files(*params):
+	output_files = set(params)
+	for try_dir in possible_dirs:
+		try:
+			os.makedirs(try_dir, exist_ok = True)
+			ret =  {
+				k: v for k, v in map(lambda filename: (filename, open(os.path.join(try_dir, filename), "w")), output_files)
+			}
+			eprint("Hint: files will be generated in {}".format(try_dir))
+			return ret
+		except OSError:
+			eprint("Something went wrong when trying to generate files in {}".format(try_dir))
+			continue
+	return None
 
 def main():
-	if get_cwd() != get_script_dir():
-		eprint("Hint: The working directory is different from the script directory.")
-		eprint("Hint: files will be generated in {}".format(get_cwd()))
+	config_files = get_config_files("config.txt", "puppets_list.txt")
+	outputs = create_output_files("containerise (nation).txt", "containerise (container).txt", "puppet_links.html")
 
-	files = get_file_paths()
 	config = ConfigParser(interpolation=ExtendedInterpolation())
+	config.read_file(config_files["config.txt"])
+	puppets = config_files["puppets_list.txt"].read().split('\n')
+	puppets = list(filter(None, puppets))
 
-	with open(files["config"]) as config_file:
-		config.read_file(config_file)
+	containerise_rules_container = outputs['containerise (container).txt']
+	containerise_rules_nation = outputs['containerise (nation).txt']
+	links = outputs['puppet_links.html']
 
 	try:
 		container_prefix = config['config']['containerPrefix']
 	except KeyError:
 		container_prefix = "container={}/nation={}"
-		containerise_rules = {
-
-		}
 
 	html_start = config['html_template']['html_start']
 	html_end = config['html_template']['html_end']
-	with open(files["puppets_list"]) as f:
-		puppets = f.read().split('\n')
 
-	puppets = list(filter(None, puppets))
 
-	containerise_rules_container = open('containerise (container).txt', 'w')
-	containerise_rules_nation = open('containerise (nation).txt', 'w')
-	links = open('puppet_links.html', 'w')
 
 	links.write(html_start)
 
