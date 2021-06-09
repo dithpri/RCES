@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: "Checkout source code"
         uses: "actions/checkout@v2.3.4"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: "Zip files"
         run: |
           mkdir -p build
@@ -20,8 +24,8 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: false
-          title: "Latest release"
+          automatic_release_tag: "${{ steps.extract_branch.outputs.branch }}"
+          prerelease: "${{ steps.extract_branch.outputs.branch == 'devel' }}"
+          title: "Release - ${{ steps.extract_branch.outputs.branch }}"
           files: |
             build/*
