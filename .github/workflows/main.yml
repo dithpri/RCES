@@ -24,7 +24,7 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ steps.extract_branch.outputs.branch }}"
+          automatic_release_tag: "release-${{ steps.extract_branch.outputs.branch }}"
           prerelease: "${{ steps.extract_branch.outputs.branch == 'devel' }}"
           title: "Release - ${{ steps.extract_branch.outputs.branch }}"
           files: |
