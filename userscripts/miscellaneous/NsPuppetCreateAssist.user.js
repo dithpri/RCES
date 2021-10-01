@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         NsPuppetCreateAssist
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
 // @description  A script for one-click puppet creation
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/miscellaneous/NsPuppetCreateAssist.user.js
 // @noframes
 // @match        https://www.nationstates.net/*page=blank/*x-rces-cp*
+// @grant        GM.getValue
+// @grant        GM.setValue
 // ==/UserScript==
 
 /*
@@ -22,7 +24,13 @@
  * nation passwords -- they'll autofill.
  */
 
-(function () {
+const DISCLAIMER =
+`Take care when using this script - DO NOT CREATE PUPPETS SIMULTANEOUSLY.
+Do it ONE AT A TIME.
+No Ctrl-Tabbing and rapidly creating many puppets.
+For more information, see the NS scripting rules about simultaneous requests.`;
+
+(async function () {
 	const currencies = [
 		"afghani",
 		"ariary",
@@ -518,7 +526,18 @@
 	const civil = Math.floor(Math.random() * 99 + 1);
 	const polit = Math.floor(Math.random() * 99 + 1);
 
+    if (!await GM.getValue("NsPuppetCreateAssist_disclaimer_read", null)) {
+        if (prompt(DISCLAIMER + "\nEnter 'I understand' in the box below to continue").toLowerCase() == "i understand") {
+            GM.setValue("NsPuppetCreateAssist_disclaimer_read", 1);
+        } else {
+            return
+        }
+    }
+
 	const puppetCreationForm = `
+    <br/>
+    <big><strong>${DISCLAIMER.replaceAll("\n", "<br/>")}</strong></big>
+    <hr/>
 <form method="POST" action="/cgi-bin/build_nation.cgi" id="x-rces-cp-onestep-form" name="form" onSubmit="submitForm(form.create_nation,'<i class=\'icon-flag-1\'></i>Creating...');">
 
 <table>
