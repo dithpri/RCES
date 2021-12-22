@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Garderner Highlighter
-// @version      0.7
+// @name         Gardener Highlighter
+// @version      0.7.1
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
