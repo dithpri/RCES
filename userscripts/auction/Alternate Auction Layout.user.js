@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.2
+// @version      0.3
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -121,9 +121,9 @@ function update_auctiontable() {
 	document
 		.getElementById("rces-container")
 		.append(
-			newElementWithAttribs("div", {id: "rces-infotable-wrapper"}),
+			document.getElementById("deck-single-card"),
 			newElementWithAttribs("div", {id: "rces-auction-wrapper"}),
-			document.getElementById("deck-single-card")
+			newElementWithAttribs("div", {id: "rces-infotable-wrapper"})
 		);
 
 	// Actually move table and auction into respective wrappers
