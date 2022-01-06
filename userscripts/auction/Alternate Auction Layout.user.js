@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -168,7 +168,7 @@ function update_auctiontable() {
 		);
 	}
 
-	GM_addStyle(`
+	addStyle(`
 #countdown-cardauction {
 display: inline-block;
 background-color: ${
