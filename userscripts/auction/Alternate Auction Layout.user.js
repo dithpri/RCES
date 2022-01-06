@@ -116,26 +116,17 @@ function update_auctiontable() {
 	document
 		.getElementById("deck-single-card")
 		.before(newElementWithAttribs("div", {id: "rces-container"}));
+
+	// Move table wrapper, auction wrapper, card to container
 	document
 		.getElementById("rces-container")
 		.append(
 			newElementWithAttribs("div", {id: "rces-infotable-wrapper"}),
-			newElementWithAttribs("div", {id: "rces-auction-wrapper"})
+			newElementWithAttribs("div", {id: "rces-auction-wrapper"}),
+			document.getElementById("deck-single-card")
 		);
 
-	// Wrap the auction countdown
-	document
-		.getElementById("rces-container")
-		.before(newElementWithAttribs("div", {id: "rces-countdown-wrapper"}));
-	document
-		.getElementById("rces-countdown-wrapper")
-		.append(document.getElementById("countdown-cardauction") || "");
-
-	// Move the card to the beginning of the page
-	document
-		.getElementById("rces-container")
-		.append(document.getElementById("deck-single-card"));
-
+	// Actually move table and auction into respective wrappers
 	document
 		.getElementById("rces-infotable-wrapper")
 		.append(document.getElementById("rces-infotable"));
@@ -145,6 +136,14 @@ function update_auctiontable() {
 			document.getElementById("cardauctionoffertable").parentElement,
 			document.getElementById("auctiontablebox").parentElement
 		);
+
+	// Wrap the auction countdown to make it float with scrolling
+	document
+		.getElementById("rces-container")
+		.before(newElementWithAttribs("div", {id: "rces-countdown-wrapper"}));
+	document
+		.getElementById("rces-countdown-wrapper")
+		.append(document.getElementById("countdown-cardauction") || "");
 
 	// Move the "You own x copies" info to the top.
 	document
