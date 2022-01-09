@@ -45,66 +45,39 @@ const icon_base64 =
 	"use strict";
 
 	const update_auctiontable = async function () {
-		const members_array = (await GM.getValue("cardgardens", "")).split(
-			"\n"
-		);
-		document
-			.querySelectorAll(
-				"#cardauctiontable > tbody > tr > td > p > a.nlink"
-			)
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					el.parentNode.parentNode.classList.add(
-						"rces-cl-cardgardens"
-					);
-				} else {
-					el.parentNode.parentNode.classList.remove(
-						"rces-cl-cardgardens"
-					);
-				}
-			});
-		document
-			.querySelectorAll("a.nlink:not(.rces-cl-cardgardens-parsed)")
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					const new_el = document.createElement("span");
-					new_el.classList.add("rces-cl-cardgardens-inline");
-					el.parentNode.insertBefore(new_el, el);
-					el.classList.add("rces-cl-cardgardens-parsed");
-				}
-			});
+		const members_array = (await GM.getValue("cardgardens", "")).split("\n");
+		document.querySelectorAll("#cardauctiontable > tbody > tr > td > p > a.nlink").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				el.parentNode.parentNode.classList.add("rces-cl-cardgardens");
+			} else {
+				el.parentNode.parentNode.classList.remove("rces-cl-cardgardens");
+			}
+		});
+		document.querySelectorAll("a.nlink:not(.rces-cl-cardgardens-parsed)").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				const new_el = document.createElement("span");
+				new_el.classList.add("rces-cl-cardgardens-inline");
+				el.parentNode.insertBefore(new_el, el);
+				el.classList.add("rces-cl-cardgardens-parsed");
+			}
+		});
 	};
 
 	if (document.getElementById("auctiontablebox")) {
 		// If we haven't updated in the last 12h
-		if (
-			(await GM.getValue("cardgardens-lastupdate", 0)) +
-				12 * 60 * 60 * 1000 <
-			new Date().getTime()
-		) {
+		if ((await GM.getValue("cardgardens-lastupdate", 0)) + 12 * 60 * 60 * 1000 < new Date().getTime()) {
 			GM.xmlHttpRequest({
 				method: "GET",
-				url:
-					"https://docs.google.com/spreadsheets/d/1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk/export?format=tsv&id=1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk&gid=540664597",
+				url: "https://docs.google.com/spreadsheets/d/1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk/export?format=tsv&id=1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk&gid=540664597",
 				onload: async function (data) {
 					console.info("updated");
 					await GM.setValue(
 						"cardgardens",
 						data.responseText
 							.split("\n")
-							.map((x) =>
-								x
-									.split("\t")[1]
-									.trim()
-									.toLowerCase()
-									.replace(/ /g, "_")
-							)
+							.map((x) => x.split("\t")[1].trim().toLowerCase().replace(/ /g, "_"))
 							.slice(1)
 							.join("\n")
 					);
@@ -125,10 +98,7 @@ const icon_base64 =
 			childList: true,
 		};
 
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
+		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
 
 		GM_addStyle(`
 .rces-cl-cardgardens {

@@ -33,10 +33,6 @@
 		.querySelector(".deckcard-season-list-card-selected > .deckcard-token")
 		.textContent.toLowerCase();
 
-	document.querySelector('input[name="auction_ask"').value = default_prices[
-		rarity
-	].ask.toFixed(2);
-	document.querySelector('input[name="auction_bid"').value = default_prices[
-		rarity
-	].bid.toFixed(2);
+	document.querySelector('input[name="auction_ask"').value = default_prices[rarity].ask.toFixed(2);
+	document.querySelector('input[name="auction_bid"').value = default_prices[rarity].bid.toFixed(2);
 })();

@@ -49,73 +49,45 @@ const icon_base64 =
 	"use strict";
 
 	const update_auctiontable = async function () {
-		const members_array = (await GM.getValue("tnp-cards-guild", "")).split(
-			"\n"
-		);
-		document
-			.querySelectorAll(
-				"#cardauctiontable > tbody > tr > td > p > a.nlink"
-			)
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					el.parentNode.parentNode.classList.add(
-						"rces-cl-tnp-cardsguild"
-					);
-				} else {
-					el.parentNode.parentNode.classList.remove(
-						"rces-cl-tnp-cardsguild"
-					);
-				}
-			});
-		document
-			.querySelectorAll("a.nlink:not(.rces-cl-tnp-cardsguild-parsed)")
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					const new_el = document.createElement("span");
-					new_el.classList.add("rces-cl-tnp-cardsguild-inline");
-					el.parentNode.insertBefore(new_el, el);
-					el.classList.add("rces-cl-tnp-cardsguild-parsed");
-				}
-			});
+		const members_array = (await GM.getValue("tnp-cards-guild", "")).split("\n");
+		document.querySelectorAll("#cardauctiontable > tbody > tr > td > p > a.nlink").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				el.parentNode.parentNode.classList.add("rces-cl-tnp-cardsguild");
+			} else {
+				el.parentNode.parentNode.classList.remove("rces-cl-tnp-cardsguild");
+			}
+		});
+		document.querySelectorAll("a.nlink:not(.rces-cl-tnp-cardsguild-parsed)").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				const new_el = document.createElement("span");
+				new_el.classList.add("rces-cl-tnp-cardsguild-inline");
+				el.parentNode.insertBefore(new_el, el);
+				el.classList.add("rces-cl-tnp-cardsguild-parsed");
+			}
+		});
 	};
 
 	if (document.getElementById("auctiontablebox")) {
 		// If we haven't updated in the last 12h
 		const lastUpdate = await GM.getValue("tnp-cards-guild-lastupdate", 0);
-		if (
-			lastUpdate < forceUpdateIfBefore ||
-			lastUpdate + 12 * 60 * 60 * 1000 < new Date().getTime()
-		) {
+		if (lastUpdate < forceUpdateIfBefore || lastUpdate + 12 * 60 * 60 * 1000 < new Date().getTime()) {
 			GM.xmlHttpRequest({
 				method: "GET",
-				url:
-					"https://docs.google.com/spreadsheets/d/1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ/export?format=tsv&id=1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ&gid=1147833059",
+				url: "https://docs.google.com/spreadsheets/d/1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ/export?format=tsv&id=1q-aLN6fhUm0OC426lv_G4f32PWA_u5nRlJ4YCj9NDlQ&gid=1147833059",
 				onload: async function (data) {
 					console.info("updated");
 					await GM.setValue(
 						"tnp-cards-guild",
 						data.responseText
 							.split("\n")
-							.map((x) =>
-								x
-									.split("\t")[4]
-									.toLowerCase()
-									.replace(/ /g, "_")
-							)
+							.map((x) => x.split("\t")[4].toLowerCase().replace(/ /g, "_"))
 							.slice(1)
 							.concat("the_northern_light")
 							.join("\n")
 					);
-					GM.setValue(
-						"tnp-cards-guild-lastupdate",
-						new Date().getTime()
-					);
+					GM.setValue("tnp-cards-guild-lastupdate", new Date().getTime());
 					update_auctiontable();
 				},
 			});
@@ -132,10 +104,7 @@ const icon_base64 =
 			childList: true,
 		};
 
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
+		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
 
 		GM_addStyle(`
 .rces-cl-tnp-cardsguild {

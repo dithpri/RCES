@@ -52,19 +52,13 @@ right: 0;
 * { visibility: hidden;}
 
 `);
-	document
-		.querySelectorAll('form[action^="/page=enact_dilemma/"]')
-		.forEach(function (el) {
-			el.action += "/template-overall=none/x-rces=autoclose";
-		});
+	document.querySelectorAll('form[action^="/page=enact_dilemma/"]').forEach(function (el) {
+		el.action += "/template-overall=none/x-rces=autoclose";
+	});
 
-	const issuebtns = document.querySelectorAll(
-		"button.button.big.icon.approve"
-	);
+	const issuebtns = document.querySelectorAll("button.button.big.icon.approve");
 	if (issuebtns.length > 0) {
-		document.querySelector(
-			"p.dilemmadismissbox > button.big.icon.remove.danger"
-		).disabled = true;
+		document.querySelector("p.dilemmadismissbox > button.big.icon.remove.danger").disabled = true;
 		const chosenButtonNumber = Math.floor(Math.random() * issuebtns.length);
 		issuebtns[chosenButtonNumber].classList.add("rces-chosen");
 		document.addEventListener("keyup", function (ev) {
@@ -72,11 +66,9 @@ right: 0;
 				ev.preventDefault();
 				return;
 			}
-			document
-				.querySelectorAll("button.button.big.icon")
-				.forEach(function (el) {
-					el.style.display = "none";
-				});
+			document.querySelectorAll("button.button.big.icon").forEach(function (el) {
+				el.style.display = "none";
+			});
 			issuebtns[chosenButtonNumber].click();
 		});
 	}

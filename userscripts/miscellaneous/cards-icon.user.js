@@ -42,23 +42,17 @@
 
 			// Antiquity
 			if (document.getElementById("sidebar")) {
-				document
-					.querySelector("#panel > ul.menu > li > ul.submenu")
-					.lastElementChild.before(cardsLink);
+				document.querySelector("#panel > ul.menu > li > ul.submenu").lastElementChild.before(cardsLink);
 				// Century
 			} else {
-				document
-					.querySelector("#panel > ul.menu > li > ul.submenu")
-					.lastElementChild.after(cardsLink);
+				document.querySelector("#panel > ul.menu > li > ul.submenu").lastElementChild.after(cardsLink);
 			}
 			// Other themes
 		} else {
 			const cardsButton = document.createElement("div");
 			cardsButton.classList.add("bel");
 			cardsButton.innerHTML = `<div class="belcontent"><a href="${conf.destination}" class="bellink"><i class="${conf.icon_class}"></i>${conf.title}</a></div>`;
-			document
-				.getElementById("banner")
-				.lastElementChild.before(cardsButton);
+			document.getElementById("banner").lastElementChild.before(cardsButton);
 		}
 	}
 })();

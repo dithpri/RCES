@@ -49,41 +49,28 @@ const sheet_url =
 
 	const update_auctiontable = async function () {
 		const members_array = (await GM.getValue("naspaq", "")).split("\n");
-		document
-			.querySelectorAll(
-				"#cardauctiontable > tbody > tr > td > p > a.nlink"
-			)
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					el.parentNode.parentNode.classList.add("rces-cl-naspaq");
-				} else {
-					el.parentNode.parentNode.classList.remove("rces-cl-naspaq");
-				}
-			});
-		document
-			.querySelectorAll("a.nlink:not(.rces-cl-naspaq-parsed)")
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					const new_el = document.createElement("span");
-					new_el.classList.add("rces-cl-naspaq-inline");
-					el.parentNode.insertBefore(new_el, el);
-					el.classList.add("rces-cl-naspaq-parsed");
-				}
-			});
+		document.querySelectorAll("#cardauctiontable > tbody > tr > td > p > a.nlink").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				el.parentNode.parentNode.classList.add("rces-cl-naspaq");
+			} else {
+				el.parentNode.parentNode.classList.remove("rces-cl-naspaq");
+			}
+		});
+		document.querySelectorAll("a.nlink:not(.rces-cl-naspaq-parsed)").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				const new_el = document.createElement("span");
+				new_el.classList.add("rces-cl-naspaq-inline");
+				el.parentNode.insertBefore(new_el, el);
+				el.classList.add("rces-cl-naspaq-parsed");
+			}
+		});
 	};
 
 	if (document.getElementById("auctiontablebox")) {
 		// If we haven't updated in the last 12h
-		if (
-			(await GM.getValue("naspaq-lastupdate", 0)) + 12 * 60 * 60 * 1000 <
-			new Date().getTime()
-		) {
+		if ((await GM.getValue("naspaq-lastupdate", 0)) + 12 * 60 * 60 * 1000 < new Date().getTime()) {
 			GM.xmlHttpRequest({
 				method: "GET",
 				url: sheet_url,
@@ -93,13 +80,7 @@ const sheet_url =
 						"naspaq",
 						data.responseText
 							.split("\n")
-							.map((x) =>
-								x
-									.split("\t")[4]
-									.trim()
-									.toLowerCase()
-									.replace(/ /g, "_")
-							)
+							.map((x) => x.split("\t")[4].trim().toLowerCase().replace(/ /g, "_"))
 							.slice(1)
 							.join("\n")
 					);
@@ -120,10 +101,7 @@ const sheet_url =
 			childList: true,
 		};
 
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
+		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
 
 		GM_addStyle(`
 .rces-cl-naspaq {

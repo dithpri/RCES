@@ -34,9 +34,7 @@ function newElementWithAttribs(elem, attribs) {
 function update_auctiontable() {
 	// collapse identical bids/asks/matches into a single row
 
-	const expandButton = document
-		.getElementById("auctiontablebox")
-		.querySelector(".cardauctionshowmorerow");
+	const expandButton = document.getElementById("auctiontablebox").querySelector(".cardauctionshowmorerow");
 	if (false && expandButton) {
 		expandButton.style.display = "none";
 		document
@@ -51,10 +49,7 @@ function update_auctiontable() {
 	let count = -1;
 
 	// the 0 is a hack to force the last iteration to update too
-	[
-		...document.getElementById("cardauctiontable").querySelectorAll("tr"),
-		0,
-	].forEach(function (el) {
+	[...document.getElementById("cardauctiontable").querySelectorAll("tr"), 0].forEach(function (el) {
 		if (lastRow === undefined) {
 			lastRow = el;
 			count = 1;
@@ -81,14 +76,10 @@ function update_auctiontable() {
 
 	document
 		.getElementById("auctiontablebox")
-		.querySelectorAll(
-			"#cardauctiontable > tbody > tr.cardauctionmatchedrow"
-		)
+		.querySelectorAll("#cardauctiontable > tbody > tr.cardauctionmatchedrow")
 		.forEach(function (el) {
 			//td > p > span.cardprice
-			const [s1, s2, s3] = [
-				...el.querySelectorAll("td > p > span.cardprice"),
-			];
+			const [s1, s2, s3] = [...el.querySelectorAll("td > p > span.cardprice")];
 			const [p1, p2, p3] = [s1, s2, s3].map((x) => Number(x.textContent));
 			if (p1 == p2 && p2 == p3) {
 				s1.style.visibility = "hidden";
@@ -104,18 +95,13 @@ function update_auctiontable() {
 	// Move elements that do not normally belong in #auctiontablebox to after its parent form.
 	document
 		.querySelectorAll("#auctiontablebox > :not(#cardauctiontable)")
-		.forEach((node) =>
-			document.getElementById("auctiontablebox").parentElement.after(node)
-		);
+		.forEach((node) => document.getElementById("auctiontablebox").parentElement.after(node));
 
 	// Add id to table for easier use
-	document.querySelector("table.shiny.wide.deckcard-card-stats").id =
-		"rces-infotable";
+	document.querySelector("table.shiny.wide.deckcard-card-stats").id = "rces-infotable";
 
 	// Container for side-by-side display of table and auction
-	document
-		.getElementById("deck-single-card")
-		.before(newElementWithAttribs("div", {id: "rces-container"}));
+	document.getElementById("deck-single-card").before(newElementWithAttribs("div", {id: "rces-container"}));
 
 	// Move table wrapper, auction wrapper, card to container
 	document
@@ -127,9 +113,7 @@ function update_auctiontable() {
 		);
 
 	// Actually move table and auction into respective wrappers
-	document
-		.getElementById("rces-infotable-wrapper")
-		.append(document.getElementById("rces-infotable"));
+	document.getElementById("rces-infotable-wrapper").append(document.getElementById("rces-infotable"));
 	document
 		.getElementById("rces-auction-wrapper")
 		.append(
@@ -138,17 +122,11 @@ function update_auctiontable() {
 		);
 
 	// Wrap the auction countdown to make it float with scrolling
-	document
-		.getElementById("rces-container")
-		.before(newElementWithAttribs("div", {id: "rces-countdown-wrapper"}));
-	document
-		.getElementById("rces-countdown-wrapper")
-		.append(document.getElementById("countdown-cardauction") || "");
+	document.getElementById("rces-container").before(newElementWithAttribs("div", {id: "rces-countdown-wrapper"}));
+	document.getElementById("rces-countdown-wrapper").append(document.getElementById("countdown-cardauction") || "");
 
 	// Move the "You own x copies" info to the top.
-	document
-		.getElementById("ttq_1a")
-		.after(document.querySelector(".minorinfo") || "");
+	document.getElementById("ttq_1a").after(document.querySelector(".minorinfo") || "");
 
 	if (document.getElementById("auctiontablebox")) {
 		update_auctiontable();
@@ -161,18 +139,13 @@ function update_auctiontable() {
 			childList: true,
 		};
 
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
+		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
 	}
 
 	addStyle(`
 #countdown-cardauction {
 display: inline-block;
-background-color: ${
-		window.getComputedStyle(document.getElementById("main")).backgroundColor
-	};
+background-color: ${window.getComputedStyle(document.getElementById("main")).backgroundColor};
 margin: 0;
 padding: 0.5em;
 border-radius: 0.5em;

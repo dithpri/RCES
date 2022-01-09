@@ -15,17 +15,7 @@
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
-const shouldConfirm = ({
-	rarity,
-	season,
-	junkValue,
-	name,
-	id,
-	region,
-	badges,
-	marketValue,
-	bid,
-}) => {
+const shouldConfirm = ({rarity, season, junkValue, name, id, region, badges, marketValue, bid}) => {
 	// EDIT HERE
 	// IMPORTANT: Note that marketValue and bid are *only* available when
 	// opening a pack, they can't be checked on the deck page.
@@ -115,29 +105,18 @@ function addOpt(...args) {
 			?.textContent.toLowerCase()
 			.replaceAll(" ", "_");
 
-		const badges = [
-			...junkButton.closest(".deckcard").querySelectorAll("img.trophy"),
-		]
-			.map((x) =>
-				x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1")
-			)
+		const badges = [...junkButton.closest(".deckcard").querySelectorAll("img.trophy")]
+			.map((x) => x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1"))
 			.concat(
-				[
-					...junkButton
-						.closest(".deckcard")
-						.querySelectorAll(".badge"),
-				].map((x) => x.textContent.toLowerCase().trim())
+				[...junkButton.closest(".deckcard").querySelectorAll(".badge")].map((x) =>
+					x.textContent.toLowerCase().trim()
+				)
 			);
 
-		const marketValueText = junkButton
-			.closest(".deckcard-flag")
-			.querySelector(".deckcard-card-mv")?.textContent;
-		const bidText = junkButton
-			.closest(".deckcard-flag")
-			.querySelector(".deckcard-card-buyers")?.textContent;
+		const marketValueText = junkButton.closest(".deckcard-flag").querySelector(".deckcard-card-mv")?.textContent;
+		const bidText = junkButton.closest(".deckcard-flag").querySelector(".deckcard-card-buyers")?.textContent;
 
-		const marketValue =
-			Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || NaN;
+		const marketValue = Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || NaN;
 		const bid = Number(bidText?.replaceAll(/[^0-9.]/g, "")) || NaN;
 
 		const params = {

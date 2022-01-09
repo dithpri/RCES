@@ -33,18 +33,12 @@ function addStyle(style) {
 	Array.from(document.querySelectorAll(".dilemmalist > li >a"))
 		.filter((x) => {
 			console.log(x);
-			return x
-				.getAttribute("href")
-				.match(/^\/?page=show_dilemma\/dilemma=/);
+			return x.getAttribute("href").match(/^\/?page=show_dilemma\/dilemma=/);
 		})
 		.map((val) => {
 			val.classList.add("rces-dilemmalink");
 			val.setAttribute("target", "_blank");
-			val.setAttribute(
-				"href",
-				val.getAttribute("href") +
-					"/template-overall=none/x-rces=openissue"
-			);
+			val.setAttribute("href", val.getAttribute("href") + "/template-overall=none/x-rces=openissue");
 			return val;
 		})[0]
 		.parentElement.classList.add("rces-chosen");
@@ -62,9 +56,7 @@ function addStyle(style) {
 		if (document.querySelector(".dilemmalist").textContent.trim() == "") {
 			setTimeout(window.close, 100);
 		}
-		document
-			.querySelector(".dilemmalist > li >a")
-			.parentElement.classList.add("rces-chosen");
+		document.querySelector(".dilemmalist > li >a").parentElement.classList.add("rces-chosen");
 	});
 
 	// Close page if no issues

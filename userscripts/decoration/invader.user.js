@@ -41,7 +41,5 @@ function GM_addStyle(style) {
 </svg>`
 	);
 
-	GM_addStyle(
-		`body {filter: contrast(150%) grayscale(100%) url("#longuniquenamethatnsdoesntuse")}`
-	);
+	GM_addStyle(`body {filter: contrast(150%) grayscale(100%) url("#longuniquenamethatnsdoesntuse")}`);
 })();

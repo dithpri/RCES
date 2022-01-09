@@ -40,11 +40,7 @@ function addStyle(style) {
 		button.style.border = ".2em solid black";
 
 		document.addEventListener("keyup", (ev) => {
-			if (
-				ev.key != "Enter" ||
-				ev.repeat ||
-				button.style.display == "none"
-			) {
+			if (ev.key != "Enter" || ev.repeat || button.style.display == "none") {
 				ev.preventDefault();
 				return;
 			}

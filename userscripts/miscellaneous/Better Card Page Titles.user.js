@@ -28,18 +28,12 @@ const capitalize = (x) => x[0].toUpperCase() + x.slice(1);
 	}
 
 	if (urlParams.has("value_deck")) {
-		titleEx += ` | ${document
-			.getElementById("deck-bank")
-			.title.replace(/bank$/, "Deck")} (by value)`;
+		titleEx += ` | ${document.getElementById("deck-bank").title.replace(/bank$/, "Deck")} (by value)`;
 	} else if (urlParams.has("show_trades")) {
 		titleEx += ` | ${capitalize(urlParams.get("show_trades"))}`;
 	} else if (urlParams.has("card")) {
-		titleEx = ` | ${
-			document.querySelector(".deckcard .nnameblock .nname").textContent
-		} (S${
-			document.querySelector(
-				".deckcard-season-list-card-selected .minicard-season-number"
-			).textContent
+		titleEx = ` | ${document.querySelector(".deckcard .nnameblock .nname").textContent} (S${
+			document.querySelector(".deckcard-season-list-card-selected .minicard-season-number").textContent
 		}) ${titleEx}`;
 		// ^ Prepend to titleEx, because it already contains the h2 title - which should go at the end.
 

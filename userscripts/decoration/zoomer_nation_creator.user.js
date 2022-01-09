@@ -52,7 +52,5 @@ function GM_addStyle(style) {
 				"strongly agree": "💗",
 			}[el.textContent.toLowerCase()] || el.textContent;
 	});
-	GM_addStyle(
-		'#style-selector.flatradio-grid input[type="radio"] + label { width: 30%; white-space: nowrap; }'
-	);
+	GM_addStyle('#style-selector.flatradio-grid input[type="radio"] + label { width: 30%; white-space: nowrap; }');
 })();

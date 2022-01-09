@@ -21,14 +21,8 @@
 				card_link.href = `https://www.nationstates.net/page=deck/card=${id}`;
 				card_link.textContent = "View card";
 				card_link.classList.add("button");
-				idspan.parentElement.insertAdjacentElement(
-					"beforeend",
-					document.createElement("br")
-				);
-				idspan.parentElement.insertAdjacentElement(
-					"beforeend",
-					card_link
-				);
+				idspan.parentElement.insertAdjacentElement("beforeend", document.createElement("br"));
+				idspan.parentElement.insertAdjacentElement("beforeend", card_link);
 			}
 		});
 })();

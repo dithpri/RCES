@@ -88,18 +88,10 @@ async function getSheetData(org) {
 	let ret = data.responseText
 		.split("\n")
 		.slice(org.headerRows)
-		.map((x) =>
-			x
-				.split("\t")
-				[org.nationColumn].trim()
-				.toLowerCase()
-				.replace(/ /g, "_")
-		);
+		.map((x) => x.split("\t")[org.nationColumn].trim().toLowerCase().replace(/ /g, "_"));
 	if (org.regexPattern && org.regexPattern != "") {
 		const regexPattern = RegExp(org.regexPattern);
-		ret = ret.map((x) =>
-			x.match(regexPattern)[0].replace(regexPattern, "$1")
-		);
+		ret = ret.map((x) => x.match(regexPattern)[0].replace(regexPattern, "$1"));
 	}
 	return ret.join("\n");
 }
@@ -120,8 +112,7 @@ function extractCssColorString(str) {
 
 function addOrgStyle(org) {
 	const fadeColor = extractCssColorString(
-		document.defaultView.getComputedStyle(document.body).backgroundColor ||
-			"rgba(255, 255, 255, 0)"
+		document.defaultView.getComputedStyle(document.body).backgroundColor || "rgba(255, 255, 255, 0)"
 	);
 	GM_addStyle(`
 	.rces-umh-${org.hash} {
@@ -166,9 +157,7 @@ async function addOrgSheetConfig(str) {
 }
 
 async function confTable_addOrgRow(org) {
-	let row = document
-		.getElementById("rces-umh-config-table")
-		.tBodies[0].insertRow();
+	let row = document.getElementById("rces-umh-config-table").tBodies[0].insertRow();
 	let newCell = undefined;
 
 	newCell = row.insertCell();
@@ -185,37 +174,27 @@ async function confTable_addOrgRow(org) {
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-headerRows");
-	newCell.innerHTML = `<input type="number" value="${
-		org.headerRows || 0
-	}" />`;
+	newCell.innerHTML = `<input type="number" value="${org.headerRows || 0}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-nationColumn");
-	newCell.innerHTML = `<input type="number" value="${
-		org.nationColumn || 0
-	}" />`;
+	newCell.innerHTML = `<input type="number" value="${org.nationColumn || 0}" />`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-regexPattern");
-	newCell.innerHTML = `<input type="text" value="${
-		org.regexPattern || ""
-	}" placeholder="(none)"/>`;
+	newCell.innerHTML = `<input type="text" value="${org.regexPattern || ""}" placeholder="(none)"/>`;
 
 	newCell = row.insertCell();
 	newCell.classList.add("rces-umh-config-org-lastupdate");
-	newCell.innerText = `${new Date(
-		await GM.getValue(`lastupdate-${org.sheetUrl}`, 0)
-	).toLocaleString()}`;
+	newCell.innerText = `${new Date(await GM.getValue(`lastupdate-${org.sheetUrl}`, 0)).toLocaleString()}`;
 
 	newCell = row.insertCell();
 	newCell.innerHTML = `<a href ="#" class="rces-umh-config-removerow button danger">Remove</a>`;
-	newCell
-		.querySelector(".rces-umh-config-removerow")
-		.addEventListener("click", function (ev) {
-			ev.preventDefault();
-			ev.stopPropagation();
-			row.remove();
-		});
+	newCell.querySelector(".rces-umh-config-removerow").addEventListener("click", function (ev) {
+		ev.preventDefault();
+		ev.stopPropagation();
+		row.remove();
+	});
 }
 
 async function saveConfig(conf) {
@@ -250,42 +229,26 @@ function confModal_add() {
 }
 
 function confModal_save() {
-	let newConf = [
-		...document.getElementById("rces-umh-config-table").tBodies[0].rows,
-	].reduce((acc, val) => {
+	let newConf = [...document.getElementById("rces-umh-config-table").tBodies[0].rows].reduce((acc, val) => {
 		let orgConf = {
 			image: val.querySelector(".rces-umh-config-org-image img").src,
 			name: val.querySelector(".rces-umh-config-org-name input").value,
-			sheetUrl: val.querySelector(".rces-umh-config-org-sheetUrl input")
-				.value,
-			headerRows: Number(
-				val.querySelector(".rces-umh-config-org-headerRows input").value
-			),
-			nationColumn: Number(
-				val.querySelector(".rces-umh-config-org-nationColumn input")
-					.value
-			),
-			regexPattern: val.querySelector(
-				".rces-umh-config-org-regexPattern input"
-			).value,
+			sheetUrl: val.querySelector(".rces-umh-config-org-sheetUrl input").value,
+			headerRows: Number(val.querySelector(".rces-umh-config-org-headerRows input").value),
+			nationColumn: Number(val.querySelector(".rces-umh-config-org-nationColumn input").value),
+			regexPattern: val.querySelector(".rces-umh-config-org-regexPattern input").value,
 		};
 		orgConf.hash = stringHash(orgConf.sheetUrl);
 		acc.push(orgConf);
 		return acc;
 	}, []);
 	saveConfig(newConf);
-	GM.setValue(
-		`preferences-iconSize`,
-		document.getElementById("rces-umh-config-iconSize").value
-	);
+	GM.setValue(`preferences-iconSize`, document.getElementById("rces-umh-config-iconSize").value);
 }
 
 async function createConfigMenu() {
-	const bg =
-		document.defaultView.getComputedStyle(document.body).backgroundColor ||
-		"#FFF";
-	const col =
-		document.defaultView.getComputedStyle(document.body).color || "#000";
+	const bg = document.defaultView.getComputedStyle(document.body).backgroundColor || "#FFF";
+	const col = document.defaultView.getComputedStyle(document.body).color || "#000";
 
 	document.body.insertAdjacentHTML(
 		"beforeend",
@@ -326,17 +289,11 @@ async function createConfigMenu() {
 	const reloadButton = document.getElementById("rces-umh-config-reload");
 	reloadButton.addEventListener("click", confModal_reload);
 	reloadButton.click();
-	document
-		.getElementById("rces-umh-config-add")
-		.addEventListener("click", confModal_add);
-	document
-		.getElementById("rces-umh-config-save")
-		.addEventListener("click", confModal_save);
-	document
-		.getElementById("rces-umh-config-modal-close")
-		.addEventListener("click", function (ev) {
-			document.getElementById("rces-umh-config-modal").hidden = true;
-		});
+	document.getElementById("rces-umh-config-add").addEventListener("click", confModal_add);
+	document.getElementById("rces-umh-config-save").addEventListener("click", confModal_save);
+	document.getElementById("rces-umh-config-modal-close").addEventListener("click", function (ev) {
+		document.getElementById("rces-umh-config-modal").hidden = true;
+	});
 	GM_addStyle(`
 #rces-umh-config-modal {
 	background: rgba(50%, 50%, 50%, 50%);
@@ -437,43 +394,24 @@ async function updateSheets(force = false) {
 async function update_auctiontable() {
 	const orgs = await getConfig();
 	for (const org of orgs) {
-		const members_array = (
-			await GM.getValue(`data-${org.sheetUrl}`, " ")
-		).split("\n");
-		document
-			.querySelectorAll(
-				"#cardauctiontable > tbody > tr > td > p > a.nlink"
-			)
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					el.parentNode.parentNode.classList.add(
-						`rces-umh-${org.hash}`
-					);
-				} else {
-					el.parentNode.parentNode.classList.remove(
-						`rces-umh-${org.hash}`
-					);
-				}
-			});
-		document
-			.querySelectorAll(`a.nlink:not(.rces-umh-${org.hash}-parsed)`)
-			.forEach(function (el, i) {
-				const canonical_nname = el
-					.getAttribute("href")
-					.replace(/^nation=/, "");
-				if (members_array.includes(canonical_nname)) {
-					const new_el = document.createElement("span");
-					new_el.classList.add(
-						`rces-umh-${org.hash}-inline`,
-						"rces-umh-inline-common"
-					);
-					el.parentNode.insertBefore(new_el, el.nextSibling);
-					el.classList.add(`rces-umh-${org.hash}-parsed`);
-				}
-			});
+		const members_array = (await GM.getValue(`data-${org.sheetUrl}`, " ")).split("\n");
+		document.querySelectorAll("#cardauctiontable > tbody > tr > td > p > a.nlink").forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				el.parentNode.parentNode.classList.add(`rces-umh-${org.hash}`);
+			} else {
+				el.parentNode.parentNode.classList.remove(`rces-umh-${org.hash}`);
+			}
+		});
+		document.querySelectorAll(`a.nlink:not(.rces-umh-${org.hash}-parsed)`).forEach(function (el, i) {
+			const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
+			if (members_array.includes(canonical_nname)) {
+				const new_el = document.createElement("span");
+				new_el.classList.add(`rces-umh-${org.hash}-inline`, "rces-umh-inline-common");
+				el.parentNode.insertBefore(new_el, el.nextSibling);
+				el.classList.add(`rces-umh-${org.hash}-parsed`);
+			}
+		});
 	}
 }
 
@@ -490,18 +428,11 @@ function clampValue(val, min, max) {
 		 * GM is dead anyway.
 		 */
 		await GM.registerMenuCommand("Configure", showConfigMenu, null);
-		await GM.registerMenuCommand(
-			"Force update sheets",
-			() => updateSheets(true),
-			null
-		);
+		await GM.registerMenuCommand("Force update sheets", () => updateSheets(true), null);
 		await GM.registerMenuCommand(
 			"Export current config to clipboard",
 			async () => {
-				await GM.setClipboard(
-					JSON.stringify(await getConfig()),
-					"text"
-				);
+				await GM.setClipboard(JSON.stringify(await getConfig()), "text");
 			},
 			null
 		);
@@ -514,19 +445,15 @@ function clampValue(val, min, max) {
 	updateSheets();
 
 	if (window.location.pathname === "/page=settings") {
-		let insertInElement =
-			document.getElementById("content") ||
-			document.getElementById("main");
+		let insertInElement = document.getElementById("content") || document.getElementById("main");
 		insertInElement.insertAdjacentHTML(
 			"afterbegin",
 			`<a href="#" id="umh-conf-settings-open" class="button icon-cog-alt">Universal Member Highlighter settings</a>`
 		);
-		document
-			.getElementById("umh-conf-settings-open")
-			.addEventListener("click", function (ev) {
-				ev.preventDefault();
-				showConfigMenu();
-			});
+		document.getElementById("umh-conf-settings-open").addEventListener("click", function (ev) {
+			ev.preventDefault();
+			showConfigMenu();
+		});
 	}
 
 	if (document.getElementById("auctiontablebox")) {
@@ -541,21 +468,13 @@ function clampValue(val, min, max) {
 			childList: true,
 		};
 
-		observer.observe(
-			document.getElementById("auctiontablebox"),
-			observerOptions
-		);
+		observer.observe(document.getElementById("auctiontablebox"), observerOptions);
 
 		const orgs = await getConfig();
 		for (const org of orgs) {
 			addOrgStyle(org);
 		}
-		const iconSize =
-			clampValue(
-				await GM.getValue(`preferences-iconSize`, 120),
-				50,
-				200
-			) / 100;
+		const iconSize = clampValue(await GM.getValue(`preferences-iconSize`, 120), 50, 200) / 100;
 		GM_addStyle(`.rces-umh-inline-common {
 			display: inline-block;
 			margin-left: 4px;

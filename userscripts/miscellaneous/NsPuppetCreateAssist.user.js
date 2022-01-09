@@ -24,8 +24,7 @@
  * nation passwords -- they'll autofill.
  */
 
-const DISCLAIMER =
-`Take care when using this script - DO NOT CREATE PUPPETS SIMULTANEOUSLY.
+const DISCLAIMER = `Take care when using this script - DO NOT CREATE PUPPETS SIMULTANEOUSLY.
 Do it ONE AT A TIME.
 No Ctrl-Tabbing and rapidly creating many puppets.
 For more information, see the NS scripting rules about simultaneous requests.`;
@@ -526,13 +525,15 @@ For more information, see the NS scripting rules about simultaneous requests.`;
 	const civil = Math.floor(Math.random() * 99 + 1);
 	const polit = Math.floor(Math.random() * 99 + 1);
 
-    if (!await GM.getValue("NsPuppetCreateAssist_disclaimer_read", null)) {
-        if (prompt(DISCLAIMER + "\nEnter 'I understand' in the box below to continue").toLowerCase() == "i understand") {
-            GM.setValue("NsPuppetCreateAssist_disclaimer_read", 1);
-        } else {
-            return
-        }
-    }
+	if (!(await GM.getValue("NsPuppetCreateAssist_disclaimer_read", null))) {
+		if (
+			prompt(DISCLAIMER + "\nEnter 'I understand' in the box below to continue").toLowerCase() == "i understand"
+		) {
+			GM.setValue("NsPuppetCreateAssist_disclaimer_read", 1);
+		} else {
+			return;
+		}
+	}
 
 	const puppetCreationForm = `
     <br/>
@@ -637,17 +638,11 @@ Civil/Econ/Polit freedoms
 	}
 
 	document.getElementById("x-rces-cp-onestep-form").onsubmit = function () {
-		document.getElementById("name").value = document.getElementById(
-			"x-rces-cp-nation-name"
-		).value;
-		document.getElementById(
-			"x-rces-cp-confirm-pass"
-		).value = document.getElementById("x-rces-cp-pass").value;
+		document.getElementById("name").value = document.getElementById("x-rces-cp-nation-name").value;
+		document.getElementById("x-rces-cp-confirm-pass").value = document.getElementById("x-rces-cp-pass").value;
 		return true;
 	};
-	document.getElementById(
-		"x-rces-cp-nation-name"
-	).value = location.href
+	document.getElementById("x-rces-cp-nation-name").value = location.href
 		.replace(/^.*\/x-rces-cp\?x-rces-cp-nation=([A-Za-z0-9_-]+)$/, "$1")
 		.replace(/_/g, " ");
 	document.getElementById("x-rces-cp-nation-name").focus();

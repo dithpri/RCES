@@ -45,29 +45,19 @@
 	};
 
 	function noinput_mousetrap(event) {
-		if (
-			event.target.classList.contains("mousetrap") ||
-			event.target.id == "new_price_value"
-		) {
+		if (event.target.classList.contains("mousetrap") || event.target.id == "new_price_value") {
 			event.preventDefault();
 			event.stopPropagation();
 		}
 	}
 
-	const ask_match = document.querySelector(
-		"#highest_matchable_ask_price > .cardprice_sell"
-	)?.textContent;
-	const bid_match = document.querySelector(
-		"#lowest_matchable_bid_price > .cardprice_buy"
-	)?.textContent;
+	const ask_match = document.querySelector("#highest_matchable_ask_price > .cardprice_sell")?.textContent;
+	const bid_match = document.querySelector("#lowest_matchable_bid_price > .cardprice_buy")?.textContent;
 	const market_value =
 		Number(
-			[
-				...document.querySelectorAll(
-					"table.deckcard-card-stats tr > td:nth-child(1)"
-				),
-			].filter((x) => x.textContent == "Market Value (estimated)")[0]
-				.nextElementSibling.innerText
+			[...document.querySelectorAll("table.deckcard-card-stats tr > td:nth-child(1)")].filter(
+				(x) => x.textContent == "Market Value (estimated)"
+			)[0].nextElementSibling.innerText
 		) || null;
 	console.log(market_value);
 
@@ -75,9 +65,7 @@
 	Mousetrap.bind(["s", "a", "S", "A"], function (ev) {
 		noinput_mousetrap(ev);
 		document.querySelector('th[data-mode="sell"]').click();
-		const askbox = document.querySelector(
-			'input.auctionbid[name="auction_ask"]'
-		);
+		const askbox = document.querySelector('input.auctionbid[name="auction_ask"]');
 		askbox.focus();
 		askbox.select();
 	});
@@ -86,9 +74,7 @@
 	Mousetrap.bind(["b", "B"], function (ev) {
 		noinput_mousetrap(ev);
 		document.querySelector('th[data-mode="buy"]').click();
-		const bidbox = document.querySelector(
-			'input.auctionbid[name="auction_bid"]'
-		);
+		const bidbox = document.querySelector('input.auctionbid[name="auction_bid"]');
 		bidbox.focus();
 		bidbox.select();
 	});
@@ -96,31 +82,21 @@
 	// gift
 	Mousetrap.bind(["g", "G"], function (ev) {
 		noinput_mousetrap(ev);
-		document
-			.querySelectorAll("div.deckcard-info-cardbuttons > a.button")
-			.forEach(function (el) {
-				if (el.textContent == "Gift") {
-					el.click();
-				}
-			});
+		document.querySelectorAll("div.deckcard-info-cardbuttons > a.button").forEach(function (el) {
+			if (el.textContent == "Gift") {
+				el.click();
+			}
+		});
 	});
 
 	// match
 	Mousetrap.bind(["m", "M"], function (ev) {
 		noinput_mousetrap(ev);
 		if (ev.target.id == "new_price_value") {
-			if (
-				ev.target.closest("tr.cardauctionunmatchedrow-ask") &&
-				ask_match &&
-				ask_match > 0
-			) {
+			if (ev.target.closest("tr.cardauctionunmatchedrow-ask") && ask_match && ask_match > 0) {
 				ev.target.value = ask_match;
 			}
-			if (
-				ev.target.closest("tr.cardauctionunmatchedrow-bid") &&
-				bid_match &&
-				bid_match > 0
-			) {
+			if (ev.target.closest("tr.cardauctionunmatchedrow-bid") && bid_match && bid_match > 0) {
 				ev.target.value = bid_match;
 			}
 		} else {
