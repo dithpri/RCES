@@ -12,6 +12,7 @@
     - [Auction Utilities](#auction-utilities)
       - [Card Default Prices](#card-default-prices)
       - [Main Auction Displayer](#main-auction-displayer)
+      - [Alternate Auction Layout](#alternate-auction-layout)
       - [Highlighters](#highlighters)
         - [Universal Member Highlighter](#universal-member-highlighter)
         - [TNP Guild Highlighter](#tnp-guild-highlighter)
@@ -20,11 +21,14 @@
     - [Miscellaneous](#miscellaneous)
       - [Better Card Page Titles](#better-card-page-titles)
       - [Auction Keybdindings](#auction-keybdindings)
-      - [Puppet Creation Assistant](#puppet-creation-assistant)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
+      - [Junk Confirmation Changer](#junk-confirmation-changer)
+      - [Puppet Creation Assistant](#puppet-creation-assistant)
+      - [Boneyard Card Links](#boneyard-card-links)
     - ["Decoration"](#decoration)
       - [InvaderNS](#invaderns)
       - [Steak Rarities](#steak-rarities)
+    - [Zoomer Nation Creator](#zoomer-nation-creator)
     - [Puppet links sheet](#puppet-links-sheet)
     - [Owner report](#owner-report)
     - [goldretriever-web](#goldretriever-web)
@@ -75,10 +79,10 @@ scripts included in the first repository commit are available, in that form,
 under the 0BSD license. Everything added or created in subsequent commits is
 available under the MIT license. For details, see [LICENSE.md](LICENSE.md).
 
-Additionally, the image resources included in the
-`Guildies Auction Highlighter UwU` and `Garderner Highlighter` are **NOT**
-under the MIT license. You'll have to contact their respective owners/creators
-for terms of use.
+Additionally, any image resources in this repo, including (but not limited to)
+those embedded in `Guildies Auction Highlighter UwU` and `Garderner Highlighter`
+are **NOT** under the MIT license. You'll have to contact their respective
+owners/creators for terms of use.
 
 ---
 
@@ -144,6 +148,17 @@ puppet. The currently used spreadsheets are
 [9003](https://www.nationstates.net/nation=9003)'s puppet reporting spreadsheet
 and [XKI](https://www.nationstates.net/region=10000_islands)'s Card Co-op
 spreadsheet.
+
+#### [Alternate Auction Layout](userscripts/auction/Alternate%20Auction%20Layout.user.js)
+[Install](../../raw/master/userscripts/auction/Alternate%20Auction%20Layout.user.js)  
+An alternate, wider auction layout better suited designed to minimize scrolling,
+with some extra tweaks:
+ * The card, auction (bids/asks/matches) and information table
+   (owners/copies...) will be displayed side-by side.
+ * The Sell and Buy buttons are located *above* the auction instead of below.
+ * Identical bids/asks (same nation and same amount) are collapsed into one.
+ * Exact matches (bid is equal to ask) will only display the match value.
+
 #### Highlighters
 
 ##### [Universal Member Highlighter](userscripts/auction/Universal%20Member%20Highlighter.user.js)
@@ -154,6 +169,9 @@ instead of having multiple highlighter scripts running. This also makes it much
 easier for card organizations to have a highlighter, without having to duplicate
 existing code. A curated list of configs is available [here](resources/umh-configs.md).  
 To add a config, navigate to the [NS settings page](https://www.nationstates.net/page=settings) and click the *Universal Member Highlighter settings* button. If using TM/VM, you can also do this through the extension menu on a card page.
+
+<details>
+<summary>Organization-specific highlighters</summary>
 
 ##### [TNP Guild Highlighter](userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)
 [Install](../../raw/master/userscripts/auction/Guildies%20Auction%20Highlighter%20UwU.user.js)  
@@ -167,6 +185,7 @@ Society.
 ##### [NASPAQ Highlighter](userscripts/auction/NASPAQ%20Highlighter.user.js)
 [Install](../../raw/master/userscripts/auction/NASPAQ%20Highlighter.user.js)  
 Highlighter for NASPAQ members.
+</details>
 
 ---
 
@@ -189,8 +208,8 @@ Tweaks the titles on card pages to be more descriptive instead of the default
 
 #### [Auction Keybdindings](userscripts/miscellaneous/auction-keybindings.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/auction-keybindings.user.js)  
-An early version of keybindings for the auction page. A more complete version is
-being worked on. These are the available bindings for now:
+An early version of keybindings for the auction page.<s> A more complete version is
+being worked on.</s> These are the available bindings for now:
 <details>
 
   * **A**sk / **S**ell
@@ -204,16 +223,26 @@ being worked on. These are the available bindings for now:
   
 </details>
 
+#### [Cards Icon / Deck page link](userscripts/miscellaneous/cards-icon.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/cards-icon.user.js)  
+Depending on NS theme, adds either a cards icon to the top banner or a link in
+the menu. Both the link and icon redirect to the deck page.
+
+#### [Junk Confirmation Changer](userscripts/miscellaneous/Junk%20Confirmation%20Changer.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/Junk%20Confirmation%20Changer.user.js)
+Allows you to tweak the conditions for when a junking confirmation popup
+appears.
+
 #### [Puppet Creation Assistant](userscripts/miscellaneous/NsPuppetCreateAssist.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/NsPuppetCreateAssist.user.js)  
 Assists with one-click creation of puppet nations. All fields (except password
 and name) are chosen randomly. Works with the `Create puppet` links in the
 [puppet links sheet](#puppet-links-sheet).
 
-#### [Cards Icon / Deck page link](userscripts/miscellaneous/cards-icon.user.js)
-[Install](../../raw/master/userscripts/miscellaneous/cards-icon.user.js)  
-Depending on NS theme, adds either a cards icon to the top banner or a link in
-the menu. Both the link and icon redirect to the deck page.
+#### [Boneyard Card Links](userscripts/miscellaneous/Boneyard%20Card%20Links.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/Boneyard%20Card%20Links.user.js)  
+Adds a link to the nation's trading card on the boneyard page. No longer
+necessary, as it is implemented by NS.
 
 ---
 
@@ -226,6 +255,10 @@ The hidden NationStates Invader theme. For real GPers™.
 #### [Steak Rarities](userscripts/decoration/steak_rarities.user.js)
 [Install](../../raw/master/userscripts/decoration/steak_rarities.user.js)  
 Would you like to know what kind of steak your card is?
+
+### [Zoomer Nation Creator](userscripts/decoration/zoomer_nation_creator.user.js)
+[Install](../../raw/master/userscripts/decoration/zoomer_nation_creator.user.js)  
+...
 
 ---
 
