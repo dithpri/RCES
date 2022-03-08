@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Better Card Page Titles
 // @namespace    dithpri.RCES
-// @version      0.1
+// @version      0.2
 // @description  Descriptive titles for card pages, for easier browsing history searching.
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/miscellaneous/Better%20Card%20Page%20Titles.user.js
 // @match        https://www.nationstates.net/page=deck*
+// @match        https://www.nationstates.net/*/page=deck*
 // @grant        none
 // ==/UserScript==
 
