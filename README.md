@@ -5,6 +5,7 @@
   - [About](#about)
   - [Licensing](#licensing)
   - [Bugs](#bugs)
+  - [GreaseMonkey](#greasemonkey)
   - [What does RCES stand for?](#what-does-rces-stand-for)
   - [Contributing](#contributing)
   - [Description of all utilities](#description-of-all-utilities)
@@ -91,7 +92,11 @@ owners/creators for terms of use.
 Please report any bugs you encounter by filing an issue. The UserScripts were
 tested with TamperMonkey but *should* also work with compatible engines (ex.
 ViolentMonkey).  
-*May* work with GreaseMonkey.
+
+## GreaseMonkey
+
+*May* work with GreaseMonkey. GreaseMoneky is ***not*** supported. Bugs only
+appearing on GreaseMoneky are unlikely to be fixed.
 
 ---
 
