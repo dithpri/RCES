@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.3.1
+// @version      0.4
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -35,15 +35,6 @@ function update_auctiontable() {
 	// collapse identical bids/asks/matches into a single row
 
 	const expandButton = document.getElementById("auctiontablebox").querySelector(".cardauctionshowmorerow");
-	if (false && expandButton) {
-		expandButton.style.display = "none";
-		document
-			.getElementById("auctiontablebox")
-			.querySelectorAll(".cardauctionhiddenrow")
-			.forEach(function (el) {
-				el.classList.remove("cardauctionhiddenrow");
-			});
-	}
 
 	let lastRow = undefined;
 	let count = -1;
@@ -57,6 +48,9 @@ function update_auctiontable() {
 		if (el.textContent == lastRow.textContent) {
 			if (el.parentNode) {
 				el.parentNode.removeChild(el);
+			}
+			if (!el.classList.contains("cardauctionhiddenrow")) {
+				lastRow.classList.remove("cardauctionhiddenrow");
 			}
 			count++;
 			return;
