@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.3
+// @version      0.3.1
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -90,12 +90,16 @@ function update_auctiontable() {
 
 (function () {
 	"use strict";
+	// Check if we're on the auction page or owners/trades history/finds/collections page
+	const isAuctionPage = !!document.getElementById("auctiontablebox");
 
-	// Because NS, for some reason, has really fucked up templating that results in nested forms and weird templates when there's no bids/asks placed.
-	// Move elements that do not normally belong in #auctiontablebox to after its parent form.
-	document
-		.querySelectorAll("#auctiontablebox > :not(#cardauctiontable)")
-		.forEach((node) => document.getElementById("auctiontablebox").parentElement.after(node));
+	if (isAuctionPage) {
+		// Because NS, for some reason, has really fucked up templating that results in nested forms and weird templates when there's no bids/asks placed.
+		// Move elements that do not normally belong in #auctiontablebox to after its parent form.
+		document
+			.querySelectorAll("#auctiontablebox > :not(#cardauctiontable)")
+			.forEach((node) => document.getElementById("auctiontablebox").parentElement.after(node));
+	}
 
 	// Add id to table for easier use
 	document.querySelector("table.shiny.wide.deckcard-card-stats").id = "rces-infotable";
@@ -114,12 +118,14 @@ function update_auctiontable() {
 
 	// Actually move table and auction into respective wrappers
 	document.getElementById("rces-infotable-wrapper").append(document.getElementById("rces-infotable"));
-	document
-		.getElementById("rces-auction-wrapper")
-		.append(
-			document.getElementById("cardauctionoffertable").parentElement,
-			document.getElementById("auctiontablebox").parentElement
-		);
+	if (isAuctionPage) {
+		document
+			.getElementById("rces-auction-wrapper")
+			.append(
+				document.getElementById("cardauctionoffertable").parentElement,
+				document.getElementById("auctiontablebox").parentElement
+			);
+	}
 
 	// Wrap the auction countdown to make it float with scrolling
 	document.getElementById("rces-container").before(newElementWithAttribs("div", {id: "rces-countdown-wrapper"}));
@@ -128,7 +134,7 @@ function update_auctiontable() {
 	// Move the "You own x copies" info to the top.
 	document.getElementById("ttq_1a").after(document.querySelector(".minorinfo") || "");
 
-	if (document.getElementById("auctiontablebox")) {
+	if (isAuctionPage) {
 		update_auctiontable();
 
 		let observer = new MutationObserver(function (mutationList) {
