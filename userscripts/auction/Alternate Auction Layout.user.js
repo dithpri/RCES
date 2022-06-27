@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.5
+// @version      0.5.1
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -85,11 +85,34 @@ function update_auctiontable() {
 			}
 
 			// Merge data from previous row if the buyers/sellers are not identical
+			// When merging, check if the nation is already somewhere in the list and deduplicate
 			if (previousRow.children[0].textContent != row.children[0].textContent) {
-				row.children[0].prepend(...previousRow.children[0].children);
+				for (const element of [...previousRow.children[0].children]) {
+					let shouldPrepend = true;
+					for (const child of [...row.children[0].children]) {
+						if (child.textContent == element.textContent) {
+							shouldPrepend = false;
+							break;
+						}
+					}
+					if (shouldPrepend) {
+						row.children[0].prepend(element);
+					}
+				}
 			}
 			if (previousRow.children[4].textContent != row.children[4].textContent) {
-				row.children[4].prepend(...previousRow.children[4].children);
+				for (const element of [...previousRow.children[4].children]) {
+					let shouldPrepend = true;
+					for (const child of [...row.children[4].children]) {
+						if (child.textContent == element.textContent) {
+							shouldPrepend = false;
+							break;
+						}
+					}
+					if (shouldPrepend) {
+						row.children[4].prepend(element);
+					}
+				}
 			}
 
 			// Current and previous rows can be collapsed, update the number of collapsed rows and remove previous row
