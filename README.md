@@ -38,6 +38,8 @@
 
 ## DISCLAIMER
 
+⚠️ ***These scripts are not endorsed by NationStates nor by NationStates staff.*** ⚠️
+
 Though these scripts are, to the best of my knowledge, legal, you should
 read the NationStates [scripting rules](https://forum.nationstates.net/viewtopic.php?p=16394966#p16394966)
 *BEFORE* using them. The most important takeaway is that YOU, the user,
