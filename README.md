@@ -9,11 +9,14 @@
   - [What does RCES stand for?](#what-does-rces-stand-for)
   - [Contributing](#contributing)
   - [Description of all utilities](#description-of-all-utilities)
-    - [Issue Answering Scripts](#issue-answering-scripts)
+    - [Issue Scripts](#issue-scripts)
+      - [Remember Issue Choices](#remember-issue-choices)
+      - [Cards issue answering scripts](#cards-issue-answering-scripts)
     - [Auction Utilities](#auction-utilities)
       - [Card Default Prices](#card-default-prices)
       - [Main Auction Displayer](#main-auction-displayer)
       - [Alternate Auction Layout](#alternate-auction-layout)
+      - [localid Synchronizer](#localid-synchronizer)
       - [Highlighters](#highlighters)
         - [Universal Member Highlighter](#universal-member-highlighter)
         - [TNP Guild Highlighter](#tnp-guild-highlighter)
@@ -23,6 +26,7 @@
       - [Better Card Page Titles](#better-card-page-titles)
       - [Auction Keybdindings](#auction-keybdindings)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
+      - [Container Owner Links](#container-owner-links)
       - [Junk Confirmation Changer](#junk-confirmation-changer)
       - [Puppet Creation Assistant](#puppet-creation-assistant)
       - [Boneyard Card Links](#boneyard-card-links)
@@ -116,8 +120,15 @@ Just open a pull request.
 
 ## Description of all utilities
 
-### [Issue Answering Scripts](userscripts/issue_answering)
+### [Issue Scripts](userscripts/issue_answering)
 
+#### [Remember Issue Choices](userscripts/issue_answering/Remember%20Issue%20Choices.user.js)
+[Install](../../raw/master/userscripts/issue_answering/Remember%20Issue%20Choices.user.js)  
+For those more stats-oriented, or just not wanting to re-read each issue when it
+pops up, this script will remember your previous choices and remind you of them
+when answering issues.
+
+#### Cards issue answering scripts
 These consist of three scripts. When used together, issue answering can be done
 just by pressing enter repeatedly:
   * [NsIssueOpener](userscripts/issue_answering/NsIssueOpener.user.js) | [Install](../../raw/master/userscripts/issue_answering/NsIssueOpener.user.js)  
@@ -165,6 +176,12 @@ with some extra tweaks:
  * The Sell and Buy buttons are located *above* the auction instead of below.
  * Identical bids/asks (same nation and same amount) are collapsed into one.
  * Exact matches (bid is equal to ask) will only display the match value.
+
+#### [localid Synchronizer](userscripts/auction/localid%20Synchronizer.user.js)
+[Install](../../raw/master/userscripts/auction/localid%20Synchronizer.user.js)  
+Synchronizes the `localid` across card pages. In short, you don't have to reload
+the auction page anymore to avoid those security errors when you have multiple
+tabs open.
 
 #### Highlighters
 
@@ -234,6 +251,10 @@ being worked on.</s> These are the available bindings for now:
 [Install](../../raw/master/userscripts/miscellaneous/cards-icon.user.js)  
 Depending on NS theme, adds either a cards icon to the top banner or a link in
 the menu. Both the link and icon redirect to the deck page.
+
+#### [Container Owner Links](userscripts/miscellaneous/Container%20Owner%20Links.user.js)
+[Install](../../raw/master/userscripts/miscellaneous/Container%20Owner%20Links.user.js)  
+Adds nifty links next to nations on the card owners page. Clicking on them will copy the appropriate container link (for you to send when requesting cards from others).
 
 #### [Junk Confirmation Changer](userscripts/miscellaneous/Junk%20Confirmation%20Changer.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/Junk%20Confirmation%20Changer.user.js)
