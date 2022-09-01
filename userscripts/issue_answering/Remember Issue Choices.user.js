@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Remember Issue Choices
-// @version      0.2
+// @version      0.2.1
 // @namespace    dithpri.RCES
 // @description  Remembers previous issue choices
 // @author       dithpri
@@ -62,7 +62,7 @@ function addStyle(style) {
 
 	addStyle(`
 	.rces-choicehistory {
-		border-color: grey
+		border-color: grey;
 		visibility: initial;
 	}
 	.rces-choicehistory-preferred-0 {
