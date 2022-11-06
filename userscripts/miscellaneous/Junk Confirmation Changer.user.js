@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
-// @version      0.2
+// @version      0.3
 // @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 /*
- * Copyright (c) 2020 dithpri (Racoda) <dithpri@gmail.com>
+ * Copyright (c) 2020-2022 dithpri (Racoda) <dithpri@gmail.com>
  * This file is part of RCES: https://github.com/dithpri/RCES and licensed under
  * the MIT license. See LICENSE.md or
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
@@ -88,33 +88,25 @@ function addOpt(...args) {
 (function () {
 	"use strict";
 
-	document.querySelectorAll(".deckcard-junk-button").forEach((junkButton) => {
+	document.querySelectorAll(".deckcard").forEach((card) => {
+		const junkButton = card.querySelector(".deckcard-junk-button");
 		const rarity = junkButton.dataset.rarity;
 		const id = Number(junkButton.dataset.cardid);
 		const junkValue = Number(junkButton.dataset.junkprice);
 		const season = Number(junkButton.dataset.season);
 
-		const name = junkButton
-			.closest(".deckcard")
+		const name = card
 			.querySelector(".deckcard-title .nnameblock .nname")
 			?.textContent.toLowerCase()
 			.replaceAll(" ", "_");
-		const region = junkButton
-			.closest(".deckcard")
-			.querySelector(".deckcard-region .rlink")
-			?.textContent.toLowerCase()
-			.replaceAll(" ", "_");
+		const region = card.querySelector(".deckcard-region .rlink")?.textContent.toLowerCase().replaceAll(" ", "_");
 
-		const badges = [...junkButton.closest(".deckcard").querySelectorAll("img.trophy")]
+		const badges = [...card.querySelectorAll("img.trophy")]
 			.map((x) => x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1"))
-			.concat(
-				[...junkButton.closest(".deckcard").querySelectorAll(".badge")].map((x) =>
-					x.textContent.toLowerCase().trim()
-				)
-			);
+			.concat([...card.querySelectorAll(".badge")].map((x) => x.textContent.toLowerCase().trim()));
 
-		const marketValueText = junkButton.closest(".deckcard-flag").querySelector(".deckcard-card-mv")?.textContent;
-		const bidText = junkButton.closest(".deckcard-flag").querySelector(".deckcard-card-buyers")?.textContent;
+		const marketValueText = card.querySelector(".deckcard-card-mv")?.textContent;
+		const bidText = card.querySelector(".deckcard-card-buyers")?.textContent;
 
 		const marketValue = Number(marketValueText?.replaceAll(/[^0-9.]/g, "")) || NaN;
 		const bid = Number(bidText?.replaceAll(/[^0-9.]/g, "")) || NaN;
