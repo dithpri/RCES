@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steak Rarities
 // @namespace    dithpri.RCES
-// @version      0.1
+// @version      0.2
 // @description  Steak Rarities
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
@@ -45,6 +45,17 @@ background: rgb(66, 36, 1);
 .deckcard-season-2 figure.deckcard-category-common {
 background: linear-gradient(112deg,#6e2f13 0%,rgb(66, 36, 1) 100%);
 }
+/* S3 */
+.deckcard-season-3 .deckcard-category-common .s3-slogan{
+background: rgb(66, 36, 1);
+}
+.deckcard-season-3 .deckcard-category-common .deckcard-stripe{
+background: rgb(66, 36, 1);
+}
+.deckcard-season-3 .deckcard-category-common .deckcard-category{
+background: rgb(66, 36, 1);
+}
+
 
 /* UNCOMMON */
 .deckcard-category-uncommon .deckcard-category::before {
@@ -63,6 +74,16 @@ background: rgb(132, 79, 41);
 /* S2 */
 .deckcard-season-2 figure.deckcard-category-uncommon {
 background: linear-gradient(112deg,#956256 0%,rgb(132, 79, 41) 100%);
+}
+/* S3 */
+.deckcard-season-3 .deckcard-category-uncommon .s3-slogan{
+background: rgb(132, 79, 41);
+}
+.deckcard-season-3 .deckcard-category-uncommon .deckcard-stripe{
+background: rgb(132, 79, 41);
+}
+.deckcard-season-3 .deckcard-category-uncommon .deckcard-category{
+background: rgb(132, 79, 41);
 }
 
 /* RARE */
@@ -83,6 +104,16 @@ background: rgb(206, 118, 91);
 .deckcard-season-2 figure.deckcard-category-rare {
 background: linear-gradient(112deg,#c99e9e 0%,rgb(206, 118, 91) 100%);
 }
+/* S3 */
+.deckcard-season-3 .deckcard-category-rare .s3-slogan{
+background: rgb(206, 118, 91);
+}
+.deckcard-season-3 .deckcard-category-rare .deckcard-stripe{
+background: rgb(206, 118, 91);
+}
+.deckcard-season-3 .deckcard-category-rare .deckcard-category{
+background: rgb(206, 118, 91);
+}
 
 /* ULTRA-RARE */
 .deckcard-category-ultra-rare .deckcard-category::before {
@@ -101,6 +132,16 @@ background: rgb(240, 97, 97);
 /* S2 */
 .deckcard-season-2 figure.deckcard-category-ultra-rare {
 background: linear-gradient(112deg,#e7a8b7 0%,rgb(240, 97, 97) 100%);
+}
+/* S3 */
+.deckcard-season-3 .deckcard-category-ultra-rare .s3-slogan{
+background: rgb(240, 97, 97);
+}
+.deckcard-season-3 .deckcard-category-ultra-rare .deckcard-stripe{
+background: rgb(240, 97, 97);
+}
+.deckcard-season-3 .deckcard-category-ultra-rare .deckcard-category{
+background: rgb(240, 97, 97);
 }
 
 /* EPIC */
@@ -121,6 +162,16 @@ background: rgb(215, 24, 24);
 .deckcard-season-2 figure.deckcard-category-epic {
 background: linear-gradient(112deg,#cf5e78 0%,rgb(215, 24, 24) 100%);
 }
+/* S3 */
+.deckcard-season-3 .deckcard-category-epic .s3-slogan{
+background: rgb(215, 24, 24);
+}
+.deckcard-season-3 .deckcard-category-epic .deckcard-stripe{
+background: rgb(215, 24, 24);
+}
+.deckcard-season-3 .deckcard-category-epic .deckcard-category{
+background: rgb(215, 24, 24);
+}
 
 /* LEGENDARY */
 .deckcard-category-legendary .deckcard-category::before {
@@ -139,6 +190,16 @@ background: rgb(171, 39, 79);
 /* S2 */
 .deckcard-season-2 figure.deckcard-category-legendary {
 background: linear-gradient(112deg,#b45c8b 0%,rgb(171, 39, 79) 100%);
+}
+/* S3 */
+.deckcard-season-3 .deckcard-category-legendary .s3-slogan{
+background: rgb(171, 39, 79);
+}
+.deckcard-season-3 .deckcard-category-legendary .deckcard-stripe{
+background: rgb(171, 39, 79);
+}
+.deckcard-season-3 .deckcard-category-legendary .deckcard-category{
+background: rgb(171, 39, 79);
 }
 
 /* S2 stripes */
