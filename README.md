@@ -230,7 +230,7 @@ Tweaks the titles on card pages to be more descriptive instead of the default
 * etc.
 </details>
 
-#### [Auction Keybdindings](userscripts/miscellaneous/auction-keybindings.user.js)
+#### [Auction Keybindings](userscripts/miscellaneous/auction-keybindings.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/auction-keybindings.user.js)  
 An early version of keybindings for the auction page.<s> A more complete version is
 being worked on.</s> These are the available bindings for now:
