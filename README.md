@@ -24,7 +24,7 @@
         - [NASPAQ Highlighter](#naspaq-highlighter)
     - [Miscellaneous](#miscellaneous)
       - [Better Card Page Titles](#better-card-page-titles)
-      - [Auction Keybdindings](#auction-keybdindings)
+      - [Auction Keybdindings](#auction-keybindings)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
       - [Container Owner Links](#container-owner-links)
       - [Junk Confirmation Changer](#junk-confirmation-changer)
