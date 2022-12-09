@@ -24,7 +24,7 @@
         - [NASPAQ Highlighter](#naspaq-highlighter)
     - [Miscellaneous](#miscellaneous)
       - [Better Card Page Titles](#better-card-page-titles)
-      - [Auction Keybdindings](#auction-keybdindings)
+      - [Auction Keybindings](#auction-keybindings)
       - [Cards Icon / Deck page link](#cards-icon--deck-page-link)
       - [Container Owner Links](#container-owner-links)
       - [Junk Confirmation Changer](#junk-confirmation-changer)
@@ -87,7 +87,7 @@ under the 0BSD license. Everything added or created in subsequent commits is
 available under the MIT license. For details, see [LICENSE.md](LICENSE.md).
 
 Additionally, any image resources in this repo, including (but not limited to)
-those embedded in `Guildies Auction Highlighter UwU` and `Garderner Highlighter`
+those embedded in `Guildies Auction Highlighter UwU` and `Gardener Highlighter`
 are **NOT** under the MIT license. You'll have to contact their respective
 owners/creators for terms of use.
 
@@ -101,8 +101,8 @@ ViolentMonkey).
 
 ## GreaseMonkey
 
-*May* work with GreaseMonkey. GreaseMoneky is ***not*** supported. Bugs only
-appearing on GreaseMoneky are unlikely to be fixed.
+*May* work with GreaseMonkey. GreaseMonkey is ***not*** supported. Bugs only
+appearing on GreaseMonkey are unlikely to be fixed.
 
 ---
 
@@ -187,7 +187,7 @@ tabs open.
 
 ##### [Universal Member Highlighter](userscripts/auction/Universal%20Member%20Highlighter.user.js)
 [Install](../../raw/master/userscripts/auction/Universal%20Member%20Highlighter.user.js)  
-<s>**ViolentMonkey/Tampermonkey only.**</s> Should work on all userscript extensions. Best used on a modern one like VM/TM.  
+<s>**ViolentMonkey/TamperMonkey only.**</s> Should work on all userscript extensions. Best used on a modern one like VM/TM.  
 A universal highlighter. You can load various card organizations' configs
 instead of having multiple highlighter scripts running. This also makes it much
 easier for card organizations to have a highlighter, without having to duplicate
@@ -293,7 +293,7 @@ Would you like to know what kind of steak your card is?
 ### [Puppet links sheet](puppet_links_sheet)
 [Downloads](../../releases)  
 A python script to generate a sheet of clickable links pointing to various
-puppets. Best used with the Containerise extension for maximum effiency. Also
+puppets. Best used with the Containerise extension for maximum efficiency. Also
 generates rules for Containerise so you don't have to.
 
 [There's this guide for more information on the extension and how it's tied to
@@ -301,7 +301,7 @@ farming.](https://www.nationstates.net/page=dispatch/id=1383002)
 
 By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
 *settings*, *telegram settings*, the nation itself and the
-[creation assistant](#puppet-creation-assistant). Configurable throught the
+[creation assistant](#puppet-creation-assistant). Configurable through the
 `config.txt` file. Puppets (or future puppets) go in `puppets_list.txt`
 
 ---
