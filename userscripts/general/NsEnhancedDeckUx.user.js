@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsEnhancedDeckUx
-// @version      0.1
+// @version      0.2
 // @namespace    dithpri.RCES
 // @description  An enhanced deck list experience, with parametric junking, non-matching bid highlighting, and more!
 // @author       dithpri
@@ -8,29 +8,38 @@
 // @noframes
 // @match        https://www.nationstates.net/*page=deck*
 // @match        https://www.nationstates.net/*page=deck*value_deck=1*
-// @require      https://github.com/joewalnes/filtrex/raw/master/filtrex.js
+// @require      https://github.com/m93a/filtrex/raw/54e69a7fde0ab23a4b0cffb1179d6d1963c01239/dist/browser/filtrex.min.js#sha256=11241f84db98e219470b276641f58451485dabd95a1d61c706054522d919eaad
 // @grant        GM.setValue
 // @grant        GM.getValue
 // ==/UserScript==
 
 /*
- * Copyright (c) 2019-2020 dithpri (Racoda) <dithpri@gmail.com>
+ * Copyright (c) 2019-2023 dithpri (Racoda) <dithpri@gmail.com>
  * This file is part of RCES: https://github.com/dithpri/RCES and licensed under
  * the MIT license. See LICENSE.md or
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
-const defaultFilterExpression =
-	"value < 1 and rarity < legendary and bid <= junk_value and not ex_nation";
-
-function titleCase(str) {
-	return str
-		.split("-")
-		.map(
-			(item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()
-		)
-		.join("-");
-}
+const CUSTOM_COLUMNS = [
+	{
+		name: "Match",
+		transformFn: (row) => {
+			if (row.data.get("ask") <= row.data.get("bid")) {
+				return ((row.data.get("ask") + row.data.get("bid")) / 2).toFixed(2);
+			} else {
+				return "—";
+			}
+		},
+	},
+	{
+		name: "Rarity",
+		transformFn: (row) => row.data.get("rarity"),
+	},
+	{
+		name: "Season",
+		transformFn: (row) => row.data.get("season"),
+	},
+];
 
 const GM_addStyle = function (style) {
 	"use strict";
@@ -79,507 +88,508 @@ function _sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-class App {
-	constructor(table, privateDeck = false) {
-		this.privateDeck = privateDeck;
-		this.table = table;
-		this.initHead();
-		this.initRows();
-		this.initJunk();
+const splitOnce = (str, sep) => {
+	let idx = str.indexOf("=");
+	if (idx == -1) {
+		return [str, undefined];
+	}
+	return [str.slice(0, idx), str.slice(idx + 1)];
+};
+
+function getNsParams() {
+	return new Map(
+		window.location.pathname
+			.split("/")
+			.filter((x) => x != "")
+			.map((x) => splitOnce(x, "="))
+	);
+}
+
+const canonicalize = (x) => x.toLowerCase().replaceAll(" ", "_");
+
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+const titleCase = (str) =>
+	str
+		.split("-")
+		.map((item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase())
+		.join("-");
+
+const asHtmlDatasetKey = (x) =>
+	x
+		.split(/[-_]/)
+		.map((x) => capitalize(x))
+		.join("");
+
+class Row {
+	constructor(row, columns) {
+		this.row = row;
+		this.columns = columns;
+		this._data = new Map();
+		this.fixValueDeckPage();
+		this.scrapeHtmlData();
+		this.initRow();
+		this.syncDataToHtml();
+		this.checkAuctionTime();
 	}
 
-	initHead() {
-		this.tableHead = this.table.querySelector("tr:first-child");
-		const additionalColumns = ["Midpoint", "Rarity", "Season"];
-		if (this.privateDeck) {
-			additionalColumns.push("Junk");
-		}
-		for (const x of additionalColumns.values()) {
-			const tdElement = document.createElement("td");
-			const pElement = document.createElement("p");
-			tdElement.append(pElement);
-			pElement.textContent = x;
-			tdElement.id = `rces-header-${x
-				.toLowerCase()
-				.replaceAll(" ", "_")}`;
-			this.tableHead.append(tdElement);
-		}
-		this.headerNumbers = new Map();
-		this.tableHead.querySelectorAll("td").forEach((val, idx) => {
-			this.headerNumbers.set(val.innerText.trim().toLowerCase(), idx + 1);
-		});
+	get dataset() {
+		return this.row.dataset;
 	}
 
-	initRows() {
-		this.rows = this.table.querySelectorAll("tr:not(:first-child)");
-		this.rows.forEach((row) => this.initRow(row));
+	get data() {
+		return this._data;
 	}
 
-	async initRow(row) {
-		while (row.cells.length < this.headerNumbers.size) {
-			row.insertCell().append(document.createElement("p"));
+	get processed() {
+		return this._processed;
+	}
+
+	set processed(val) {
+		this._processed = val;
+		if (val) {
+			this.row.classList.add("rces-processed");
+			this.row.querySelector(".rces-column-action p").textContent = "";
+		} else {
+			this.row.classList.remove("rces-processed");
 		}
-		const cardTd = row.querySelector(
-			`td:nth-child(${this.headerNumbers.get("card")})`
-		);
+	}
+
+	get failed() {
+		return this._failed;
+	}
+
+	set failed(val) {
+		this._failed = val;
+		if (val) {
+			this.row.classList.add("rces-failed");
+			this.row.querySelector(".rces-column-action p").className = "";
+		} else {
+			this.row.classList.remove("rces-failed");
+		}
+	}
+
+	get link() {
+		return this.row
+			.querySelector(`td:nth-child(${this.columns.headerNumber("card")})`)
+			.querySelector("a.nref.cardnameblock").href;
+	}
+
+	fixValueDeckPage() {
 		// Fix inconsistency on value_deck page: td doesn't have p
+		const cardTd = this.row.querySelector(`td:nth-child(${this.columns.headerNumber("card")})`);
 		if (!cardTd.querySelector("p:first-child")) {
 			const wrapper = document.createElement("p");
 			wrapper.append(...cardTd.childNodes);
 			cardTd.append(wrapper);
 		}
-		const cardP = cardTd.querySelector("p:first-child");
-		const href = cardP.querySelector("a").href;
-
-		const season = href.replace(/.*season=([0-9]+).*/, "$1");
-		const card_id = href.replace(/.*card=([0-9]+).*/, "$1");
-
-		const attrib = new Map();
-		attrib.set("rcesSeason", season);
-		attrib.set("rcesCardId", card_id);
-		attrib.set("rcesName", cardP.querySelector(".nnameblock").innerText);
-		attrib.set(
-			"rcesCanonicalName",
-			attrib.get("rcesName").replace(/ /g, "_").toLowerCase()
-		);
-		attrib.set(
-			"rcesRarity",
-			cardP.querySelector(".minicard-category").innerText.toLowerCase()
-		);
-		attrib.set("rcesJunkValue", getJunkValue(attrib.get("rcesRarity")));
-		attrib.set(
-			"rcesMarketValue",
-			Number(
-				row.querySelector(
-					`td:nth-child(${this.headerNumbers.get("value")})`
-				).innerText
-			) || 0
-		);
-		const ask_column = this.headerNumbers.get("ask");
-		if (ask_column) {
-			attrib.set(
-				"rcesAsk",
-				Number(
-					row.querySelector(`td:nth-child(${ask_column})`).innerText
-				) || 0
-			);
-		}
-		const bid_column = this.headerNumbers.get("bid");
-		if (bid_column) {
-			attrib.set(
-				"rcesBid",
-				Number(
-					row.querySelector(`td:nth-child(${bid_column})`).innerText
-				) || 0
-			);
-		}
-		const copies_column = this.headerNumbers.get("copies");
-		if (copies_column) {
-			attrib.set(
-				"rcesCopies",
-				Number(
-					row.querySelector(`td:nth-child(${copies_column})`)
-						.innerText
-				) || 0
-			);
-		}
-		this.headerNumbers.forEach((value, key) => {
-			row.querySelector(
-				`td:nth-child(${this.headerNumbers.get(key)})`
-			).classList.add(
-				`rces-column-${key.toLowerCase().replaceAll(" ", "_")}`
-			);
-		});
-		if (
-			cardP
-				.querySelector(".minicard-flag")
-				.style.backgroundImage.match(/\.gif("\))?$/)
-		) {
-			attrib.set("rcesGifFlag", 1);
-			const appendEl = document.createElement("span");
-			appendEl.classList.add("deckcard-token");
-			appendEl.innerText = "GIF";
-			cardP.append(appendEl);
-		} else {
-			attrib.set("rcesGifFlag", 0);
-		}
-
-		if (
-			cardP
-				.querySelector(".minicard-flag")
-				.style.backgroundImage.match(/exnation.png("\))?$/)
-		) {
-			attrib.set("rcesExnationFlag", 1);
-			const appendEl = document.createElement("span");
-			appendEl.classList.add("deckcard-token");
-			appendEl.innerText = "EX-NATION";
-			cardP.append(appendEl);
-		} else {
-			attrib.set("rcesExnationFlag", 0);
-		}
-
-		const ask = attrib.get("rcesAsk") || 0;
-		const bid = attrib.get("rcesBid") || 0;
-		if (ask && bid && ask != bid && ask < bid) {
-			row.classList.add("rces-dirty-match");
-		}
-		attrib.forEach((value, key) => {
-			row.dataset[key] = value;
-		});
-
-		const auction_column = this.headerNumbers.get("auction");
-		if (auction_column) {
-			const rowResolveTimeElement = row.querySelector(
-				`td:nth-child(${this.headerNumbers.get("auction")}) > p > time`
-			);
-			if (rowResolveTimeElement) {
-				const rowResolveTime = rowResolveTimeElement.dataset.epoch;
-				const now = Math.round(Date.now() / 1000);
-				if (rowResolveTime >= now) {
-					const valueId = `auction-${card_id}-${season}`;
-					const storedResolveTime = await GM.getValue(valueId, `0`);
-					let changed = false;
-					if (storedResolveTime != rowResolveTime) {
-						if (!(storedResolveTime <= now - 6 * 60 * 60)) {
-							row.classList.add("rces-time-changed");
-						}
-						row.addEventListener("click", async function () {
-							row.classList.remove("rces-time-changed");
-							await GM.setValue(valueId, `${rowResolveTime}`);
-						});
-						changed = true;
-					}
-				}
-			}
-		}
-
-		row.querySelector(".rces-column-rarity > p").appendChild(
-			(() => {
-				const el = row.querySelector(
-					'.rces-column-card .deckcard-token[class*=" deckcard-category-"]'
-				);
-				el.remove();
-				return document.createTextNode(titleCase(el.innerText));
-			})()
-		);
-		row.querySelector(".rces-column-season > p").appendChild(
-			document.createTextNode(`${season}`)
-		);
 	}
 
-	async initJunk() {
-		if (!this.privateDeck) {
-			return false;
-		}
-		this.isJunking = false;
+	scrapeHtmlData() {
+		const cardTd = this.row.querySelector(`td:nth-child(${this.columns.headerNumber("card")})`);
+		const cardLink = cardTd.querySelector("a.nref.cardnameblock");
+		const href = cardLink.href;
 
-		this.junkDiv = document.createElement("div");
-		this.junkDiv.id = "rces-junkdiv";
-
-		this.junkButton = document.createElement("button");
-		this.junkButton.textContent = "Junk next card";
-		this.junkButton.classList.add("button", "icon", "trash", "danger");
-
-		this.filterButton = document.createElement("button");
-		this.filterButton.textContent = "Filter cards";
-		this.filterButton.classList.add("button", "icon", "fork");
-
-		this.junkFilterTextarea = document.createElement("textarea");
-		this.junkFilterTextarea.id = "rces-junk-filter";
-		this.junkFilterTextarea.value = await GM.getValue(
-			"rces-junk-filter-expression",
-			defaultFilterExpression
+		this.data.set("season", Number(href.replace(/.*season=([0-9]+).*/, "$1")));
+		this.data.set("id", Number(href.replace(/.*card=([0-9]+).*/, "$1")));
+		this.data.set("stylized_name", cardLink.querySelector(".nnameblock").innerText);
+		this.data.set("name", this.data.get("stylized_name").replace(/ /g, "_").toLowerCase());
+		this.data.set("rarity", cardLink.querySelector(".minicard-category").innerText.toLowerCase());
+		this.data.set("junk_value", getJunkValue(this.data.get("rarity")));
+		this.data.set(
+			"flag_link",
+			cardLink.querySelector(".minicard-flag").style.backgroundImage.replace(/^url\(["'](.*)["']\)$/, "$1")
 		);
-		this.junkFilterTextareaUpdated = true;
-
-		const buttonGroupElement = document.createElement("div");
-		buttonGroupElement.classList.add("button-group");
-		buttonGroupElement.append(this.filterButton, this.junkButton);
-
-		{
-			var timer = undefined;
-			const timeout = 250;
-			this.junkFilterTextarea.addEventListener("keypress", () => {
-				window.clearTimeout(timer);
-				this.junkFilterTextareaUpdated = true;
-			});
-			this.junkFilterTextarea.addEventListener("keyup", () => {
-				window.clearTimeout(timer); // prevent errant multiple timeouts from being generated
-				timer = window.setTimeout(async () => {
-					this.compileExpression();
-				}, timeout);
-			});
-		}
-
-		this.junkButton.addEventListener("click", () =>
-			this.junkNextCard(Date.now())
+		this.data.set(
+			"exnation",
+			/exnation.png("\))?$/.test(cardLink.querySelector(".minicard-flag").style.backgroundImage)
 		);
-		this.filterButton.addEventListener("click", () => {
-			this.junkFilterTextareaUpdated = true;
-			this.filterRows();
-		});
 
-		document.addEventListener("keyup", (ev) => {
-			if (event.isComposing || event.keyCode === 229) {
-				return;
-			}
-			const junkKey = ev.key == "Enter" || ev.key.toLowerCase() == "j";
-			if (
-				junkKey &&
-				!(
-					ev.target.tagName == "TEXTAREA" ||
-					ev.target.tagName == "INPUT"
-				)
-			) {
-				ev.stopPropagation();
-				this.junkButton.click();
+		this.columns.forEach((val, idx) => {
+			if (val.vanilla) {
+				let valueFn = val.valueFn ?? ((x) => x.innerText);
+				this.data.set(val.name, valueFn(this.row.querySelector(`td:nth-child(${idx}) p`)));
 			}
 		});
-
-		this.junkDiv.append(
-			this.junkFilterTextarea,
-			document.createElement("br"),
-			buttonGroupElement
-		);
-		const deckFiltersDiv = document.querySelector(".deckcard-filters");
-		deckFiltersDiv.parentNode.insertBefore(this.junkDiv, deckFiltersDiv);
-
-		this.rows.forEach((row) => {
-			const rowJunkButton = document.createElement("button");
-			rowJunkButton.classList.add("button");
-			rowJunkButton.classList.add("danger");
-			rowJunkButton.classList.add("rces-junkbutton");
-			rowJunkButton.textContent = "Junk";
-			rowJunkButton.addEventListener("click", () => {
-				this.junkRow(row, Date.now());
-			});
-			row.querySelector(
-				`td:nth-child(${this.headerNumbers.get("junk")}) p`
-			).append(rowJunkButton);
-		});
-
-		this.filterRows();
 	}
 
-	async compileExpression() {
-		try {
-			if (
-				typeof this.junkExpressionFilter != "function" ||
-				this.junkFilterTextareaUpdated
-			) {
-				this.junkExpressionFilter = compileExpression(
-					this.junkFilterTextarea.value
-				);
-				console.log(
-					typeof this.junkExpressionFilter != "function",
-					this.junkFilterTextareaUpdated
-				);
-			}
-		} catch (error) {
-			this.junkExpressionFilter = false;
-			this.junkFilterTextarea.classList.add("rces-parse-error");
-
-			this.junkButton.disabled = true;
-			return false;
-		}
-		this.junkFilterTextareaUpdated = false;
-		this.junkFilterTextarea.classList.remove("rces-parse-error");
-		await GM.setValue(
-			"rces-junk-filter-expression",
-			this.junkFilterTextarea.value
-		);
-		this.junkButton.disabled = false;
-		return true;
+	syncDataToHtml() {
+		this.data.forEach((value, key) => {
+			this.row.dataset[asHtmlDatasetKey(`rces-${key}`)] = value;
+		});
 	}
 
-	filterRows() {
-		console.log("filterrows");
-		if (!this.compileExpression(this.junkFilterTextareaUpdated)) {
-			console.log("calling compile");
-			return false;
+	async initRow() {
+		while (this.row.cells.length < this.columns.count) {
+			this.row.insertCell().append(document.createElement("p"));
 		}
-		console.log("filterrows proper");
-
-		this.rows.forEach((row) => {
-			if (row.classList.contains(".rces-junked")) {
-				console.log("WHY RETURNING????");
-				return;
+		this.columns.forEach((val, idx) => {
+			if (!val.vanilla) {
+				this.row.querySelector(`td:nth-child(${idx}) p`).innerText = val.transformFn(this);
 			}
-			const value = Number(row.dataset.rcesMarketValue);
-			let result = false;
-			result = this.junkExpressionFilter({
-				id: Number(row.dataset.rcesCardId),
-				season: Number(row.dataset.rcesSeason),
-				name: row.dataset.rcesName,
-				rarity: getRarityOrder(row.dataset.rcesRarity),
-				ask: Number(row.dataset.rcesAsk),
-				bid: Number(row.dataset.rcesBid),
-				value: value,
-				market_value: value,
-				ex_nation: Number(row.dataset.rcesExnationFlag),
-				gif: Number(row.dataset.rcesGifFlag),
-				junk_value: Number(row.dataset.rcesJunkValue),
-				copies: Number(row.dataset.rcesCopies),
-				common: -5,
-				uncommon: -4,
-				rare: -3,
-				ultrarare: -2,
-				ultra_rare: -2,
-				epic: -1,
-				legendary: 0,
-			});
+			this.row.querySelector(`td:nth-child(${idx})`).classList.add(`rces-column-${val.name}`);
+		});
+	}
 
-			if (result == true) {
-				row.classList.add("rces-junkable");
+	async checkAuctionTime() {
+		const valueId = `RT-${this.data.get("id")}-${this.data.get("season")}`;
+		const actualResolveTime = this.data.get("auction");
+		const storedResolveTime = await GM.getValue(valueId, 0);
+		const now = Math.round(Date.now() / 1000);
+		if (storedResolveTime != actualResolveTime) {
+			if (storedResolveTime != 0 && storedResolveTime > now - 6 * 60 * 60) {
+				this.row.classList.add("rces-time-changed");
+				this.row.addEventListener("click", async () => {
+					await GM.setValue(valueId, actualResolveTime);
+					this.row.classList.remove("rces-time-changed");
+				});
 			} else {
-				row.parentElement.append(row);
-				row.classList.remove("rces-junkable");
+				await GM.setValue(valueId, actualResolveTime);
 			}
-			console.log(result, row.dataset);
-		});
-	}
-
-	async junkNextCard(userclickms) {
-		if (
-			this.junkFilterTextareaUpdated &&
-			(await this.compileExpression())
-		) {
-			this.filterRows();
 		}
-		const row = this.table.querySelector("tr.rces-junkable");
-		if (row != null) {
-			await this.junkRow(row, userclickms);
-		}
-	}
-
-	async junkRow(row, userclickms) {
-		if (!this.isJunking) {
-			this.isJunking = true;
-			this.table
-				.querySelectorAll(".rces-junkbutton")
-				.forEach(async (x) => (x.disabled = true));
-			try {
-				const response = await this.junkCard(
-					row.dataset.rcesCardId,
-					row.dataset.rcesSeason,
-					userclickms
-				);
-				if (response.trim() == "0") {
-					throw new Error("Couldn't junk card.");
-				}
-				row.dataset.rcesCopies -= 1;
-				row.querySelector(
-					`td:nth-child(${this.headerNumbers.get("copies")}) p`
-				).textContent = row.dataset.rcesCopies;
-				if (row.dataset.rcesCopies <= 0) {
-					row.parentElement.append(row);
-					row.classList.remove("rces-junkable");
-					row.classList.add("rces-junked");
-					row.querySelector(".rces-junkbutton").remove();
-				}
-			} catch (err) {
-				row.classList.remove("rces-junkable");
-				row.classList.add("rces-junkerror");
-				console.error(err);
-			}
-			this.isJunking = false;
-			this.table
-				.querySelectorAll(
-					"tr:not(.rces-junkerror) button.rces-junkbutton"
-				)
-				.forEach(async (x) => (x.disabled = false));
-		}
-	}
-
-	async junkCard(cardid, season, userclickms) {
-		if (!userclickms) {
-			throw new Error("No userclickms!");
-		}
-		const data = {};
-		const url = `/page=ajax3/a=junkcard/card=${cardid}/season=${season}/script=${GM.info.script.name}(${GM.info.script.namespace}:${GM.info.script.version})/userclickms=${userclickms}`;
-		console.log(url);
-		return (
-			await (
-				await fetch(url, {
-					method: "POST",
-					data: data,
-				})
-			).text()
-		).trim();
 	}
 }
 
-(function () {
-	"use strict";
+class Columns {
+	constructor(tableHead) {
+		this.tableHead = tableHead;
+		this.headerNumbers = new Array();
+		this.tableHead.querySelectorAll("td").forEach((val, idx) => {
+			const name = canonicalize(val.innerText.trim());
+			this.headerNumbers[idx + 1] = {
+				name: name,
+				vanilla: true,
+			};
+			if (["ask", "bid", "value", "copies"].includes(name)) {
+				this.headerNumbers[idx + 1].valueFn = (x) => Number(x.innerText);
+			} else if (name == "card") {
+				this.headerNumbers[idx + 1].valueFn = (x) => x.querySelector(".nnameblock").innerText;
+			} else if (name == "auction") {
+				this.headerNumbers[idx + 1].valueFn = (x) => x?.querySelector("time")?.dataset.epoch ?? NaN;
+			}
+		});
+	}
 
-	const app = new App(
-		document.querySelector("table.clickabletimes.wide.nscodetable"),
-		true
-	);
+	addColumn(name, transformFn) {
+		const tdElement = document.createElement("td");
+		const pElement = document.createElement("p");
+		tdElement.append(pElement);
+		pElement.textContent = name;
+		tdElement.id = `rces-header-${canonicalize(name)}`;
+		this.tableHead.append(tdElement);
+		this.headerNumbers[this.headerNumbers.length] = {
+			name: canonicalize(name),
+			vanilla: false,
+			transformFn: transformFn,
+		};
+	}
 
-	GM_addStyle(`
+	headerNumber(name) {
+		return this.headerNumbers.findIndex((x) => x && x.name == "card");
+	}
+
+	get count() {
+		return this.headerNumbers.length - 1;
+	}
+
+	forEach(fn) {
+		this.headerNumbers.forEach(function () {
+			return fn.apply(null, arguments);
+		});
+	}
+}
+
+class App {
+	constructor(table, privateDeck = false) {
+		this._isExecutingAction = true;
+		this.privateDeck = privateDeck;
+		this.table = table;
+		this.expressions = {
+			gift: () => false,
+			open: () => false,
+			junk: () => false,
+		};
+		this.filters = {};
+		this.columns = new Columns(this.table.querySelector("tr:first-child"));
+		CUSTOM_COLUMNS.forEach((x) => this.columns.addColumn(x.name, x.transformFn));
+		if (this.privateDeck) {
+			this.columns.addColumn("Action", (x) => "");
+		}
+
+		this.initRows();
+		this.insertCss();
+		if (this.privateDeck) {
+			this.initPrivateDeck();
+		}
+	}
+
+	async initPrivateDeck() {
+		this.insertHtml();
+		await this.initFilters();
+		await this.filterRows();
+		this.isExecutingAction = false;
+	}
+
+	get isExecutingAction() {
+		return this._isExecutingAction;
+	}
+
+	set isExecutingAction(val) {
+		this._isExecutingAction = val;
+		if (val) {
+			this.defaultActionButton.disabled = true;
+		} else {
+			this.defaultActionButton.disabled = false;
+		}
+	}
+
+	async processRow(idx, userclickms) {
+		if (!userclickms) {
+			throw "No userclickms!";
+			return;
+		}
+		if (this.isExecutingAction) {
+			throw "Cannot process cards simultaneously";
+			return;
+		}
+		this.isExecutingAction = true;
+		try {
+			const row = this.rows[idx];
+			row.processed = true;
+			if (row.action == "open") {
+				window.open(row.link);
+			} else if (row.action == "gift") {
+				window.open(row.link + "/gift=1");
+			} else if (row.action == "junk") {
+				const cardid = row.data.get("id");
+				const season = row.data.get("season");
+				const url = `/page=ajax3/a=junkcard/card=${cardid}/season=${season}/script=${GM.info.script.name}(${GM.info.script.namespace}:${GM.info.script.version})/userclickms=${userclickms}`;
+				const response = (
+					await (
+						await fetch(url, {
+							method: "POST",
+							data: {},
+						})
+					).text()
+				).trim();
+				if (response.trim() == "0") {
+					row.failed = true;
+				}
+			}
+		} finally {
+			this.isExecutingAction = false;
+		}
+	}
+
+	processNextRow(userclickms, actionRestrict) {
+		if (!userclickms) {
+			throw "No userclickms!";
+			return;
+		}
+		let restrict = () => true;
+		if (actionRestrict) {
+			restrict = actionRestrict;
+		}
+		const idx = this.rows.findIndex((x) => x.ready && !x.processed && restrict(x));
+		if (idx != -1) {
+			this.processRow(idx, userclickms);
+		}
+	}
+
+	async initFilters() {
+		["gift", "open", "junk"].forEach(async (filter) => {
+			const el = document.getElementById(`rces-filter-${filter}`);
+			el.value = await GM.getValue(`filter-${filter}`, "1==0");
+			el.disabled = false;
+			this.filters[filter] = el;
+			this.compileExpression(filter);
+		});
+	}
+
+	async updateExpression(filter_name) {
+		let success = false;
+		this.filters[filter_name].disabled = true;
+		if (this.compileExpression(filter_name)) {
+			success = true;
+			await GM.setValue(`filter-${filter_name}`, this.filters[filter_name].value);
+		}
+		this.filters[filter_name].disabled = false;
+		return success;
+	}
+
+	setFilterError(filter_name, error) {
+		this.filters[filter_name].classList.add("rces-errored");
+		console.error(error);
+		document.getElementById("rces-EnhancedDeckUx").classList.remove("rces-hidden");
+	}
+
+	compileExpression(filter_name) {
+		let compiled = () => false;
+		this.filters[filter_name].classList.remove("rces-errored");
+		try {
+			compiled = filtrex.compileExpression(this.filters[filter_name].value);
+			return true;
+		} catch (e) {
+			this.setFilterError(filter_name, e);
+			return false;
+		} finally {
+			this.expressions[filter_name] = compiled;
+		}
+	}
+
+	async filterRows() {
+		let errored = false;
+		this.rows.forEach((row) => {
+			row.ready = false;
+			row.action = undefined;
+			const cell = row.row.querySelector(".rces-column-action p");
+			cell.className = "";
+			cell.classList.add("rces-action");
+		});
+
+		this.rows.forEach(async (row, idx) => {
+			if (row.failed) {
+				return;
+			}
+			const cell = row.row.querySelector(".rces-column-action p");
+			for (const [name, expression] of Object.entries(this.expressions)) {
+				const result = expression(Object.fromEntries(row.data));
+				if (typeof result !== typeof true) {
+					console.warn(`Expected `, typeof true, ` got `, typeof result);
+					this.setFilterError(name, result);
+					errored = true;
+				} else {
+					if (result) {
+						row.action = name;
+						const button = document.createElement("button");
+						cell.insertAdjacentElement("afterbegin", button);
+						button.classList.add(`rces-action-${name}`, "button");
+						if (name == "gift") {
+							button.classList.add("icon-gift");
+						} else if (name == "open") {
+							button.classList.add("icon-link");
+						} else if (name == "junk") {
+							button.classList.add("icon-mushroom-cloud", "danger");
+						} else {
+							console.warn(name);
+						}
+						button.addEventListener("click", (ev) => {
+							if (!event.isTrusted) {
+								return;
+							}
+							this.processRow(idx, Date.now());
+						});
+						break;
+					}
+				}
+			}
+			if (!row.action) {
+				row.processed = true;
+			}
+			row.ready = true;
+		});
+		if (errored) {
+			alert("Errors encoutered, check console");
+		}
+	}
+
+	initRows() {
+		this.rows = [...this.table.querySelectorAll("tr:not(:first-child)")].map((row) => new Row(row, this.columns));
+	}
+
+	insertHtml() {
+		const deckFiltersEl = document.querySelector(".deckcard-filters");
+		deckFiltersEl.insertAdjacentHTML(
+			"beforebegin",
+			`
+<div id="rces-EnhancedDeckUxWrapper">
+	<button class="button icon edit" id="rces-EnhancedDeckUx-collapse" onclick="document.getElementById('rces-EnhancedDeckUx').classList.toggle('rces-hidden')">Settings</button>
+	<div class="rces-hidden" id="rces-EnhancedDeckUx">
+		<label for="rces-filter-gift">Gift filter</label>
+		<br>
+		<textarea class="rces-filter" id="rces-filter-gift" disabled></textarea>
+		<hr>
+		<label for="rces-filter-open">Open filter</label>
+		<br>
+		<textarea class="rces-filter" id="rces-filter-open" disabled></textarea>
+		<hr>
+		<label for="rces-filter-junk">Junk filter</label>
+		<br>
+		<textarea class="rces-filter" id="rces-filter-junk" disabled></textarea>
+		<hr>
+		Available properties:
+		<pre id="rces-infobox">
+		</pre>
+	</div>
+	<button class="button icon arrowright" id="rces-default-action">Process next card</button>
+</div>
+`
+		);
+		document.getElementById("rces-infobox").textContent = Object.entries(
+			this.rows.reduce((acc, row) => ({...Object.fromEntries(row.data), ...acc}), {})
+		)
+			.map((entry) => [entry[0], typeof entry[1]].join(":"))
+			.join("\n");
+		document.querySelectorAll(".rces-filter").forEach((el) => {
+			el.addEventListener("change", () => {
+				if (this.updateExpression(el.id.replace("rces-filter-", ""))) {
+					this.filterRows();
+				}
+			});
+		});
+		this.defaultActionButton = document.getElementById("rces-default-action");
+		this.defaultActionButton.addEventListener("click", (ev) => {
+			if (!event.isTrusted) {
+				return;
+			}
+			this.processNextRow(Date.now());
+		});
+		document.addEventListener("keyup", (ev) => {
+			if (!event.isTrusted || event.repeat) {
+				return;
+			}
+			if (event.key == "Enter") {
+				this.processNextRow(Date.now());
+			} else if (event.key == "g") {
+				this.processNextRow(Date.now(), (x) => x.action == "gift");
+			} else if (event.key == "o") {
+				this.processNextRow(Date.now(), (x) => x.action == "open");
+			} else if (event.key == "j") {
+				this.processNextRow(Date.now(), (x) => x.action == "junk");
+			}
+		});
+	}
+
+	insertCss() {
+		GM_addStyle(`
 .clickabletimes {
 	border-collapse: collapse;
 }
 
-#rces-junkdiv {
-	width: 50%;
-	position: relative;
-	right: -50%;
-}
-
-#rces-junkdiv .button-group {
+.rces-filter {
+	resize: none;
 	width: 100%;
 }
 
-#rces-junkdiv button {
-	margin-left: 0;
-	width: 50%;
+.rces-hidden {
+	display: none;
 }
 
-#rces-junk-filter {
-	min-width: 100%;
-	max-width: 100%;
-	margin: auto;
-	min-height: 2em;
+.rces-processed {
+	opacity: 0.8;
 }
 
-#rces-junk-filter.rces-parse-error {
-	color: red;
+.rces-failed .rces-column-action {
+	background-color: red;
 }
 
-.rces-junked {
-	opacity: 0.5;
-}
-
-tr.rces-junkerror td.rces-column-junk button.rces-junkbutton {
-	display: initial !important;
-}
-
-tr.rces-junkerror td.rces-column-junk {
-	background-color: salmon;
-	opacity: 0.5;
+.rces-errored {
+	background-color: orange;
+	border: 1px solid red;
 }
 
 .rces-time-changed td.rces-column-auction {
 	background-color: red;
-}
-
-.rces-time-changed {
-	background-color: lightcoral;
-}
-
-.rces-dirty-match td.rces-column-ask,
-.rces-dirty-match td.rces-column-bid {
-	background-color: yellow;
-}
-
-tr.rces-junkable td.rces-column-junk button.rces-junkbutton {
-	display: initial;
-}
-
-tr:not(.rces-junkable) td.rces-column-junk button.rces-junkbutton {
-	display: none;
 }
 
 td.rces-column-rarity,
@@ -590,37 +600,33 @@ td.rces-column-season {
 	font-variant: petite-caps;
 	text-align: left;
 }
-
-[data-rces-season="1"] td.rces-column-season {
-	background-color: red;
-}
-
-[data-rces-season="2"] td.rces-column-season {
-	background-color: #00a5ff;
-}
-
-[data-rces-rarity="legendary"] td.rces-column-rarity {
-	background-color: gold;
-}
-
-[data-rces-rarity="epic"] td.rces-column-rarity {
-	background-color: #db9e1c;
-}
-
-[data-rces-rarity="ultra-rare"] td.rces-column-rarity {
-	background-color: #ac00e6; /* hsl(285, 75%, 62%); */
-}
-
-[data-rces-rarity="rare"] td.rces-column-rarity {
-	background-color: #008ec1;
-}
-
-[data-rces-rarity="uncommon"] td.rces-column-rarity {
-	background-color: #00aa4c;
-}
-
-[data-rces-rarity="common"] td.rces-column-rarity {
-	background-color: #7e7e7e;
-}
 `);
+		const seasons = this.rows.reduce((acc, row) => {
+			acc.set(
+				row.data.get("season"),
+				document.defaultView.getComputedStyle(row.row.querySelector(".cardnameblock .minicard-season-number"))
+					.background
+			);
+			return acc;
+		}, new Map());
+		const rarities = this.rows.reduce((acc, row) => {
+			acc.set(
+				row.data.get("rarity"),
+				document.defaultView.getComputedStyle(row.row.querySelector(".cardnameblock .minicard-category"))
+					.background
+			);
+			return acc;
+		}, new Map());
+		seasons.forEach((v, k) => GM_addStyle(`tr[data--rces-season="${k}"] .rces-column-season{background: ${v}}`));
+		rarities.forEach((v, k) => GM_addStyle(`tr[data--rces-rarity="${k}"] .rces-column-rarity{background: ${v}}`));
+	}
+}
+
+(function () {
+	"use strict";
+
+	const path_params = getNsParams();
+	const private_deck =
+		path_params.get("page") == "deck" && path_params.has("value_deck") && !path_params.has("show_market");
+	const app = new App(document.querySelector("table.clickabletimes.wide.nscodetable"), private_deck);
 })();
