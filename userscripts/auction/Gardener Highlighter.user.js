@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gardener Highlighter
-// @version      0.7.1
+// @version      0.7.2
 // @namespace    dithpri.RCES
 // @description  Adds The Card Gardening Society's icon besides members during auctions
 // @author       dithpri
@@ -70,7 +70,7 @@ const icon_base64 =
 		if ((await GM.getValue("cardgardens-lastupdate", 0)) + 12 * 60 * 60 * 1000 < new Date().getTime()) {
 			GM.xmlHttpRequest({
 				method: "GET",
-				url: "https://docs.google.com/spreadsheets/d/1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk/export?format=tsv&id=1THMFwrDdQEsoK0-W4kVQBFIq_48-Lr8YHyX1jV1HHqk&gid=540664597",
+				url: "https://docs.google.com/spreadsheets/d/1mqQRESG_HrMF6aToHqUF40eHNkLE6XbusoeZHFUMTKQ/export?format=tsv&id=1mqQRESG_HrMF6aToHqUF40eHNkLE6XbusoeZHFUMTKQ&gid=641340461",
 				onload: async function (data) {
 					console.info("updated");
 					await GM.setValue(
