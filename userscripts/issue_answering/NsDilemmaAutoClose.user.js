@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsDilemmaAutoClose
-// @version      0.4
+// @version      0.4.1
 // @namespace    dithpri.RCES
 // @description  Auto-close resolved dilemma windows or offer to open a pack if it was generated
 // @author       dithpri
@@ -21,34 +21,20 @@
 // Credits to 9003 for also discovering the pack-opening shortcut and reminding
 // me to push an update
 
-function addStyle(style) {
-	"use strict";
-	var node = document.createElement("style");
-	node.innerHTML = style;
-	document.getElementsByTagName("head")[0].appendChild(node);
-}
-
 (function () {
 	"use strict";
 
-	const forms = document.getElementsByTagName("form");
-	if (forms.length > 0) {
-		addStyle("div, h5, p { display: none; } form p { display: initial;}");
-		const form = forms[0];
-		// form.action = "/page=deck/template-overall=none?x-autoclose"; // To be continued
-		const button = form.getElementsByTagName("button")[0];
-		button.style.border = ".2em solid black";
-
-		document.addEventListener("keyup", (ev) => {
-			if (ev.key != "Enter" || ev.repeat || button.style.display == "none") {
-				ev.preventDefault();
-				return;
-			}
-
-			button.style.display = "none";
-			button.click();
-		});
-	} else {
-		window.close();
-	}
+	const pack_open_btn = document.querySelector(".button.lootboxbutton");
+	document.addEventListener("keyup", (ev) => {
+		if (ev.key != "Enter" || ev.repeat) {
+			ev.preventDefault();
+			return;
+		}
+		if (pack_open_btn && pack_open_btn.style.display != "none") {
+			pack_open_btn.style.display = "none";
+			pack_open_btn.click();
+		} else {
+			window.close();
+		}
+	});
 })();
