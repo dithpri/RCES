@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.4.1
+// @version      0.5
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
@@ -52,14 +52,11 @@ right: 0;
 * { visibility: hidden;}
 
 `);
-	document.querySelectorAll('form[action^="/page=enact_dilemma/"]').forEach(function (el) {
-		el.action += "/template-overall=none/x-rces=autoclose";
-	});
 
 	const issuebtns = document.querySelectorAll("button.button.big.icon.approve");
 	if (issuebtns.length > 0) {
 		document.querySelector("p.dilemmadismissbox > button.big.icon.remove.danger").disabled = true;
-		const chosenButtonNumber = Math.floor(Math.random() * issuebtns.length);
+		const chosenButtonNumber = 0;
 		issuebtns[chosenButtonNumber].classList.add("rces-chosen");
 		document.addEventListener("keyup", function (ev) {
 			if (ev.key != "Enter" || ev.repeat) {
