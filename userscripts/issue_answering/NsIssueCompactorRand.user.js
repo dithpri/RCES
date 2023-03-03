@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.5
+// @version      0.5.1
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
@@ -59,7 +59,7 @@ right: 0;
 		const chosenButtonNumber = 0;
 		issuebtns[chosenButtonNumber].classList.add("rces-chosen");
 		document.addEventListener("keyup", function (ev) {
-			if (ev.key != "Enter" || ev.repeat) {
+			if (ev.key != "Enter" || ev.repeat || issuebtns[chosenButtonNumber].style.display == "none") {
 				ev.preventDefault();
 				return;
 			}
