@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsDilemmaAutoClose
-// @version      0.5
+// @version      0.5.1
 // @namespace    dithpri.RCES
 // @description  Auto-close resolved dilemma windows or offer to open a pack if it was generated
 // @author       dithpri
@@ -21,11 +21,19 @@
 // Credits to 9003 for also discovering the pack-opening shortcut and reminding
 // me to push an update
 
+function addStyle(style) {
+	"use strict";
+	var node = document.createElement("style");
+	node.innerHTML = style;
+	document.getElementsByTagName("head")[0].appendChild(node);
+}
+
 (function () {
 	"use strict";
 
 	const pack_open_btn = document.querySelector(".button.lootboxbutton");
 	if (pack_open_btn) {
+		addStyle("div, h5, p, #banner { display: none; } #main, #content, form p { display: initial;}");
 		pack_open_btn.scrollIntoView();
 		document.addEventListener("keyup", (ev) => {
 			if (ev.key != "Enter" || ev.repeat) {
