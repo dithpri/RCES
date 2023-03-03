@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.5.1
+// @version      0.5.2
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
 // @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/issue_answering/NsIssueCompactorRand.user.js
 // @noframes
-// @match        https://www.nationstates.net/*page=show_dilemma/*x-rces=openissue
+// @match        https://www.nationstates.net/*page=show_dilemma*
 // @grant        window.close
 // @run-at       document-end
 // ==/UserScript==
