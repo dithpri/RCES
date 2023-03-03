@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsDilemmaAutoClose
-// @version      0.4.1
+// @version      0.5
 // @namespace    dithpri.RCES
 // @description  Auto-close resolved dilemma windows or offer to open a pack if it was generated
 // @author       dithpri
@@ -25,16 +25,19 @@
 	"use strict";
 
 	const pack_open_btn = document.querySelector(".button.lootboxbutton");
-	document.addEventListener("keyup", (ev) => {
-		if (ev.key != "Enter" || ev.repeat) {
-			ev.preventDefault();
-			return;
-		}
-		if (pack_open_btn && pack_open_btn.style.display != "none") {
-			pack_open_btn.style.display = "none";
-			pack_open_btn.click();
-		} else {
-			window.close();
-		}
-	});
+	if (pack_open_btn) {
+		pack_open_btn.scrollIntoView();
+		document.addEventListener("keyup", (ev) => {
+			if (ev.key != "Enter" || ev.repeat) {
+				ev.preventDefault();
+				return;
+			}
+			if (pack_open_btn.style.display != "none") {
+				pack_open_btn.style.display = "none";
+				pack_open_btn.click();
+			}
+		});
+	} else {
+		window.close();
+	}
 })();
