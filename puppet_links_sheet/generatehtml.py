@@ -162,12 +162,6 @@ def main():
                 )
         except KeyError:
             pass
-        if config["config"]["include create column"] in ["yes", "true", "1"]:
-            links.write(
-                '\t<td class="createcol"><p><a target="_blank" href="https://www.nationstates.net/{}/page=blank/template-overall=none/x-rces-cp?x-rces-cp-nation={}">Create {}</a></p></td>\n'.format(
-                    container_protolink, nation.replace(" ", "_"), nation
-                )
-            )
         links.write("</tr>\n")
         puppet_number += 1
 

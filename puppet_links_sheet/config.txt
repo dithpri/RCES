@@ -7,7 +7,6 @@
 # containerPrefix: nation={}
 # In both cases, {} will be replaced with the name of the puppet
 
-Include create column: yes
 Number rows: yes
 
 
@@ -68,9 +67,6 @@ html_start =
 			tr:hover {
 				background-color: ${hover_dark_color};
 			}
-		}
-		td.createcol p {
-			padding-left: 10em;
 		}
 	
 		a {
