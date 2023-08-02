@@ -261,12 +261,6 @@ Adds nifty links next to nations on the card owners page. Clicking on them will 
 Allows you to tweak the conditions for when a junking confirmation popup
 appears.
 
-#### [Puppet Creation Assistant](userscripts/miscellaneous/NsPuppetCreateAssist.user.js)
-[Install](../../raw/master/userscripts/miscellaneous/NsPuppetCreateAssist.user.js)  
-Assists with one-click creation of puppet nations. All fields (except password
-and name) are chosen randomly. Works with the `Create puppet` links in the
-[puppet links sheet](#puppet-links-sheet).
-
 #### [Boneyard Card Links](userscripts/miscellaneous/Boneyard%20Card%20Links.user.js)
 [Install](../../raw/master/userscripts/miscellaneous/Boneyard%20Card%20Links.user.js)  
 Adds a link to the nation's trading card on the boneyard page. No longer
@@ -300,8 +294,7 @@ generates rules for Containerise so you don't have to.
 farming.](https://www.nationstates.net/page=dispatch/id=1383002)
 
 By default, links to *issues*, *the deck page* (3 variants), *telegrams*,
-*settings*, *telegram settings*, the nation itself and the
-[creation assistant](#puppet-creation-assistant). Configurable through the
+*settings*, *telegram settings* and the nation itself. Configurable through the
 `config.txt` file. Puppets (or future puppets) go in `puppets_list.txt`
 
 ---
