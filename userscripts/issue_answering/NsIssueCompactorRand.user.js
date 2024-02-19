@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         NsIssueCompactorRand
-// @version      0.5.2
+// @version      0.6
 // @namespace    dithpri.RCES
 // @description  Hide everything except issue buttons and focus on a random option
 // @author       dithpri
@@ -18,41 +18,7 @@
  * https://github.com/dithpri/RCES/blob/master/LICENSE.md for more details.
  */
 
-function addStyle(style) {
-	"use strict";
-	var node = document.createElement("style");
-	node.innerHTML = style;
-	document.getElementsByTagName("head")[0].appendChild(node);
-}
-
 (function () {
-	addStyle(`
-body > *, body > #banner, .smalltext, .dilemmapaper, p, h5 {display : none;}
-body > #dilemma, body > #main, p.dilemmaaccept, p.dilemmadismissbox {display: initial;}
-
-button.button.big.icon.approve, p.dilemmadismissbox > button.big.icon.remove.danger {
-visibility: initial;
-}
-
-ol {
-list-style: none;
-padding-left: 0;
-}
-
-button.rces-chosen {
-font-weight: 700;
-}
-
-p.dilemmadismissbox {
-position: fixed;
-top: 0;
-right: 0;
-}
-
-* { visibility: hidden;}
-
-`);
-
 	const issuebtns = document.querySelectorAll("button.button.big.icon.approve");
 	if (issuebtns.length > 0) {
 		document.querySelector("p.dilemmadismissbox > button.big.icon.remove.danger").disabled = true;
