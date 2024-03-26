@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Remember Issue Choices
-// @version      0.2.1
+// @version      0.2.2
 // @namespace    dithpri.RCES
 // @description  Remembers previous issue choices
 // @author       dithpri
@@ -37,7 +37,8 @@ function addStyle(style) {
 		get: (target, name) => (name in target ? target[name] : 0),
 	});
 
-	const mostChosenList = [...Object.entries(previousChoices)].sort(([, a], [, b]) => b - a).map(([x]) => x);
+	const mostChosenList = [...Object.entries(previousChoices)].sort(([, a], [, b]) => b - a).map(([, x]) => x | 0);
+	const totalChoices = mostChosenList.reduce((acc, x) => acc + x);
 
 	[...document.querySelectorAll('button[name^="choice-"]')].forEach((button) => {
 		const choiceId = button.name.replace(/^choice-/, "");
@@ -52,11 +53,9 @@ function addStyle(style) {
 		if (idx <= 3) {
 			chosenCountWrapper.classList.add(`rces-choicehistory-preferred-${idx}`);
 		}
-		chosenCountWrapper.innerText += `Chosen ${(
-			((previousChoices[choiceId] / mostChosenList.length) * 100) |
+		chosenCountWrapper.innerText += `Chosen ${(((previousChoices[choiceId] / totalChoices) * 100) | 0).toFixed(
 			0
-		).toFixed(0)}% of the time (${previousChoices[choiceId]}/${mostChosenList.length})`;
-		console.log(idx, idx / mostChosenList.length);
+		)}% of the time (${previousChoices[choiceId]}/${totalChoices})`;
 		button.insertAdjacentElement("afterend", chosenCountWrapper);
 	});
 
