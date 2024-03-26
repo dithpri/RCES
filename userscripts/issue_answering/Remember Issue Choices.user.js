@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Remember Issue Choices
-// @version      0.2.2
+// @version      0.2.3
 // @namespace    dithpri.RCES
 // @description  Remembers previous issue choices
 // @author       dithpri
@@ -37,8 +37,8 @@ function addStyle(style) {
 		get: (target, name) => (name in target ? target[name] : 0),
 	});
 
-	const mostChosenList = [...Object.entries(previousChoices)].sort(([, a], [, b]) => b - a).map(([, x]) => x | 0);
-	const totalChoices = mostChosenList.reduce((acc, x) => acc + x);
+	const mostChosenList = [...Object.entries(previousChoices)].sort(([, a], [, b]) => b - a).map(([x]) => x);
+	const totalChoices = [...Object.entries(previousChoices)].map(([, x]) => x).reduce((acc, x) => acc + x);
 
 	[...document.querySelectorAll('button[name^="choice-"]')].forEach((button) => {
 		const choiceId = button.name.replace(/^choice-/, "");
@@ -49,13 +49,21 @@ function addStyle(style) {
 		const chosenCountWrapper = document.createElement("div");
 		chosenCountWrapper.classList.add("rces-choicehistory");
 		chosenCountWrapper.classList.add("info");
-		const idx = mostChosenList.findIndex((x) => x == choiceId) + 1;
-		if (idx <= 3) {
+		const idx = mostChosenList.findIndex((x) => x == choiceId);
+		if (idx <= 3 && idx != -1) {
 			chosenCountWrapper.classList.add(`rces-choicehistory-preferred-${idx}`);
 		}
-		chosenCountWrapper.innerText += `Chosen ${(((previousChoices[choiceId] / totalChoices) * 100) | 0).toFixed(
-			0
-		)}% of the time (${previousChoices[choiceId]}/${totalChoices})`;
+		const cntChosen = previousChoices[choiceId];
+		if (cntChosen > 0) {
+			chosenCountWrapper.innerText += `Chosen ${(((previousChoices[choiceId] / totalChoices) * 100) | 0).toFixed(
+				0
+			)}% of the time (${previousChoices[choiceId]}/${totalChoices})`;
+		} else {
+			chosenCountWrapper.innerText = `Never chosen.`;
+		}
+		if (choiceId == -1) {
+			chosenCountWrapper.style.float = "left";
+		}
 		button.insertAdjacentElement("afterend", chosenCountWrapper);
 	});
 
@@ -63,18 +71,22 @@ function addStyle(style) {
 	.rces-choicehistory {
 		border-color: grey;
 		visibility: initial;
+		padding: 0.15em;
+		width: fit-content;
+		float: right;
+		margin: 0 0.1em;
 	}
 	.rces-choicehistory-preferred-0 {
-		border-color: lavender;
-	}
-	.rces-choicehistory-preferred-1 {
 		border-color: green;
 	}
+	.rces-choicehistory-preferred-1 {
+		border-color: darkcyan;
+	}
 	.rces-choicehistory-preferred-2 {
-		border-color: lightblue;
+		border-color: orange;
 	}
 	.rces-choicehistory-preferred-3 {
-		border-color: lightpink;
+		border-color: rosybrown;
 	}
 	`);
 })();
