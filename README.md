@@ -31,7 +31,7 @@
       - [Puppet Creation Assistant](#puppet-creation-assistant)
       - [Boneyard Card Links](#boneyard-card-links)
     - ["Decoration"](#decoration)
-      - [InvaderNS](#invaderns)
+      - [IntruderNS](#intruderns)
       - [Steak Rarities](#steak-rarities)
     - [Zoomer Nation Creator](#zoomer-nation-creator)
     - [Puppet links sheet](#puppet-links-sheet)
@@ -270,9 +270,9 @@ necessary, as it is implemented by NS.
 
 ### ["Decoration"](userscripts/decoration)
 
-#### [InvaderNS](userscripts/decoration/invader.user.js)
-[Install](../../raw/master/userscripts/decoration/invader.user.js)  
-The hidden NationStates Invader theme. For real GPers™.
+#### [IntruderNS](userscripts/decoration/intruder.user.js)
+[Install](../../raw/master/userscripts/decoration/intruder.user.js)  
+The hidden NationStates Intruder theme. For real GPers™.
 
 #### [Steak Rarities](userscripts/decoration/steak_rarities.user.js)
 [Install](../../raw/master/userscripts/decoration/steak_rarities.user.js)  

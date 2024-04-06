@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         InvaderNS
+// @name         IntruderNS
 // @version      0.1
 // @description  Da ba dee da ba daa
 // @author       dithpri
 // @match        https://www.nationstates.net/*
-// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/decoration/invader.user.js
+// @downloadURL  https://github.com/dithpri/RCES/raw/master/userscripts/decoration/intruder.user.js
 // @run-at       document-body
 // ==/UserScript==
 
