@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Main Auction Displayer
-// @version      0.16
+// @version      0.17
 // @namespace    dithpri.RCES
 // @description  Displays puppets' main nation above puppet name in an auction
 // @author       dithpri
@@ -59,6 +59,13 @@ const sheets = [
 	},
 ];
 
+function GM_addStyle(style) {
+	"use strict";
+	var node = document.createElement("style");
+	node.innerHTML = style;
+	document.getElementsByTagName("head")[0].appendChild(node);
+}
+
 function GM_promiseXmlHttpRequest(opts) {
 	return new Promise((resolve, reject) => {
 		let details = opts;
@@ -115,7 +122,7 @@ async function updatePuppets(isAuctionPage) {
 	if (isAuctionPage) {
 		document
 			.querySelectorAll(
-				"#cardauctiontable > tbody > tr > td > p > a.nlink, .deckcard-title > a.nlink:not(.rces-was-parsed)"
+				"#cardauctiontable > tbody > tr > td > p > a.nlink, .deckcard-title > a.nlink:not(.rces-was-parsed), .deckcard-name > a.nlink:not(.rces-was-parsed)"
 			)
 			.forEach(function (el, i) {
 				const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
@@ -126,24 +133,30 @@ async function updatePuppets(isAuctionPage) {
 						"beforebegin",
 						`<a href="nation=${canonicalize(
 							puppetmaster
-						)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a><br />`
+						)}" class="nlink rces-was-parsed rces-main-nation">(<span class="nnameblock">${puppetmaster}</span>)</a><br />`
 					);
 				}
 			});
 	}
-	document.querySelectorAll("a.nlink:not(.rces-was-parsed)").forEach(function (el, i) {
-		const canonical_nname = el.getAttribute("href").replace(/^nation=/, "");
-		if (Object.prototype.hasOwnProperty.call(puppets_map, canonical_nname)) {
-			const puppetmaster = puppets_map[canonical_nname];
-			el.classList.add("rces-was-parsed");
-			el.insertAdjacentHTML(
-				"afterend",
-				`&nbsp;<a href="nation=${canonicalize(
-					puppetmaster
-				)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a>`
-			);
-		}
-	});
+	document
+		.querySelectorAll('a.nlink:not(.rces-was-parsed), a[href^="/nation="]:not(.rces-was-parsed)')
+		.forEach(function (el, i) {
+			const nlink = el.getAttribute("href");
+			if (!/^\/?nation=[a-z0-9_-]+$/.test(nlink)) {
+				return;
+			}
+			const canonical_nname = el.getAttribute("href").replace(/^\/?nation=/, "");
+			if (Object.prototype.hasOwnProperty.call(puppets_map, canonical_nname)) {
+				const puppetmaster = puppets_map[canonical_nname];
+				el.classList.add("rces-was-parsed");
+				el.insertAdjacentHTML(
+					"afterend",
+					`&nbsp;<a href="nation=${canonicalize(
+						puppetmaster
+					)}" class="nlink rces-was-parsed">(<span class="nnameblock">${puppetmaster}</span>)</a>`
+				);
+			}
+		});
 }
 
 async function refreshAllSheets() {
@@ -196,5 +209,20 @@ function setupUpdates() {
 	if (lastUpdateMs + 24 * 60 * 60 * 1000 < new Date().getTime()) {
 		refreshAllSheets();
 	}
+	GM_addStyle(
+		`
+.s3-upper .rces-main-nation {
+	position: relative;
+	z-index: 3;
+	margin: .5em .5em .4em 1em;
+	color: white;
+	font-weight: 700;
+	font-size: 200%;
+	filter: drop-shadow(1px 1px 1px black) drop-shadow(1px 1px 1px black);
+}
+.s3-upper .rces-main-nation .nnameblock {
+}
+`
+	);
 	setupUpdates();
 })();
