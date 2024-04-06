@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Alternate Auction Layout
-// @version      0.5.1
+// @version      0.5.2
 // @namespace    dithpri.RCES
 // @description  An alternate auction layout better suited for wide screens
 // @author       dithpri
@@ -79,7 +79,7 @@ function update_auctiontable() {
 		}
 		if (row != undefined && canRowsCollapse(previousRow, row)) {
 			// If one of the rows is already visible, make sure the "collapsed" row will be visible as well
-			if (!"cardauctionhiddenrow" in previousRow.classList || !"cardauctionhiddenrow" in row.classList) {
+			if (!("cardauctionhiddenrow" in previousRow.classList) || !("cardauctionhiddenrow" in row.classList)) {
 				previousRow.classList.remove("cardauctionhiddenrow");
 				row.classList.remove("cardauctionhiddenrow");
 			}
