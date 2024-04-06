@@ -33,7 +33,7 @@
     - ["Decoration"](#decoration)
       - [IntruderNS](#intruderns)
       - [Steak Rarities](#steak-rarities)
-    - [Zoomer Nation Creator](#zoomer-nation-creator)
+      - [Zoomer Nation Creator](#zoomer-nation-creator)
     - [Puppet links sheet](#puppet-links-sheet)
     - [Owner report](#owner-report)
     - [goldretriever-web](#goldretriever-web)
@@ -278,7 +278,7 @@ The hidden NationStates Intruder theme. For real GPers™.
 [Install](../../raw/master/userscripts/decoration/steak_rarities.user.js)  
 Would you like to know what kind of steak your card is?
 
-### [Zoomer Nation Creator](userscripts/decoration/zoomer_nation_creator.user.js)
+#### [Zoomer Nation Creator](userscripts/decoration/zoomer_nation_creator.user.js)
 [Install](../../raw/master/userscripts/decoration/zoomer_nation_creator.user.js)  
 ...
 
