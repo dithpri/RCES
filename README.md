@@ -1,7 +1,11 @@
 # RCES
 
+
+<details><summary>Table of contents</summary>
+
 - [RCES](#rces)
   - [DISCLAIMER](#disclaimer)
+  - [Usage](#Usage)
   - [About](#about)
   - [Licensing](#licensing)
   - [Bugs](#bugs)
@@ -38,6 +42,8 @@
     - [Owner report](#owner-report)
     - [goldretriever-web](#goldretriever-web)
 
+</details>
+
 ---
 
 ## DISCLAIMER
@@ -53,6 +59,18 @@ When a script pauses and waits for your input, you should interact with
 it manually.
 That means no running another script to automate clicks or keypresses,
 no placing water bottles on the keyboard, no `yes | ./script`.
+
+---
+
+## Usage
+
+For userscripts (`.user.js` extension) - the majority of this repo, you'll
+just need a userscript manager, like
+[Violentmonkey](https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/)
+or
+[Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/).
+Once you have the browser extension installed, you can click one of the
+"Install" buttons below to install the script.
 
 ---
 
