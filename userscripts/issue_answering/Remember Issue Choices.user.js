@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Remember Issue Choices
-// @version      0.2.3
+// @version      0.2.4
 // @namespace    dithpri.RCES
 // @description  Remembers previous issue choices
 // @author       dithpri
@@ -38,7 +38,7 @@ function addStyle(style) {
 	});
 
 	const mostChosenList = [...Object.entries(previousChoices)].sort(([, a], [, b]) => b - a).map(([x]) => x);
-	const totalChoices = [...Object.entries(previousChoices)].map(([, x]) => x).reduce((acc, x) => acc + x);
+	const totalChoices = Object.values(previousChoices).reduce((acc, x) => acc + x, 0);
 
 	[...document.querySelectorAll('button[name^="choice-"]')].forEach((button) => {
 		const choiceId = button.name.replace(/^choice-/, "");
