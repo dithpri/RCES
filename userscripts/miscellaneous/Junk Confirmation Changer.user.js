@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
-// @version      0.3
+// @version      0.4
 // @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
@@ -96,7 +96,8 @@ function addOpt(...args) {
 		const season = Number(junkButton.dataset.season);
 
 		const name = card
-			.querySelector(".deckcard-title .nnameblock .nname")
+			.querySelector(".deckcard-title, .deckcard-name")
+			.querySelector(".nnameblock .nname")
 			?.textContent.toLowerCase()
 			.replaceAll(" ", "_");
 		const region = card.querySelector(".deckcard-region .rlink")?.textContent.toLowerCase().replaceAll(" ", "_");
