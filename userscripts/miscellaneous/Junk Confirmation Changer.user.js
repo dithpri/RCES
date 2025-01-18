@@ -100,7 +100,7 @@ function addOpt(...args) {
 			.querySelector(".nnameblock .nname")
 			?.textContent.toLowerCase()
 			.replaceAll(" ", "_");
-		const region = card.querySelector(".deckcard-region .rlink")?.textContent.toLowerCase().replaceAll(" ", "_");
+		const region = card.querySelector(".rlink")?.textContent.toLowerCase().replaceAll(" ", "_"); //removing .deckcard-region since that don't appear on s4 cards
 
 		const badges = [...card.querySelectorAll("img.trophy")]
 			.map((x) => x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1"))
