@@ -20,7 +20,6 @@ guard, *guard_ = 0, 0, 0  # This script requires Python 3, you're using Python 2
 
 invalid_nation_chars = re.compile("[^A-Za-z0-9_ -]")
 
-
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
     sys.stderr.flush()
@@ -37,6 +36,10 @@ def get_script_dir():
 def get_cwd():
     return os.getcwd()
 
+# gotta make sure this code does the whole script idenitification bit. 
+# whodunit will be used to insert your nation into the generated HTML link so that NS knows who used this script
+rawwhodunit = "Chimore says edit me"
+whodunit = canonicalize(whodunit)
 
 possible_dirs = [
     get_script_dir(),
@@ -149,15 +152,15 @@ def main():
         if config["config"]["number rows"] in ["yes", "true", "1"]:
             links.write("\t<td>{}</td>".format(puppet_number))
         links.write(
-            '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(
-                container_protolink, canonical, nation
+            '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}?generated_by=RCES_puppet_links_sheet__author_main_nation_East_Chimore__usedBy_{}">{}</a></p></td>\n'.format(
+                container_protolink, canonical, whodunit, nation
             )
         )
         try:
             for key, value in config["links"].items():
                 links.write(
-                    '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(
-                        container_protolink, value, key
+                    '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}?generated_by=RCES_puppet_links_sheet__author_main_nation_East_Chimore__usedBy_{}">{}</a></p></td>\n'.format(
+                        container_protolink, value, whodunit, key
                     )
                 )
         except KeyError:
