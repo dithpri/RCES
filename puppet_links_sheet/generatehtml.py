@@ -39,7 +39,7 @@ def get_cwd():
 # gotta make sure this code does the whole script idenitification bit. 
 # whodunit will be used to insert your nation into the generated HTML link so that NS knows who used this script
 rawwhodunit = "Chimore says edit me"
-whodunit = canonicalize(whodunit)
+whodunit = canonicalize(rawwhodunit)
 
 possible_dirs = [
     get_script_dir(),
