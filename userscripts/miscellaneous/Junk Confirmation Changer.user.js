@@ -95,11 +95,14 @@ function addOpt(...args) {
 		const junkValue = Number(junkButton.dataset.junkprice);
 		const season = Number(junkButton.dataset.season);
 
-		const name = card
-			.querySelector(".deckcard-title, .deckcard-name")
-			.querySelector(".nnameblock .nname")
-			?.textContent.toLowerCase()
-			.replaceAll(" ", "_");
+		const name =
+		      season === 4 //because fuck using consistent class naming conventions across seasons I guess (written by scramble)
+    			? card.querySelector(".title")?.textContent.toLowerCase().replaceAll(" ", "_")
+			: card
+        		.querySelector(".deckcard-title, .deckcard-name")
+        		?.querySelector(".nnameblock .nname")
+        		?.textContent.toLowerCase()
+        		.replaceAll(" ", "_");
 		const region = card.querySelector(".rlink")?.textContent.toLowerCase().replaceAll(" ", "_"); //removing .deckcard-region since that don't appear on s4 cards
 
 		const badges = [...card.querySelectorAll("img.trophy")]
