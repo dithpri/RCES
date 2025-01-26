@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
-// @version      0.4
+// @version      0.5
 // @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
@@ -81,6 +81,10 @@ const shouldConfirm = ({rarity, season, junkValue, name, id, region, badges, mar
 
 /********************************/
 
+function canonicalize(name) {
+	return name.toLowerCase().replaceAll(" ", "_");
+}
+
 function addOpt(...args) {
 	return args.filter((x) => x).reduce((acc, cur) => `${acc} ${cur}`, "");
 }
@@ -95,12 +99,10 @@ function addOpt(...args) {
 		const junkValue = Number(junkButton.dataset.junkprice);
 		const season = Number(junkButton.dataset.season);
 
-		const name = card
-			.querySelector(".deckcard-title, .deckcard-name")
-			.querySelector(".nnameblock .nname")
-			?.textContent.toLowerCase()
-			.replaceAll(" ", "_");
-		const region = card.querySelector(".deckcard-region .rlink")?.textContent.toLowerCase().replaceAll(" ", "_");
+		const name = canonicalize(
+			card.querySelector(".deckcard .nnameblock .nname, .s4-card-wrapper a.title").textContent
+		);
+		const region = canonicalize(card.querySelector(".rlink").textContent);
 
 		const badges = [...card.querySelectorAll("img.trophy")]
 			.map((x) => x.src.replace(/^.*\/images\/trophies\/(.*)\.png$/, "$1"))
