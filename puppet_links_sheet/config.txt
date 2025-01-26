@@ -8,7 +8,12 @@
 # In both cases, {} will be replaced with the name of the puppet
 
 Number rows: yes
+# Your nation name, for the script-generated links to identify themselves.
+# Define it like in the following example:
+# User nation: INSERT_YOUR_NATION_NAME_HERE
+User nation:
 
+# baseURL: https://www.nationstates.net
 
 [links]
 # Links are relative to the NS site.
@@ -23,104 +28,3 @@ Value Deck (No CSS): page=deck/value_deck=1/template-overall=none
 Telegrams: page=telegrams
 Settings: page=settings
 TG Settings: page=tgsettings
-
-[html_template]
-# text and background color. Switched around in dark mode
-dark_color = #111
-light_color = #FFF
-
-border_color = darkorange
-
-hover_light_color = #DDD
-hover_dark_color = #444
-
-#
-# Edit the following at your own risk
-#
-html_start =
-	<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<style>
-		/* Light mode */
-		@media (prefers-color-scheme: light) {
-			body {
-				background-color: ${light_color};
-				color: ${dark_color};
-			}
-			a {
-				color: ${dark_color};
-			}
-			tr:hover {
-				background-color: ${hover_light_color};
-			}
-		}
-		/* Dark mode */
-		@media (prefers-color-scheme: dark) {
-			body {
-				background-color: ${dark_color};
-				color: ${light_color};
-			}
-			a {
-				color: ${light_color};
-			}
-			tr:hover {
-				background-color: ${hover_dark_color};
-			}
-		}
-	
-		a {
-			text-decoration: none;
-		}
-	
-		a:visited {
-			color: grey;
-		}
-	
-		table {
-			border-collapse: collapse;
-			max-width: 100%;
-			border: 1px solid ${border_color};
-		}
-	
-		tr, td {
-			border-bottom: 1px solid ${border_color};
-		}
-	
-		td:first-child {
-			border: 1px solid ${border_color};
-		}
-	
-		td p, td:first-child {
-			padding: 0.5em;
-		}
-	
-		</style>
-	</head>
-	<body>
-	<table>
-html_end =
-	</table>
-	<script>
-
-	document.querySelectorAll("a").forEach(function(el) {
-		el.addEventListener("click", function(ev) {
-			if (!ev.repeat) {
-				let myidx = 0;
-				const row = el.closest("tr");
-				let child = el.closest("td");
-				while((child = child.previousElementSibling) != null) {
-					myidx++;
-				}
-				try {
-					row.nextElementSibling.children[myidx].querySelector("p > a").focus();
-				} finally {
-					row.parentNode.removeChild(row);
-				}
-			}
-		});
-	});
-
-	</script>
-	</body>
-	</html>

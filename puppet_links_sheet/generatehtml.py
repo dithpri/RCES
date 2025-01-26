@@ -96,6 +96,116 @@ def create_output_files(*params):
     return None
 
 
+def cleanup(str):
+    return re.sub(invalid_nation_chars, "", str)
+
+
+def mk_generated_by(user):
+    if not hasattr(mk_generated_by, "fmt"):
+        mk_generated_by.fmt = "github_dithpri_RCES_generatehtml.py_0.2__usedBy_{}"
+    user = cleanup(user)
+    return mk_generated_by.fmt.format(user)
+
+
+html_start = """
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <style>
+        /* Light mode */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #FFF;
+                color: #111;
+            }
+            a {
+                color: #111;
+            }
+            tr:hover {
+                background-color: #DDD;
+            }
+        }
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #111;
+                color: #FFF;
+            }
+            a {
+                color: #FFF;
+            }
+            tr:hover {
+                background-color: #444;
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: grey;
+        }
+
+        table {
+            border-collapse: collapse;
+            max-width: 100%;
+            border: 1px solid darkorange;
+        }
+
+        tr, td {
+            border-bottom: 1px solid darkorange;
+        }
+
+        td:first-child {
+            border: 1px solid darkorange;
+        }
+
+        td p, td:first-child {
+            padding: 0.5em;
+        }
+
+        </style>
+    </head>
+    <body>
+    <table>
+"""
+html_end = """
+    </table>
+    <script>
+
+    document.querySelectorAll("a").forEach(function(el) {
+        el.addEventListener("click", function (ev) {
+            ev.preventDefault();
+            return false;
+        });
+        el.addEventListener("keyup", function(ev) {
+            if ((ev.key && (ev.key !== "Enter" || ev.type !== "keyup")) || ev.repeat) {
+                ev.preventDefault();
+                el.focus();
+                return;
+            }
+            window.open(el.href, "_blank");
+            let myidx = 0;
+            const row = el.closest("tr");
+            let child = el.closest("td");
+            while((child = child.previousElementSibling) != null) {
+                myidx++;
+            }
+            try {
+                row.nextElementSibling.children[myidx].querySelector("p > a").focus();
+            } finally {
+                row.parentNode.removeChild(row);
+            }
+        });
+    });
+
+    </script>
+    </body>
+    </html>
+"""
+
+
 def main():
     config_files = get_config_files("config.txt", "puppets_list.txt")
     outputs = create_output_files(
@@ -116,8 +226,17 @@ def main():
     except KeyError:
         container_prefix = "container={}/nation={}"
 
-    html_start = config["html_template"]["html_start"]
-    html_end = config["html_template"]["html_end"]
+    try:
+        baseURL = config["config"]["baseURL"]
+    except KeyError:
+        baseURL = "https://www.nationstates.net"
+
+    try:
+        user_nation = cleanup(canonicalize(config["config"]["user nation"]))
+        if user_nation == "" or user_nation is None:
+            raise Exception("User nation is invalid or not defined")
+    except KeyError:
+        raise Exception("User nation not found in config file")
 
     links.write(html_start)
 
@@ -149,15 +268,23 @@ def main():
         if config["config"]["number rows"] in ["yes", "true", "1"]:
             links.write("\t<td>{}</td>".format(puppet_number))
         links.write(
-            '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/nation={}">{}</a></p></td>\n'.format(
-                container_protolink, canonical, nation
+            '\t<td><p><a target="_blank" href="{}/{}/nation={}/generated_by={}">{}</a></p></td>\n'.format(
+                baseURL,
+                container_protolink,
+                canonical,
+                mk_generated_by(user_nation),
+                nation,
             )
         )
         try:
             for key, value in config["links"].items():
                 links.write(
-                    '\t<td><p><a target="_blank" href="https://www.nationstates.net/{}/{}">{}</a></p></td>\n'.format(
-                        container_protolink, value, key
+                    '\t<td><p><a target="_blank" href="{}/{}/{}/generated_by={}">{}</a></p></td>\n'.format(
+                        baseURL,
+                        container_protolink,
+                        value,
+                        mk_generated_by(user_nation),
+                        key,
                     )
                 )
         except KeyError:
