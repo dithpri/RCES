@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Junk Confirmation Changer
 // @namespace    dithpri.RCES
-// @version      0.5
+// @version      0.6
 // @description  Change conditions for the junk confirmation alert
 // @author       dithpri
 // @match        https://www.nationstates.net/*page=deck*
