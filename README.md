@@ -1,3 +1,15 @@
+# IMPORTANT
+
+This repository is not actively maintained. I am not actively verifying it wrt. new NationStates script rules changes.
+
+Similarly, I am not checking script behaviour/compatibility against any new NS website/layout changes.
+
+Therefore, I recommend looking for other actively maintained tools, such as those by [Kractero](https://github.com/Kractero)
+
+Use these at your own peril (or make use of the free license and fork it!).
+
+I will likely accept PRs if any are made.
+
 # RCES
 
 
